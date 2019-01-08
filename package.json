@@ -1,0 +1,46 @@
+{
+  "name": "newFitApp",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest"
+  },
+  "dependencies": {
+    "link": "^0.1.5",
+    "moment": "^2.22.2",
+    "native-base": "^2.8.1",
+    "react": "16.6.3",
+    "react-circular-progressbar": "^1.0.0",
+    "react-native": "^0.57.8",
+    "react-native-activity-recognition": "^3.2.0",
+    "react-native-elements": "^0.19.1",
+    "react-native-elevated-view": "0.0.6",
+    "react-native-facebook-login": "^1.6.1",
+    "react-native-keyboard-aware-scroll-view": "^0.6.0",
+    "react-native-loading-spinner-overlay": "^0.5.2",
+    "react-native-local-storage": "^1.5.2",
+    "react-native-modal": "^6.5.0",
+    "react-native-progress-circle": "^2.0.1",
+    "react-native-pure-chart": "0.0.24",
+    "react-native-svg": "^8.0.10",
+    "react-native-svg-charts": "^5.2.0",
+    "react-native-swiper": "^1.5.13",
+    "react-native-switch-toggle": "^1.0.6",
+    "react-native-ui-kitten": "^3.0.1",
+    "react-navigation": "^2.18.2",
+    "react-redux": "^6.0.0",
+    "redux": "^4.0.0",
+    "redux-thunk": "^2.3.0",
+    "validator": "^10.5.0"
+  },
+  "devDependencies": {
+    "babel-jest": "23.6.0",
+    "jest": "23.6.0",
+    "metro-react-native-babel-preset": "0.51.1",
+    "react-test-renderer": "16.6.3"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}
