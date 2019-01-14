@@ -61,28 +61,30 @@ class PwdTextInput extends Component {
 
   render() {
     return (
+    <View>
       <View style = {styles.emailPwdContainer}>
        
               <Label style = {styles.PwdContainer}>Password</Label>
               <Input style = {styles.inputStyle} 
                  autoCorrect={false}
-                 autoCapitalize="none" 
-                 placeholder='eg Password *****'                 
+                 autoCapitalize="none"               
                  secureTextEntry={true}
                  value={this.props.password}
                 onChangeText={password => this.onPasswordChange(password)}
                  onBlur={() => { this.validateInput('password', this.props.password); }} />
            
-        <View>
+      </View>
+
+        <View style={{marginHorizontal: 20}}>
         { this.renderFormError('password') }
         </View>
-      </View>
+       </View>
     );
   }
 }
 
 let styles = RkStyleSheet.create(theme => ({
-  emailPwdContainer: {   
+  emailPwdContainer: {
     marginHorizontal: 20,
     marginTop: 20,     
     height:70
@@ -94,7 +96,6 @@ let styles = RkStyleSheet.create(theme => ({
     borderBottomWidth:1,
     borderBottomWidth:1 ,
     height:40 ,
-
   }
 })); 
 

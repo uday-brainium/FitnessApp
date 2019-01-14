@@ -66,7 +66,6 @@ class EmailTextInput extends Component {
                  keyboardType="email-address"
                  autoCorrect={false}
                  autoCapitalize="none" 
-                 placeholder='Email Address (john.doe@3co.com)'
                  value={this.props.emailReset}
                  onChangeText={emailReset => this.onEmailResetChange(emailReset)}
                  onBlur={() => { this.validateInput('emailReset', this.props.emailReset); }} />         

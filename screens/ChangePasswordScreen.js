@@ -57,58 +57,19 @@ class ChangePasswordScreen extends Component {
 
     return (
 
-          <View style={{ width: width, marginTop:30, height: bodyContainer}}>
-
-              <LoadingSpinner />
+          <View style={{ backgroundColor: '#fff', width: width, height: bodyContainer}}>
+            <View style={{ marginTop:30}}>
+            <LoadingSpinner />
               <ErrorMessage />
               <OldPwdTextInput  />
               <NewPwdTextInput />
               <ConfirmPwdTextInput />
               <EmailPwdButton emailPwdBtnStr={'Change'} />
-
-
+            </View>
           </View>
 
     );
   }
 }
 
-let styles = RkStyleSheet.create(theme => ({
-  root: {
-    flex:1,
-    alignSelf: 'stretch',
-    alignItems:'center',
-    justifyContent:'center',
-  },
-  container: {
-    padding: 16,
-    flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderColor: theme.colors.border.base,
-    alignItems: 'flex-start'
-  },
-  avatar: {},
-  text: {
-    marginBottom: 5,
-  },
-  content: {
-    flex: 1,
-    marginLeft: 16,
-    marginRight: 0
-  },
-  mainContent: {
-    marginRight: 60
-  },
-  img: {
-    height: 50,
-    width: 50,
-    margin: 0
-  },
-  attachment: {
-    position: 'absolute',
-    right: 0,
-    height: 50,
-    width: 50
-  }
-}));
 export default ChangePasswordScreen;

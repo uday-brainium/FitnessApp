@@ -110,7 +110,7 @@ export default (state = INITIAL_STATE, action) => {
     case LOGIN_USER_SUCCESS:
       return { ...state, ...RESET_STATE, user: action.payload, loginStatus: 'loggedin', email: '', password: ''};
     case LOGIN_USER_FAIL:
-      return { ...state, error: action.payload, password: '', loginStatus: 'loginfailed'  };
+      return { ...state, error: action.payload, password: '', email: '', loginStatus: 'loginfailed'  };
 
     case RESET_ONLY_LOGIN_DATA:
       return { ...state, ...RESET_STATE  };

@@ -5,9 +5,9 @@ import {
   ImageBackground,
   StatusBar,
   Keyboard,
-  ScrollView
+  ScrollView,
+  BackHandler
  } from 'react-native';
-
 import EmailTextInput from './../components/Login/EmailTextInput';
 import PwdTextInput from './../components/Login/PwdTextInput';
 import FirstnameTextInput from './../components/Login/FirstnameTextInput';
@@ -54,12 +54,20 @@ class ProfileScreen extends Component {
   componentWillMount () {
     this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow.bind(this));
     this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide.bind(this));
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
   }
 
   componentWillUnmount () {
      this.keyboardDidShowListener.remove();
      this.keyboardDidHideListener.remove();
+     BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
   }
+
+  handleBackPress = () => {
+    NavigatorService.reset('login_screen')
+    return true;
+  }
+
 
   _keyboardDidShow () {
     if ( true ) {  // Platform.OS === 'android'
@@ -99,7 +107,7 @@ class ProfileScreen extends Component {
     return (
 
       <ImageBackground  source={require('./../assets/images/how_it_work_bg.png')}  style={styles.mainContainer} >
-        
+
             <View style={{ ...styles.screen}}>
                   <View style={styles.containerHeader}>
                       <LoadingSpinner parentFlag={this.state.loadingState} />
@@ -110,12 +118,12 @@ class ProfileScreen extends Component {
                       />
                     </View>
                     <View style={styles.containerBody}>
-                    <ScrollView style={styles.root}>                   
-                      <View > 
+                    <ScrollView style={styles.root}>
+                      <View >
                           <FirstnameTextInput />
                           <LastnameTextInput />
-                          <GenderTextInput /> 
-                          <View style={styles.HWrow}>    
+                          <GenderTextInput />
+                          <View style={styles.HWrow}>
                             <HeightTextInput />
                             <WeightTextInput  />
                           </View>
@@ -124,15 +132,15 @@ class ProfileScreen extends Component {
                           <EmailTextInput />
                           <PwdTextInput />
                       </View>
-                     
+
                     </ScrollView>
-                    <EmailPwdButton emailPwdBtnStr={'Sign up'} /> 
+                    <EmailPwdButton emailPwdBtnStr={'Sign up'} />
                     <View style={styles.containerButtonFooter}>
                         <FooterNavButtons
                           emailPwdBtnStr={'Profile Screen'}
                           onForgotPassword={''}
-                          onNavString1={'Already have an account?'}
-                          onNavString2={'Sign In now'}
+                          onNavString1={'Already have an account ?'}
+                          onNavString2={' Sign In now'}
                           onNavPress={
                             () => {
                               NavigatorService.reset('login_screen');
@@ -145,8 +153,8 @@ class ProfileScreen extends Component {
                     </View>
                     </View>
             </View>
-         
-      </ImageBackground> 
+
+      </ImageBackground>
     );
   }
 }
@@ -156,27 +164,27 @@ let styles = RkStyleSheet.create(theme => ({
   mainContainer: {
     flex: 1,
     alignSelf: 'stretch',
-    resizeMode: 'cover'    
+    resizeMode: 'cover'
   },
   screen: {
-    flex: 1,  
-    alignSelf: 'stretch',  
+    flex: 1,
+    alignSelf: 'stretch',
   }, containerHeader: {
     flex: 18,
   }, containerBody: {
     flex: 65,
-  } 
+  }
   , containerButtonBody: {
-    flex: 17,  
+    flex: 17,
     justifyContent:'flex-end',
-    alignItems: 'center', 
-   
+    alignItems: 'center',
+
   },
   HWrow:{
     flex: 1,
-    alignSelf: 'stretch', 
+    alignSelf: 'stretch',
     flexDirection: 'row',
-  },containerButtonFooter :{   
+  },containerButtonFooter :{
     marginTop: 10
   },
   image: {

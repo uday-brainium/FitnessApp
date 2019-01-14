@@ -1,6 +1,6 @@
 import { NetworkConstants } from './../config/appConstants'
 let ls = require('react-native-local-storage');
-
+import { Platform } from 'react-native'
 
 import {
   EMAIL_CHANGED,
@@ -27,7 +27,8 @@ import {
   ERROR_SET,
   RESET_USER ,
   RESET_ONLY_LOGIN_DATA,
-  LOADING_SPINNER_STATE
+  LOADING_SPINNER_STATE,
+  FACEBOOK_LOGIN_SUCCESS
 } from './types';
 
 import NavigatorService from './../utils/navigator';
@@ -292,6 +293,8 @@ export const resetUser = ({ emailReset}) => {
 };
 
 export const changeUserPassword = ({ user_id,oldPassword,newPassword }) => {
+  console.log("Change-PAssword-Details", user_id, oldPassword, newPassword );
+  
   //user_id,password,new_password
   return async (dispatch) => {
     try {
@@ -305,7 +308,7 @@ export const changeUserPassword = ({ user_id,oldPassword,newPassword }) => {
            "user_id":user_id,
            "password":oldPassword,
            "new_password":newPassword,
-           "apptype":"Android"
+           "apptype": Platform.OS === 'android'? 'android' : 'ios'
            });
 
           let response = await fetch(reqUrl,reqData);
@@ -394,58 +397,58 @@ try {
       "weight":weight,
       "dob":dob
       });
-            let response = await fetch(reqUrl,reqData);
-            if(response)
+        let response = await fetch(reqUrl,reqData);
+        if(response)
+        {
+          if (response.ok) // network 200 ok
             {
-                    if (response.ok) // network 200 ok
-                    {
-                          let responseJson = await response.json(); // My Server Raw Response
+              let responseJson = await response.json(); // My Server Raw Response
 
-                            if (responseJson.response_code !='2000') {  // My Server Error Response
+                if (responseJson.response_code !='2000') {  // My Server Error Response
 
-                              const err_message = responseJson.response_message;
-                              loginUserFail(dispatch, err_message);
-
-                              dispatch({
-                                type: ERROR_SET,
-                                payload: err_message
-                              });
-
-                          }else {  // My Server 2000 Response
-                            dispatch({
-                              type: LOGIN_STATUS_CHANGED,
-                              payload: 'loggedin'
-                            });
-
-                            loginUserSuccess(dispatch, responseJson.response_data);
-
-                            currentNavState = NavigatorService.getCurrentRoute();
-                            if (currentNavState.routeName != 'orders_Screen') {
-                              NavigatorService.reset('orders_Screen');
-                            }
-
-                          }
-                    }else if (!response.ok) {  // Network Error
-                          const err_message = response.message;
-                          loginUserFail(dispatch, err_message);
-                    }
-                }else {
-                        const err_message ='Something went wrong !';
-                          loginUserFail(dispatch, err_message);
-                          dispatch({
-                            type: ERROR_SET,
-                            payload: err_message
-                          });
-            }
-          }
-          catch (error) {
-              const err_message = error.message;
+                  const err_message = responseJson.response_message;
                   loginUserFail(dispatch, err_message);
+
                   dispatch({
                     type: ERROR_SET,
                     payload: err_message
                   });
-          }
+
+                } else {  // My Server 2000 Response
+                  dispatch({
+                    type: LOGIN_STATUS_CHANGED,
+                    payload: 'loggedin'
+                  });
+
+                  loginUserSuccess(dispatch, responseJson.response_data);
+
+                  currentNavState = NavigatorService.getCurrentRoute();
+                  if (currentNavState.routeName != 'dashboard_screen') {
+                    NavigatorService.reset('dashboard_screen');
+                  }
+
+                }
+              }else if (!response.ok) {  // Network Error
+                    const err_message = response.message;
+                    loginUserFail(dispatch, err_message);
+              }
+            }else {
+              const err_message ='Something went wrong !';
+                loginUserFail(dispatch, err_message);
+                dispatch({
+                  type: ERROR_SET,
+                  payload: err_message
+                });
+        }
+      }
+      catch (error) {
+          const err_message = error.message;
+              loginUserFail(dispatch, err_message);
+              dispatch({
+                type: ERROR_SET,
+                payload: err_message
+              });
+      }
   };
 };
 
@@ -457,13 +460,13 @@ export const authStateChanged = (loginStatus) => {
       if(loginStatus==='loggedin')
       {
         dispatch({
-                   type: LOGIN_STATUS_CHANGED,
-                   payload: 'loggedin'
-                 });
-                 currentNavState = NavigatorService.getCurrentRoute();
-                 if (currentNavState.routeName != 'main_screen') {
-                   NavigatorService.reset('main_screen');
-                 }
+                type: LOGIN_STATUS_CHANGED,
+                payload: 'loggedin'
+              });
+              currentNavState = NavigatorService.getCurrentRoute();
+              if (currentNavState.routeName != 'main_screen') {
+                NavigatorService.reset('main_screen');
+              }
       } else if(loginStatus==='notloggedin' || loginStatus==='initial' ) {
         dispatch({
           type: LOGIN_STATUS_CHANGED,
@@ -472,7 +475,6 @@ export const authStateChanged = (loginStatus) => {
 
       }
   }
-
 };
 
 const loginUserFail = (dispatch, err_message) => {
@@ -488,4 +490,9 @@ const loginUserSuccess = (dispatch, user) => {
     type: LOGIN_USER_SUCCESS,
     payload: user
   });
+  dispatch({
+    type: FACEBOOK_LOGIN_SUCCESS,
+    payload: user
+  });
+  
 };

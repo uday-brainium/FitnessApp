@@ -1,5 +1,5 @@
 {
-  "name": "newFitApp",
+  "name": "FitnessApp",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -11,7 +11,6 @@
     "moment": "^2.22.2",
     "native-base": "^2.8.1",
     "react": "16.6.3",
-    "react-circular-progressbar": "^1.0.0",
     "react-native": "^0.57.8",
     "react-native-activity-recognition": "^3.2.0",
     "react-native-elements": "^0.19.1",
@@ -21,7 +20,6 @@
     "react-native-loading-spinner-overlay": "^0.5.2",
     "react-native-local-storage": "^1.5.2",
     "react-native-modal": "^6.5.0",
-    "react-native-progress-circle": "^2.0.1",
     "react-native-pure-chart": "0.0.24",
     "react-native-svg": "^8.0.10",
     "react-native-svg-charts": "^5.2.0",

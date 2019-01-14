@@ -62,21 +62,23 @@ class EmailTextInput extends Component {
 
   render() {
     return (
+      <View>
       <View style = {styles.emailPwdContainer}>        
               <Label>Email</Label>
               <Input style = {styles.inputStyle} 
                  keyboardType="email-address"
                  autoCorrect={false}
                  autoCapitalize="none" 
-                 placeholder='Email Address (john.doe@3co.com)'
                  value={this.props.email}
                  onChangeText={email => this.onEmailChange(email)}
-                 onBlur={() => { this.validateInput('email', this.props.email); }} />           
+                 onBlur={() => { this.validateInput('email', this.props.email); }} /> 
+      </View>          
 
-        <View>
+        <View style={styles.error}>
         { this.renderFormError('email') }
         </View>
-      </View>
+     </View>
+      
     );
   }
 }
@@ -84,8 +86,11 @@ class EmailTextInput extends Component {
 let styles = StyleSheet.create({
   emailPwdContainer: {   
     marginHorizontal: 20,
-    marginTop: 20,     
+    marginTop: 10,     
     height:70
+  },
+  error: {
+    marginHorizontal: 20,
   },
   inputStyle: {
     flex:1, 

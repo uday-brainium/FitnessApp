@@ -4,7 +4,7 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   StyleSheet,
-  ImageBackground
+  ToastAndroid
 } from 'react-native';
 import { RkText } from 'react-native-ui-kitten';
 import { Avatar } from '../components/avatar';
@@ -13,7 +13,7 @@ import { Container, Header, Title, Content, Footer, FooterTab, Button, Left, Rig
 import ActivityRecognition from 'react-native-activity-recognition'
 import Dashborad from './../components/dashboard'
 let ls = require('react-native-local-storage');
-
+let timeIntervalFunction
 
 class Dashboard_screen extends Component {
 
@@ -74,6 +74,7 @@ class Dashboard_screen extends Component {
     )})
   }
 
+   //Heversine formula
    getDistanceFromLatLonInKm = (lat1,lon1,lat2,lon2) => {
     var R = 6371; // Radius of the earth in km
     var dLat = this.deg2rad(lat2-lat1);  // deg2rad below
@@ -112,11 +113,11 @@ class Dashboard_screen extends Component {
     navigator.geolocation.getCurrentPosition((pos) => {
         this.setState({initLat: pos.coords.latitude, initLng:  pos.coords.longitude})
     }, (err) => {
-      alert(JSON.stringify(err))
+      console.log("Location error", err);
     }, options);
 
    // this.updateNewCords()
-      setInterval(() => {
+   timeIntervalFunction = setInterval(() => {
         this.updateNewCords()
       }, 3000)
 
@@ -132,13 +133,23 @@ class Dashboard_screen extends Component {
         this.setState({updatedLat: pos.coords.latitude, updatedLng: pos.coords.longitude})
         this.calcDistance()
       }, (err) => {
-         alert(JSON.stringify(err))
+         console.log("Location error", err);
       }, options);
   }
 
   stopInterval = () => {
     this.setState({btn_text: !this.state.btn_text})
-    clearInterval(this.setInterVal);
+    clearInterval(timeIntervalFunction);
+  }
+
+  resetCounter = () => {
+    this.setState({distanceTravelled: 0, initLat: '', initLng: '', latitude: '', longitude: ''},() => {
+      ToastAndroid.showWithGravity(
+        'Counter reseted',
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
+    })
   }
 
   render() {
@@ -146,7 +157,7 @@ class Dashboard_screen extends Component {
         <Container >
           <Content >
           <View style={{paddingLeft: '5%', paddingRight: '5%', paddingTop: '5%'}}>
-          <View style={styles.main_row}>
+           <View style={styles.main_row}>
             <View>
                 <TouchableOpacity  style={styles.track_now_btn} onPress={this.state.btn_text == false ? this.startTracing : this.stopInterval}>
                  <Text style={styles.btn_text}> {this.state.btn_text == false ? 'Start tracking' : 'STOP'} </Text>
@@ -154,9 +165,11 @@ class Dashboard_screen extends Component {
             </View>
 
             <View>
-
+              <TouchableOpacity disabled={this.state.btn_text ? true : false}  style={[styles.track_now_btn, {backgroundColor: this.state.btn_text ? 'gray' : '#C5A0F4'}]} onPress={this.resetCounter}>
+                <Text style={styles.btn_text}> Reset </Text>
+              </TouchableOpacity>
             </View>
-          </View>
+           </View>
           </View>
 
              <Dashborad

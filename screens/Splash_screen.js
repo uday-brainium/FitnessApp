@@ -4,7 +4,8 @@ import {
   Text,
   StyleSheet,
   Image,
-  Dimensions
+  Dimensions,
+  StatusBar
 } from 'react-native';
 import NavigatorService from './../utils/navigator';
 let ls = require('react-native-local-storage');
@@ -15,7 +16,8 @@ export default class Splash_screen extends Component {
    super(props)
    this.state = {
      isOpened: false,
-     isLogged: false
+     isLogged: false,
+     splash2: false
    }
  }
 
@@ -31,26 +33,35 @@ export default class Splash_screen extends Component {
    ls.get('userdata').then((data) => {
      const isLogged = data != null ? true : false
      this.setState({isLogged})
-     console.log('USERDATA ONLOGIN', data);
    })
 
-   setTimeout(() => {
-     if(this.state.isOpened) {
-       NavigatorService.reset('login_screen');
+  setTimeout(() => {
+    this.setState({splash2: true})
+    setTimeout(() => {
+      if(this.state.isOpened) {
+        NavigatorService.reset('login_screen');
        if(this.state.isLogged){
          NavigatorService.reset('dashboard_screen');
        }
      } else {
        NavigatorService.reset('welcome_screen');
      }
-   }, 3000)
+    }, 3000)
+     
+   }, 2000)
  }
 
 
   render() {
     return (
       <View style={styles.container}>
-        <Image style={styles.splash_image} source={require('./../assets/images/splash.png')} />
+        <StatusBar hidden />
+        {!this.state.splash2 &&
+          <Image style={styles.splash_image} source={require('./../assets/images/splash2.png')} />
+        }
+        {this.state.splash2 &&
+          <Image style={styles.splash2_img} source={require('./../assets/images/splash1.jpg')} />
+        }
       </View>
     );
   }
@@ -67,5 +78,9 @@ const styles = StyleSheet.create({
   splash_image: {
     width: 250,
     height: 270
+  },
+  splash2_img: {
+    width: '100%',
+    height: 250
   }
 });

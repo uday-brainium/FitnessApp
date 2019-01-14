@@ -35,15 +35,30 @@ class PhoneTextInput extends Component {
   validateInput(inputName, inputVal) {
 
     if (inputName == 'phone') {
-      if (validator.isMobilePhone(inputVal, 'en-US')){
-        this.setState({ phoneError: '' });
-        this.setState({ phoneFlag: 1 });
-        return true;
-      } else {
+       if( inputVal.length > 15 ) {
         this.setState({ phoneError: 'Please enter a valid phone number'});
         this.setState({ phoneFlag: 0 });
         return false;
-      }
+       } else if(inputVal.length < 10) {
+        this.setState({ phoneError: 'Please enter a valid phone number'});
+        this.setState({ phoneFlag: 0 });
+        return false;
+       } else {
+        this.setState({ phoneError: ''});
+        this.setState({ phoneFlag: 1 });
+        return true;
+       }
+       
+       
+      // if (validator.isMobilePhone(inputVal, 'en-US')){
+      //   this.setState({ phoneError: '' });
+      //   this.setState({ phoneFlag: 1 });
+      //   return true;
+      // } else {
+      //   this.setState({ phoneError: 'Please enter a valid phone number'});
+      //   this.setState({ phoneFlag: 0 });
+      //   return false;
+      // }
     }
   }
 
@@ -65,7 +80,6 @@ class PhoneTextInput extends Component {
                  keyboardType="phone-pad"
                  autoCorrect={false}
                  autoCapitalize="none" 
-                 placeholder='eg ( 8143217654 ) '
                  value={this.props.phone}
                  onChangeText={phone => this.onPhoneChange(phone)}
                  onBlur={() => { this.validateInput('phone', this.props.phone); }} />           

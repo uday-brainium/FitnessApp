@@ -98,6 +98,7 @@ class Activity_tracker extends Component {
   }
 
   render() {
+    let distance = Math.round( ((this.props.distance * 100) * 100) / 100)
     return (
         <ScrollView>
          <View style={styles.container}>
@@ -108,12 +109,12 @@ class Activity_tracker extends Component {
             <View style={styles.head_circle}>
               <View>
                 <Text style={styles.unit_head_text}>Type</Text>
-                <Text  style={styles.unit_text}>{this.props.type == '' ? '...' : this.props.type.type}</Text>
+                <Text  style={styles.unit_text}>{this.props.type == null ? '...' : this.props.type.type}</Text>
               </View>
 
               <View>
                 <Text  style={styles.unit_head_text}>Distance</Text>
-                <Text  style={styles.unit_text}>{Math.round((this.props.distance * 100) * 100) / 100} m</Text>
+                <Text  style={styles.unit_text}>{ distance > 20 ? distance * 10 : distance } m</Text>
               </View>
             </View>
 

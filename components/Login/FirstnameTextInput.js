@@ -64,7 +64,6 @@ class FirstnameTextInput extends Component {
               <Input style = {styles.inputStyle} 
                  autoCorrect={false}
                  autoCapitalize="none" 
-                 placeholder='eg John '
                  value={this.props.firstname}
                  onChangeText={firstname => this.onFirstnameChange(firstname)}
                  onBlur={() => { this.validateInput('firstname', this.props.firstname); }} />

@@ -53,22 +53,22 @@ class DobTextInput extends Component {
       <View style = {styles.emailPwdContainer}>
 
             <DatePicker
-            defaultDate={new Date()}
-            minimumDate={new Date(previous)}
-            maximumDate={new Date(now)}
-            locale={"en"}
-            timeZoneOffsetInMinutes={undefined}
-            modalTransparent={false}
-            animationType={"fade"}
-            androidMode={"default"}
-            placeHolderText="Select date"
-            textStyle={{ color: "green" }}
-            placeHolderTextStyle={{ color: "#d3d3d3" }}
-            onDateChange={this.onDobChanged}
+              defaultDate={new Date()}
+              minimumDate={new Date(previous)}
+              maximumDate={new Date(now)}
+              locale={"en"}
+              timeZoneOffsetInMinutes={undefined}
+              modalTransparent={false}
+              animationType={"fade"}
+              androidMode={"default"}
+              placeHolderText="Date of birth"
+              textStyle={{ color: "black", fontSize: 17, marginLeft: -10 }}
+              placeHolderTextStyle={{ color: "gray", fontSize: 17, marginLeft: -10 }}
+              onDateChange={this.onDobChanged}
             />
             
 
-        <View>
+        <View style={{marginTop: -20}}>
         { this.renderFormError('dob') }
         </View>
       </View>
@@ -83,7 +83,7 @@ let styles = RkStyleSheet.create(theme => ({
     alignSelf: "stretch",
     borderColor:'gray',
     borderBottomWidth:1,
-    borderBottomWidth:1  
+    //borderBottomWidth:1  
   }
 }));
 

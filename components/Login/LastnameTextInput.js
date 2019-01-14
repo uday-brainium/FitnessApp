@@ -65,7 +65,6 @@ class LastnameTextInput extends Component {
               <Input style = {styles.inputStyle} 
                  autoCorrect={false}
                  autoCapitalize="none" 
-                 placeholder='eg Doe '
                  value={this.props.lastname}
                  onChangeText={lastname => this.onLastnameChange(lastname)}
                  onBlur={() => { this.validateInput('lastname', this.props.lastname); }} />            

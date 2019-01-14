@@ -7,8 +7,23 @@ import {
 } from 'react-native-ui-kitten';
 import validator from 'validator';
 import { loginUser, signupUser,changeUserPassword,errorSet, resetUser } from './../../actions';
+let ls = require('react-native-local-storage');
+
 
 class EmailPwdButton extends Component {
+
+  constructor(props){
+    super(props)
+    this.state = {
+      user: {}
+    }
+  }
+
+  componentDidMount() {
+    ls.get('userdata').then((data) => {
+      this.setState({user: JSON.parse(data)})
+    })
+  }
 
   onButtonPress() {
 
@@ -53,14 +68,10 @@ class EmailPwdButton extends Component {
           this.props.errorSet('Please provide valid inputs');
         }
     } else if (this.props.emailPwdBtnStr == 'Reset') {
-      console.log('inside Reset button press: '+this.props.emailPwdBtnStr);
-
-      console.log('EmailPwdButton Press for Reset');
+      
         const { emailReset } = this.props;
-        console.log('EmailPwdButton Press for Reset email=> '+emailReset);
         if ( this.validateInput('email', emailReset) ) {
           const user_is='1234567890';
-          console.log('sarwesh emailReset==> '+emailReset)
           this.props.resetUser({emailReset,user_is});
          // this.props.onButtonPress();
 
@@ -87,14 +98,15 @@ class EmailPwdButton extends Component {
           if ( newPassword === confirmPassword)
           {
 
-            if(this.props.user==null)
+            if(this.state.user == null || this.state.user == "")
             {
              this.props.errorSet('Something went wrong in change password .');
             }else {
 
-              const { profile_details} = this.props.user;
-              const user_id=profile_details.user_id;
-              this.props.changeUserPassword({user_id,oldPassword,newPassword});
+              const user_id = (typeof this.state.user._id !== "undefined") ? this.state.user._id : 0;
+              console.log('Hello-world', user_id);
+              
+              this.props.changeUserPassword({ user_id, oldPassword, newPassword});
 
             }
 
@@ -105,7 +117,7 @@ class EmailPwdButton extends Component {
           this.props.errorSet('Please provide valid inputs password');
         }
     } else {
-      console.log('inside Change no button press matched '+this.props.emailPwdBtnStr);
+      
     }
   }
 

@@ -2,7 +2,7 @@ import {Platform} from 'react-native';
 
 export class NetworkConstants {
   static RequestUrl = (requestActionName) =>{
-  BaseUrl='http://162.243.110.92:4242/api/';
+  BaseUrl='http://68.183.173.21:4242/api/';
     return(BaseUrl+requestActionName);
   } ;
   

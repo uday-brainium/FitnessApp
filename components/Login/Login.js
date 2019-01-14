@@ -138,7 +138,7 @@ class Login extends Component {
                 {this.state.isLoading && (
                   <View style={{flex: 10, justifyContent: 'center', alignItems: 'center', flexDirection: 'row',justifyContent: 'space-around',paddingTop: '45%'}}>
                     <ActivityIndicator size="large" color="#0000ff" />
-                  </View>
+                  </View> 
                 )}
                 <LoginHeaderImage
                   keyboardflag={this.state.keyboardflag}
@@ -159,7 +159,7 @@ class Login extends Component {
                       buttonView={<FBLoginView />}
                       ref={(fbLogin) => { this.fbLogin = fbLogin }}
                       loginBehavior={FBLoginManager.LoginBehaviors.Native}
-                      permissions={["email","user_friends"]}
+                      permissions={["public_profile","email"]}
                       onLogin={this.fbLogin_action}
                       onLoginFound={function(e){console.log(e)}}
                       onLoginNotFound={function(e){console.log(e)}}

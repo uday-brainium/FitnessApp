@@ -59,12 +59,11 @@ class HeightTextInput extends Component {
   render() {
     return (
       <View style = {styles.emailPwdContainer}>
-              <Label>Height</Label>
+              <Label>Height (cm)</Label>
               <Input style = {styles.inputStyle}
                  keyboardType="numeric"
                  autoCorrect={false}
                  autoCapitalize="none" 
-                 placeholder='eg ( 175 inch ) '
                  value={this.props.height}
                  onChangeText={height => this.onHeightChanged(height)}
                  onBlur={() => { this.validateInput('height', this.props.height); }} />

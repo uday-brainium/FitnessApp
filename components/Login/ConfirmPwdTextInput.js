@@ -4,7 +4,7 @@ import {
   Form,Item,Label ,Input,Button,Text} from "native-base";
 import {
   RkText,
-  RkTextInput,
+  RkTextInput, 
   RkStyleSheet,
 } from 'react-native-ui-kitten';
 import { connect } from 'react-redux';
@@ -69,7 +69,7 @@ class ConfirmPwdTextInput extends Component {
                  autoCapitalize="none"
                  secureTextEntry={true}
                  value={this.props.confirmPassword}
-                onChangeText={confirmPassword => this.onPasswordChange(confirmPassword)}
+                 onChangeText={confirmPassword => this.onPasswordChange(confirmPassword)}
                  onBlur={() => { this.validateInput('confirmPassword', this.props.confirmPassword); }} />
 
 

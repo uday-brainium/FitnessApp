@@ -161,11 +161,11 @@ const LoginNavigator = createStackNavigator({
     contentComponent: Drawer_Component
   });
 
-  //Locking the Drawer for some screens 
+  //Locking the Drawer for some screens
   LoginNavigator.navigationOptions = ({ navigation }) => {
    name = (navigation.state.index !== undefined ? navigation.state.routes[navigation.state.index] : navigation.state.routeName)
     let drawerLockMode = 'locked-closed'
-    if (name.routeName != 'login_screen' && name.routeName != 'signup_screen' && name.routeName != 'splash_screen') {
+    if (name.routeName != 'login_screen' && name.routeName != 'signup_screen' && name.routeName != 'splash_screen' && name.routeName != 'welcome_screen') {
       drawerLockMode = 'unlocked'
     }
 
@@ -174,7 +174,11 @@ const LoginNavigator = createStackNavigator({
     };
   }
 
+  const _XHR = GLOBAL.originalXMLHttpRequest ?  
+    GLOBAL.originalXMLHttpRequest :           
+    GLOBAL.XMLHttpRequest                     
 
+    XMLHttpRequest = _XHR
 
 export default class App extends React.Component {
   state = { areReasourcesReady: false };

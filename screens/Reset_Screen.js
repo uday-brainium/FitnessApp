@@ -5,7 +5,8 @@ import {
   ImageBackground,
   Keyboard,
   StatusBar,
-  Platform
+  Platform,
+  BackHandler
  } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -40,11 +41,18 @@ class Reset_Screen extends Component {
   componentWillMount () {
     this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow.bind(this));
     this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide.bind(this));
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
   }
 
   componentWillUnmount () {
    this.keyboardDidShowListener.remove();
    this.keyboardDidHideListener.remove();
+   BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
+  }
+
+  handleBackPress = () => {
+    NavigatorService.reset('login_screen')
+    return true;
   }
 
   _keyboardDidShow () {
@@ -68,7 +76,7 @@ class Reset_Screen extends Component {
   onReset() {
     NavigatorService.reset('login_screen');
     Keyboard.dismiss();
-  } 
+  }
 
 
   renderSpinner() {

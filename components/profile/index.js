@@ -20,7 +20,10 @@ class Profile extends Component {
 
   componentDidMount() {
     ls.get('userdata').then((data) => {
-      this.setState({profileInfo: JSON.parse(data)})
+      this.setState({profileInfo: JSON.parse(data)}, () =>{
+        console.log('PROFILE_INdex', JSON.parse(data));
+        
+      })
     })
   }
 
@@ -29,22 +32,32 @@ class Profile extends Component {
          <View style={styles.container}>
             <View style={styles.profile_image_part}>
             <View style={{justifyContent: 'center', alignItems: 'center'}}>
-            <ImageBackground style={styles.bg_icon} source={require('./../../assets/images/Group402.png')} />
              <View style={styles.image_container}>
-              <Image style={styles.profile_image} source={{uri: 'http://graph.facebook.com/'+this.state.profileInfo.id+'/picture?type=large' }} />
+             {this.state.profileInfo.user_type == 'facebook' &&
+              <Image style={styles.profile_image} source={{uri: 'http://graph.facebook.com/'+this.state.profileInfo.social_id+'/picture?type=large' }} />
+             }
+             {this.state.profileInfo.user_type == 'Normal' &&
+              <Image style={styles.profile_image} source={require('./../../assets/images/app-icon.png')} />
+             }
              </View>
             </View>
 
              <View style={styles.name}>
+             {this.state.profileInfo.user_type == 'facebook' &&
               <Text style={styles.username}>{this.state.profileInfo.name}</Text>
+             }
+             {this.state.profileInfo.user_type == 'Normal' &&
+              <Text style={styles.username}>{this.state.profileInfo.name_first} {this.state.profileInfo.name_last}</Text>
+             }
+              
               <Image style={styles.line} source={require('./../../assets/images/Line17.png')}/>
               <Text style={styles.email}>{this.state.profileInfo.email}</Text>
              </View>
 
              <View style={styles.profile_details}>
                 <View style={styles.left_part}>
-                    <Text style={styles.details_head_text}>My height</Text>
-                    <Text style={styles.details_text}>165 cm</Text>
+                    <Text style={styles.details_head_text}>My Height</Text>
+                    <Text style={styles.details_text}> {this.state.profileInfo.height} cm</Text>
                 </View>
 
                 <View style={styles.verticle_line}>
@@ -56,7 +69,7 @@ class Profile extends Component {
 
                 <View style={styles.right_part}>
                  <Text style={styles.details_head_text}>My Weight</Text>
-                 <Text style={styles.details_text}>52 Kg</Text>
+                 <Text style={styles.details_text}> {this.state.profileInfo.weight} kg </Text>
                 </View>
              </View>
 
@@ -146,7 +159,7 @@ const styles = StyleSheet.create({
         textAlign: 'center'
       },
       details_text: {
-        fontSize: 18,
+        fontSize: 19,
         color: 'gray',
         textAlign: 'center'
       },

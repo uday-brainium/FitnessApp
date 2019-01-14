@@ -62,12 +62,11 @@ class WeightTextInput extends Component {
       <View style = {styles.emailPwdContainer}>
 
            
-              <Label>Weight</Label>
-              <Input style = {styles.inputStyle} 
+              <Label>Weight (Kg)</Label>
+              <Input style = {styles.inputStyle}
                  keyboardType="numeric"
                  autoCorrect={false}
                  autoCapitalize="none" 
-                 placeholder='eg ( 78 kgs ) '
                  value={this.props.weight}
                  onChangeText={weight => this.onWeightChanged(weight)}
                  onBlur={() => { this.validateInput('weight', this.props.weight); }} />
