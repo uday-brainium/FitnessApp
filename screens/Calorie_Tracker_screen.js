@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {View, Text, Image, ScrollView, TouchableHighlight } from 'react-native'
+import {View, Text, Image, ScrollView, TouchableOpacity } from 'react-native'
 import Calorie_Tracker from './../components/calorieTracker'
 import { connect } from 'react-redux'
 import { RkText } from 'react-native-ui-kitten'
@@ -17,13 +17,13 @@ class Calorie_Tracker_screen extends Component {
            return {
                headerTitle: (<RkText > {' Calorie Tracker '} </RkText>),
                headerLeft: ( <View style={{marginLeft: 16}}>
-                             <TouchableHighlight
+                             <TouchableOpacity
                                onPress={() =>  params.openDrawer()}>
                                 <Avatar
                                  rkType='image'
                                  source={require('../assets/images/menu.png')}
                                />
-                               </TouchableHighlight>
+                               </TouchableOpacity>
                         </View>),
            };
        };

@@ -8,6 +8,7 @@ export const HEIGHT_CHANGED = 'height_changed';
 export const WEIGHT_CHANGED = 'weight_changed';
 export const DOB_CHANGED = 'dob_changed';
 export const PASSWORD_CHANGED = 'password_changed';
+export const USER_ENTRED_HEIGHT = 'user_entered_height'
 
 // Change password
 export const OLD_PASSWORD_CHANGED = 'old_password_changed';

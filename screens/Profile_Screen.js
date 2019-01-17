@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import {
   View,
-  TouchableHighlight,
+  TouchableOpacity,
   Button
 } from 'react-native';
 
 import { RkText } from 'react-native-ui-kitten';
 import { Avatar } from '../components/avatar';
 import NavigatorService from './../utils/navigator';
-import { Container, Content, Text } from 'native-base';
 import Profile from '../components/profile'
 
 class Profile_Screen extends Component {
@@ -21,13 +20,13 @@ class Profile_Screen extends Component {
        return {
            headerTitle: (<RkText > {' Profile '} </RkText>),
            headerLeft: ( <View style={{marginLeft: 16}}>
-                         <TouchableHighlight
+                         <TouchableOpacity
                            onPress={() =>  params.openDrawer()}>
                             <Avatar
                              rkType='image'
                              source={require('../assets/images/menu.png')}
                            />
-                           </TouchableHighlight>
+                           </TouchableOpacity>
                     </View>),
        };
    };

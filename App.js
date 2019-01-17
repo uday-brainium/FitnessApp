@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware, compose } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import ReduxThunk from 'redux-thunk';
 import reducers from './reducers';
 import Drawer_Component from './screens/Drawer'
@@ -157,7 +157,8 @@ const LoginNavigator = createStackNavigator({
     payment_screen: { screen: NavigatorPayment },
     terms_screen: { screen: Terms_Screen }
   },{
-    drawerType: 'slide',
+    drawerType: 'front',
+    useNativeAnimations: false,
     contentComponent: Drawer_Component
   });
 
@@ -174,10 +175,10 @@ const LoginNavigator = createStackNavigator({
     };
   }
 
+  //DEBUGGING network requests **delete on production
   const _XHR = GLOBAL.originalXMLHttpRequest ?  
     GLOBAL.originalXMLHttpRequest :           
     GLOBAL.XMLHttpRequest                     
-
     XMLHttpRequest = _XHR
 
 export default class App extends React.Component {
@@ -195,7 +196,9 @@ export default class App extends React.Component {
       return (
         <Provider store={this.store}>
           <View style={styles.container}>
-
+          <StatusBar 
+            backgroundColor="#C5A0F4"
+            barStyle="light-content" />
           <Drawer ref={navigatorRef => {
             NavigatorService.setContainer(navigatorRef);
           }}>

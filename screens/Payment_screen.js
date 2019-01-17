@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {View, Text, Image, ScrollView, TouchableHighlight, BackHandler } from 'react-native'
+import {View, TouchableOpacity } from 'react-native'
 import Payment from '../components/payment'
 import { connect } from 'react-redux'
 import { RkText } from 'react-native-ui-kitten'
@@ -17,13 +17,13 @@ class Payment_screen extends Component {
        return {
            headerTitle: (<RkText > {' Payment '} </RkText>),
            headerLeft: ( <View style={{marginLeft: 16}}>
-                         <TouchableHighlight
+                         <TouchableOpacity
                            onPress={() =>  params.openDrawer()}>
                             <Avatar
                              rkType='image'
                              source={require('../assets/images/menu.png')}
                            />
-                           </TouchableHighlight>
+                           </TouchableOpacity>
                     </View>),
        };
    };

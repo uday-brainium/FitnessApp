@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
   View,Dimensions,
-  TouchableHighlight
+  TouchableOpacity
 } from 'react-native';
 import {RkStyleSheet, RkText,RkTextInput} from 'react-native-ui-kitten';
 import { Container,Card, Header, Title, Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Text } from 'native-base';
@@ -26,13 +26,13 @@ class ChangePasswordScreen extends Component {
        return {
            headerTitle: (<RkText > {' Change Password '} </RkText>),
            headerLeft: ( <View style={{marginLeft: 16}}>
-                         <TouchableHighlight
+                         <TouchableOpacity
                            onPress={() =>  params.openDrawer()}>
                             <Avatar
                              rkType='image'
                              source={require('../assets/images/menu.png')}
                            />
-                           </TouchableHighlight>
+                           </TouchableOpacity>
                     </View>),
        };
    };

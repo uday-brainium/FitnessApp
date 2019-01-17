@@ -368,6 +368,7 @@ export const logoutUser = () => {
       currentNavState = NavigatorService.getCurrentRoute();
       if(currentNavState.routeName != 'login_screen') {
            ls.remove('userdata').then(() => {
+              ls.remove('modalflag')
               NavigatorService.reset('login_screen');
            })
         }
@@ -395,7 +396,8 @@ try {
       "gender":gender,
       "height":height,
       "weight":weight,
-      "dob":dob
+      "dob":dob,
+      "heightWeight": true
       });
         let response = await fetch(reqUrl,reqData);
         if(response)

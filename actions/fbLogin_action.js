@@ -5,6 +5,7 @@ import {
   ERROR_SET,
   LOGIN_USER_SUCCESS,
   LOGIN_USER_FAIL,
+  USER_ENTRED_HEIGHT
 } from './types';
 import {Platform} from 'react-native'
 import { NetworkConstants } from './../config/appConstants'
@@ -60,5 +61,31 @@ export const fb_login_action = (values) => {
           }
 
   }
+
+}
+
+export const saveOtherDetails = (values) => {
+  return async (dispatch) => {
+    let insertData = {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userid: values.userid,
+        height: values.height,
+        weight: values.weight,
+      })
+    }
+     fetch(NetworkConstants.RequestUrl('update_height'), insertData).then ((res) => {
+      res.json().then(function(data) {
+          dispatch({
+            type: USER_ENTRED_HEIGHT,
+            payload: true
+          })
+      })
+    }) 
+  }  
 
 }

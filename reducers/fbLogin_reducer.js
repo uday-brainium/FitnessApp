@@ -4,6 +4,7 @@ import {
   LOGIN_STATUS_CHANGED,
   LOGIN_USER_SUCCESS,
   LOGIN_USER_FAIL,
+  USER_ENTRED_HEIGHT
  } from '../actions/types';
 
 export default function(state = {}, action) {
@@ -19,6 +20,8 @@ export default function(state = {}, action) {
         return { ...state, user: action.payload, loginStatus: 'loggedin' };
       case LOGIN_USER_FAIL:
         return { ...state, error: action.payload, loginStatus: 'loginfailed' };
+      case USER_ENTRED_HEIGHT:
+        return { ...state, modalflag: action.payload };
       default:
         return state;
     }

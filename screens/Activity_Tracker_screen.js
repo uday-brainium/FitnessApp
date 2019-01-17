@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {View, Text, Image, ScrollView, TouchableHighlight } from 'react-native'
+import {View, Text, Image, ScrollView, TouchableOpacity,  } from 'react-native'
 import Activity_Tracker from './../components/dashboard/'
 import { connect } from 'react-redux'
 import { RkText } from 'react-native-ui-kitten'
@@ -15,13 +15,13 @@ class Activity_Tracker_screen extends Component {
     static navigationOptions = {
         headerTitle: (<RkText > {' Activity Tracker '} </RkText>),
         headerLeft: ( <View style={{marginLeft: 16}}>
-        <TouchableHighlight
+        <TouchableOpacity
                         onPress={() => this.props.navigation.toggleDrawer()}>
                          <Avatar
                           rkType='image'
                           source={require('../assets/images/menu.png')}
                         />
-                        </TouchableHighlight>
+                        </TouchableOpacity>
                  </View>),
       };
 

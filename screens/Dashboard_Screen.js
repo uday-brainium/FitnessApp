@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
 import {
   View,
-  TouchableHighlight,
+  Dimensions,
   TouchableOpacity,
   StyleSheet,
-  ToastAndroid
+  ToastAndroid,
+  Modal,
+  ActivityIndicator
 } from 'react-native';
+import { connect } from 'react-redux'
+import { saveOtherDetails } from '../actions/fbLogin_action'
 import { RkText } from 'react-native-ui-kitten';
 import { Avatar } from '../components/avatar';
+import { Icon } from 'react-native-elements'
 import NavigatorService from '../utils/navigator';
-import { Container, Header, Title, Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Text } from 'native-base';
+import { Container, Content, Item, Input, Label, Text } from 'native-base';
 import ActivityRecognition from 'react-native-activity-recognition'
 import Dashborad from './../components/dashboard'
 let ls = require('react-native-local-storage');
@@ -32,6 +37,15 @@ class Dashboard_screen extends Component {
       updatedLat: '',
       updatedLng: '',
       btn_text: false,
+      maxUp: 0,
+      prevCount: 0,
+      modalVisible: false,
+      height: '',
+      weight: '',
+      userdata: {},
+      modalErr: '',
+      loading: false,
+      saveSuccess: false
     }
   }
 
@@ -40,13 +54,13 @@ class Dashboard_screen extends Component {
        return {
            headerTitle: (<RkText > {' Activity Tracker '} </RkText>),
            headerLeft: ( <View style={{marginLeft: 16}}>
-                         <TouchableHighlight
+                         <TouchableOpacity
                            onPress={() =>  params.openDrawer()}>
                             <Avatar
                              rkType='image'
                              source={require('../assets/images/menu.png')}
                            />
-                           </TouchableHighlight>
+                           </TouchableOpacity>
                     </View>),
        };
    };
@@ -59,8 +73,31 @@ class Dashboard_screen extends Component {
           openDrawer: this.openDrawerNow
       });
     ls.get('userdata').then((data) => {
-      console.log('FBLOGIN USERDATA', data);
+      console.log('FBLOGIN USERDATA', JSON.parse(data));
+      this.setState({userdata: JSON.parse(data)}, () => {
+        if(this.state.userdata.heightWeight == 'false') {
+          ls.get('modalflag').then((data) => {
+            if(data != 'true') 
+            this.setState({modalVisible: true})
+          })
+        }
+      })
     })
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if(nextProps != null &&  nextProps.allState.fbuserData != null) {
+      if(nextProps.allState.fbuserData.modalflag == true) {
+        ls.save('modalflag', 'true').then(() =>{
+          this.setState({saveSuccess: true}, () => {
+            setTimeout(() =>{
+              this.setState({modalVisible: false})
+            },2000)
+          })
+        })
+      }
+      console.log("NextPROS", nextProps.allState.fbuserData.modalflag);
+    }
   }
 
   openDrawerNow = () => {
@@ -152,18 +189,37 @@ class Dashboard_screen extends Component {
     })
   }
 
+  saveOtherData = () => {
+    let {height, weight, userdata} = this.state
+    if(height == "" || height.length != 3 && weight == "" || weight.length != 2 ) {
+      this.setState({modalErr: 'Please enter valid details !'})
+    } else {
+      this.setState({modalErr: '', loading: true})
+      let sendData = {
+        height,
+        weight,
+        userid: userdata._id
+      }
+        this.props.saveOtherDetails(sendData)
+        
+    }
+     console.log(height,weight, userdata);
+    
+  }
+
   render() {
     return (
         <Container >
           <Content >
           <View style={{paddingLeft: '5%', paddingRight: '5%', paddingTop: '5%'}}>
            <View style={styles.main_row}>
+        
             <View>
                 <TouchableOpacity  style={styles.track_now_btn} onPress={this.state.btn_text == false ? this.startTracing : this.stopInterval}>
                  <Text style={styles.btn_text}> {this.state.btn_text == false ? 'Start tracking' : 'STOP'} </Text>
                 </TouchableOpacity>
             </View>
-
+            
             <View>
               <TouchableOpacity disabled={this.state.btn_text ? true : false}  style={[styles.track_now_btn, {backgroundColor: this.state.btn_text ? 'gray' : '#C5A0F4'}]} onPress={this.resetCounter}>
                 <Text style={styles.btn_text}> Reset </Text>
@@ -171,6 +227,66 @@ class Dashboard_screen extends Component {
             </View>
            </View>
           </View>
+
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={this.state.modalVisible}
+            onRequestClose={() => {
+              this.setState({modalVisible: false})
+            }}> 
+              <View style={{backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center', flex: 1, height: Dimensions.get('window').height + 20}}>
+               <View style={styles.popup_screen}>
+               <View style={styles.popup_head}>
+                <Text style={styles.popup_head_text}>Please tell us more about you </Text>
+               </View>
+
+                <View style={styles.from_row}>
+                  <View style={{width: '45.5%', marginLeft: '5%'}}>
+                    <Item floatingLabel style={styles.field} >
+                      <Label style={styles.fields}>Height (cm)</Label>
+                      <Input 
+                        style={styles.input_text}
+                        value={this.state.height}
+                        keyboardType="phone-pad"
+                        maxLength={3}
+                        onChangeText={(height) => this.setState({height})}
+                      />
+                    </Item>
+                  </View>
+
+                  <View style={{width: '45.5%'}}>
+                  <Item floatingLabel style={styles.field} >
+                      <Label style={styles.fields}>Weight (kg)</Label>
+                      <Input
+                        style={styles.input_text}
+                        value={this.state.weight}
+                        keyboardType="phone-pad"
+                        maxLength={3}
+                        onChangeText={(weight) => this.setState({weight}) }
+                      />
+                    </Item>
+                  </View>
+                </View>
+                
+                <Text style={styles.err}>{this.state.modalErr}</Text>
+    
+                <View style={styles.saveBtn_view}>
+                { this.state.loading ? 
+                   this.state.saveSuccess ? 
+                    <View>
+                      <Text style={{marginBottom: '5%', color: 'green', fontSize: 20}}>Successfully updated</Text>
+                    </View> :
+                    <ActivityIndicator style={{marginBottom: '5%'}} size="large" color="green" />
+                  :
+                  <TouchableOpacity onPress={this.saveOtherData} style={styles.popup_saveBtn}>
+                    <Text style={styles.btn_text}> Save </Text>
+                  </TouchableOpacity>
+                }
+                </View>
+               </View>
+              </View>
+            </Modal>
 
              <Dashborad
                startActivity = {() => this.startTracing}
@@ -202,6 +318,79 @@ const styles = StyleSheet.create({
       width: '100%',
       height: 200
   },
+  popup_screen: {
+    width: '90%',
+    height: 250,
+    backgroundColor: '#fff',
+    padding: 10,
+    borderRadius: 10,
+    shadowColor: "#000000",
+    shadowOpacity: 0.8,
+    shadowRadius: 10,
+    shadowOffset: {
+    height: 1,
+    width: 0
+    },
+    elevation: 10
+  },
+  from_row: {
+    width: '90%',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingLeft: '2%'
+  },
+  fields: {
+    textAlign: 'center',
+    fontSize: 20
+  },
+  input_text: {
+    textAlign: 'center',
+    fontSize: 20,
+    color: '#000'
+  },
+  popup_head: {
+    padding: 10,
+    paddingTop: 15,
+    paddingBottom: 20,
+    alignItems: 'center',
+  },
+  popup_head_text: {
+    fontSize: 22,
+    textAlign: 'center',
+    color: '#000',
+    fontFamily: 'roboto'
+  },
+  popup_saveBtn: {
+    padding: 10,
+    width: '50%',
+    backgroundColor: '#2FDA54',
+    borderRadius: 20,
+  },
+  saveBtn_view: {
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  btn_text: {
+    textAlign: 'center',
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: 'bold'
+  },
+  err: {
+    color: 'red',
+    fontSize: 14,
+    fontWeight: 'normal',
+    marginBottom: '5%',
+    textAlign: 'center'
+  }
 })
 
-export default Dashboard_screen;
+function mapStateToProps(state) {
+  return {
+   allState: state
+  }
+}
+
+
+export default connect(mapStateToProps, {saveOtherDetails})(Dashboard_screen)

@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {View, Text, Image, ScrollView, TouchableHighlight } from 'react-native'
+import {View, Text, Image, ScrollView, TouchableOpacity } from 'react-native'
 import TokenTransfer from '../components/tokens/tokentransfer'
 import { connect } from 'react-redux'
 import { RkText } from 'react-native-ui-kitten'
@@ -17,13 +17,13 @@ class Token_transfer extends Component {
          return {
              headerTitle: (<RkText > {' Token Transfer '} </RkText>),
              headerLeft: ( <View style={{marginLeft: 16}}>
-                           <TouchableHighlight
+                           <TouchableOpacity
                              onPress={() =>  params.openDrawer()}>
                               <Avatar
                                rkType='image'
                                source={require('../assets/images/menu.png')}
                              />
-                             </TouchableHighlight>
+                             </TouchableOpacity>
                       </View>),
          };
      };

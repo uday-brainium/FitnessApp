@@ -14,6 +14,7 @@ import ProgressCircle from './../commons/progressCircle'
 import ActivityTab from './../commons/activityTab'
 import SwitchToggle from 'react-native-switch-toggle'
 
+
 let sampleData = [
   {
     seriesName: 'series1',
@@ -62,9 +63,16 @@ class Activity_tracker extends Component {
         walkValue: 3000,
         bikeValue: 200,
         vehicleValue: 100,
-        type: 'colored'
+        type: 'colored',
+        percent: 10
       }
     };
+  }
+
+  componentDidMount() {
+   
+      this.setState({percent: 50})
+    
   }
 
   getButtonText() {
@@ -98,7 +106,7 @@ class Activity_tracker extends Component {
   }
 
   render() {
-    let distance = Math.round( ((this.props.distance * 100) * 100) / 100)
+    let distance = this.props.distance
     return (
         <ScrollView>
          <View style={styles.container}>
@@ -114,17 +122,17 @@ class Activity_tracker extends Component {
 
               <View>
                 <Text  style={styles.unit_head_text}>Distance</Text>
-                <Text  style={styles.unit_text}>{ distance > 20 ? distance * 10 : distance } m</Text>
+                <Text  style={styles.unit_text}>{ distance > 5 ? (distance * 100 ).toFixed(2) : (distance * 1000 ).toFixed(2) } m</Text>
               </View>
             </View>
 
            </ImageBackground>
            <View style={{flex: 0.1, alignItems: 'center'}}>
             <Text style={styles.head_text}>Activity Wise Total Distance/Token</Text>
-            <ActivityTab type='normal'/>
+            <ActivityTab type='normal' switch={!this.state.switchOn2 ? 'left' : 'right'} percent = {this.state.percent}/>
            </View>
 
-            <View style={{ paddingBottom: 20, marginTop: '1%', alignItems: 'center'}}>
+            <View style={{ paddingBottom: 20, marginTop: '-3%', alignItems: 'center'}}>
             <SwitchToggle
                   containerStyle={styles.switch_container_style}
                   backgroundColorOn = {this.state.backgroundColorOn}
@@ -148,7 +156,7 @@ class Activity_tracker extends Component {
             </View>
 
             <View style={{flex: 0.1, paddingBottom: 30, alignItems: 'center'}}>
-             <ActivityTab type='box'/>
+             <ActivityTab type='box' switch={!this.state.switchOn2 ? 'left' : 'right'}  percent = {this.state.percent}/>
             </View>
 
 
@@ -161,13 +169,13 @@ class Activity_tracker extends Component {
                 <View style={{flex:0.1, flexDirection: 'row'}}>
                   <View style={{ margin: 5}}>
                     <View style={{flex:1, flexDirection: 'row',}}>
-                      <View style={{width: 20, height: 20, backgroundColor: 'violet', borderRadius: 5}}></View>
+                      <View style={{width: 15, height: 15, backgroundColor: 'violet', borderRadius: 5, marginTop: 3}}></View>
                       <View><Text style={styles.barChart_text}>Token</Text></View>
                     </View>
                   </View>
                   <View style={{margin: 5}}>
                   <View style={{flex:1, flexDirection: 'row',}}>
-                    <View style={{width: 20, height: 20, backgroundColor: 'green', borderRadius: 5}}></View>
+                    <View style={{width: 15, height: 15, backgroundColor: 'green', borderRadius: 5, marginTop: 3}}></View>
                     <View><Text style={styles.barChart_text}>Calories</Text></View>
                    </View>
                   </View>
@@ -203,8 +211,8 @@ const styles = StyleSheet.create({
           flexDirection: 'row'
         },
         head_text: {
-          paddingTop: 5,
-          paddingBottom: 10,
+          paddingTop: 2,
+          paddingBottom: 0,
           fontSize: 18,
           fontWeight: 'bold',
           color: 'gray'
@@ -250,7 +258,7 @@ const styles = StyleSheet.create({
           borderRadius: 30,
           backgroundColor: '#C5A0F4',
           padding: 0,
-          backgroundColor: '#1fcbbf'
+         // backgroundColor: '#1fcbbf'
         },
         switch_right_container_style: {
           flex: 0.9,

@@ -147,7 +147,7 @@ body:{
   flex:1 ,
   justifyContent:'flex-start',
   alignItems: 'center',
-  marginTop: 5,
+  marginTop: 25,
 },
 bodyHeader :{
   flex:35 ,

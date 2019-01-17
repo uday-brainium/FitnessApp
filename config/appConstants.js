@@ -2,11 +2,11 @@ import {Platform} from 'react-native';
 
 export class NetworkConstants {
   static RequestUrl = (requestActionName) =>{
-  BaseUrl='http://68.183.173.21:4242/api/';
+  BaseUrl='http://nodeserver.brainiuminfotech.com:4242/api/';
     return(BaseUrl+requestActionName);
   } ;
   
-  static RequestConfig =(data) => {    
+  static RequestConfig =(data) => {
  return({
   method: "POST",
   headers: {

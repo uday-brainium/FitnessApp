@@ -13,22 +13,13 @@ import {
   RkTheme,
   RkStyleSheet
 } from 'react-native-ui-kitten';
-
-
-import { Header } from 'react-navigation';
-import { Button } from 'react-native-elements';
 import { logoutUser, userDetailsFetch } from '../actions';
-
-
 import users from './../data/raw/users';
 import {Avatar} from './../components';
 import {GradientButton} from './../components/';
 import {FontAwesome} from './../assets/icons';
 import LoadingSpinner from './../components/Loading/LoadingSpinner';
 
-
-
-// FontAwesome.cog
 
 class Settings_Screen extends Component {
 

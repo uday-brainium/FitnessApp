@@ -9,7 +9,6 @@ import {
 import {
   RkStyleSheet,
   RkText,
-  RkAvoidKeyboard,
 } from 'react-native-ui-kitten';
 
 import { Avatar } from '../components/avatar';
