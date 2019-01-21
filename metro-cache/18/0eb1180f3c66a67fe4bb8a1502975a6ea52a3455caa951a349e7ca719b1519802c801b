@@ -1,0 +1,1 @@
+{"dependencies":[{"name":"fbjs/lib/Promise.native","data":{"isAsync":false}}],"output":[{"data":{"code":"__d(function(g,r,i,a,m,e,d){'use strict';var t=r(d[0]);m.exports=t});","map":[[1,28,11,0],[1,41,16,0],[1,45,16,6,"Promise"],[1,47,16,16,"require"],[1,49,16,23,"d"],[1,51,16,23],[1,55,55,0,"module"],[1,57,55,7,"exports"],[1,65,55,17,"Promise"]]},"type":"js/module"}]}

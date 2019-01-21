@@ -2,16 +2,19 @@ import React, {Component} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import ProgressCircle from './../commons/progressCircle'
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
+import {design} from './../../config/stylsheet'
+
 
 class Activity_Tab extends Component {
     render() {
         return(
             <View style={this.props.type == 'box'? this.props.switch == 'left' ? styles.container_box : styles.container_box_right : styles.container}>
+                <Text style={design.med_center_text}>Today's activity result</Text>
                 <View style={styles.circle_row}>
                     <View style={{margin: 5}}>
                       <AnimatedCircularProgress
-                        size={107}
-                        width={12}
+                        size={100}
+                        width={10}
                         fill={this.props.percent}
                         lineCap='round'
                         tintColor="#2FDA54"
@@ -21,15 +24,13 @@ class Activity_Tab extends Component {
                           (fill) => (
                             <View style={styles.under_circle}>
                               <Text style={[styles.circle_head, this.props.type == 'box' ? {color: '#fff'} : {color: 'gray'}]}>
-                               Total
+                              Activity
                               </Text>
  
                               <Text style={[styles.circle_number, this.props.type == 'box' ? {color: '#fff'} : {color: 'gray'}]}>
-                                Activity 300km
+                                350 M
                               </Text>
-                              <Text style={[styles.circle_number, this.props.type == 'box' ? {color: '#fff'} : {color: 'gray'}]}>
-                                 Tokens 20
-                              </Text>
+                              
                             </View>
                           )
                         }
@@ -38,8 +39,8 @@ class Activity_Tab extends Component {
         
                     <View style={{margin: 5}}>
                       <AnimatedCircularProgress
-                        size={107}
-                        width={12}
+                        size={100}
+                        width={10}
                         fill={this.props.percent + 15}
                         lineCap='round'
                         tintColor="#2FDA54"
@@ -49,14 +50,12 @@ class Activity_Tab extends Component {
                           (fill) => (
                             <View style={styles.under_circle}>
                               <Text style={[styles.circle_head, this.props.type == 'box' ? {color: '#fff'} : {color: 'gray'}]}>
-                               Total
+                               Calories
                               </Text>
                               <Text style={[styles.circle_number, this.props.type == 'box' ? {color: '#fff'} : {color: 'gray'}]}>
-                                Activity 300km
+                                 25
                               </Text>
-                              <Text style={[styles.circle_number, this.props.type == 'box' ? {color: '#fff'} : {color: 'gray'}]}>
-                                 Tokens 20
-                              </Text>
+                              
                             </View>
                           )
                         }
@@ -65,8 +64,8 @@ class Activity_Tab extends Component {
         
                     <View style={{margin: 5}}>
                       <AnimatedCircularProgress
-                          size={107}
-                          width={12}
+                          size={100}
+                          width={10}
                           fill={this.props.percent - 20}
                           lineCap='round'
                           tintColor="#2FDA54"
@@ -76,14 +75,12 @@ class Activity_Tab extends Component {
                           (fill) => (
                             <View style={styles.under_circle}>
                               <Text style={[styles.circle_head, this.props.type == 'box' ? {color: '#fff'} : {color: 'gray'}]}>
-                               Total
+                               Tokens
                               </Text>
                               <Text style={[styles.circle_number, this.props.type == 'box' ? {color: '#fff'} : {color: 'gray'}]}>
-                                Activity 300km
+                                55
                               </Text>
-                              <Text style={[styles.circle_number, this.props.type == 'box' ? {color: '#fff'} : {color: 'gray'}]}>
-                                 Tokens 20
-                              </Text>
+                              
                             </View>
                           )
                         }
@@ -139,7 +136,7 @@ const styles = StyleSheet.create({
       justifyContent: 'center'
     },
   circle_row: {
-    paddingTop: '6.5%',
+    paddingTop: '4%',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -154,7 +151,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   circle_number: {
-    fontSize: 11,
+    fontSize: 20,
     fontWeight: 'bold'
   }
 });

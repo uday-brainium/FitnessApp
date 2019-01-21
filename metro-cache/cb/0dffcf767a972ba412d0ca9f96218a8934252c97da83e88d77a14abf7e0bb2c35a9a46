@@ -1,0 +1,1 @@
+{"dependencies":[],"output":[{"data":{"code":"__d(function(g,r,i,a,m,e,d){'use strict';var t=g.nativeFabricUIManager;m.exports=t});","map":[[1,28,10,0],[1,41,35,0],[1,45,35,6,"FabricUIManager"],[1,47,35,31,"global"],[1,49,35,38,"nativeFabricUIManager"],[1,71,37,0,"module"],[1,73,37,7,"exports"],[1,81,37,17,"FabricUIManager"]]},"type":"js/module"}]}

@@ -9,10 +9,14 @@ import { RkText } from 'react-native-ui-kitten';
 import { Avatar } from '../components/avatar';
 import NavigatorService from './../utils/navigator';
 import Profile from '../components/profile'
+let ls = require('react-native-local-storage');
 
 class Profile_Screen extends Component {
   constructor(props) {
       super(props);
+      this.state = {
+        userData: {}
+      }
     }
 
   static navigationOptions = ({navigation}) => {
@@ -37,6 +41,11 @@ class Profile_Screen extends Component {
      this.props.navigation.setParams({
            openDrawer: this.openDrawerNow
        });
+
+       ls.get('userdata').then((data) => {
+         console.log("DATA", data);
+          this.setState({userData: data})
+       })
    }
 
    openDrawerNow = () => {
@@ -46,7 +55,7 @@ class Profile_Screen extends Component {
   render() {
     return (
         <View>
-          <Profile nav={this.props.navigation}/>
+          <Profile nav={this.props.navigation} userdata={this.state.userData} />
         </View>
     );
   }

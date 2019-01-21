@@ -6,15 +6,18 @@ import {
   Text,
   Dimensions,
   ImageBackground,
-  ScrollView
+  ScrollView,
+  Animated
 } from 'react-native';
 import { Colors } from './../../config/theme'
 import PureChart from 'react-native-pure-chart'
 import ProgressCircle from './../commons/progressCircle'
 import ActivityTab from './../commons/activityTab'
 import SwitchToggle from 'react-native-switch-toggle'
-
-
+import { AnimatedCircularProgress } from 'react-native-circular-progress';
+import {tokensPerMeter} from './../../config/appConstants'
+import {design} from './../../config/stylsheet'
+import { Icon } from 'react-native-elements'
 let sampleData = [
   {
     seriesName: 'series1',
@@ -65,15 +68,24 @@ class Activity_tracker extends Component {
         vehicleValue: 100,
         type: 'colored',
         percent: 10
-      }
+      },
+      fadeAnim: new Animated.Value(5), 
     };
   }
 
   componentDidMount() {
-   
-      this.setState({percent: 50})
-    
+    this.setState({percent: 50}) 
+    Animated.timing(                  // Animate over time
+      this.state.fadeAnim,            // The animated value to drive
+      {
+        toValue: 35,                   // Animate to opacity: 1 (opaque)
+        duration: 3000,
+        //easing: Easing.inOut(Easing.ease)
+        //useNativeDriver: true,           // Make it take a while
+      }
+    ).start(); 
   }
+
 
   getButtonText() {
     return this.state.switchOn2 ? 'Weekly' : 'Daily';
@@ -106,7 +118,11 @@ class Activity_tracker extends Component {
   }
 
   render() {
-    let distance = this.props.distance
+    let distance = this.props.distance > 10 ? (this.props.distance * 100 ).toFixed(1) : (this.props.distance * 1000 ).toFixed(1) 
+    let tokens = Math.round(distance * tokensPerMeter)
+     //Calculate the percentage of progress circle
+    let progressPercent = (tokens / distance * 100 ) 
+    
     return (
         <ScrollView>
          <View style={styles.container}>
@@ -114,25 +130,69 @@ class Activity_tracker extends Component {
             source={require('./../../assets/images/actTrackbg.png')}
             style={styles.img_bg}
            >
+           {!this.props.startedTracking ?
+            <Animated.View style={{justifyContent: 'center', alignItems: 'center', marginTop: this.state.fadeAnim}}>
+              <AnimatedCircularProgress
+                size={150}
+                width={16}
+                fill={isNaN(progressPercent) ? 0 : Math.round(progressPercent)}
+                lineCap='round'
+                tintColor="#2FDA54"
+                onAnimationComplete={() => console.log('onAnimationComplete')}
+                backgroundColor="#ffffff">
+              {
+                (fill) => (
+                  <View style={styles.under_circle}>
+                    
+
+                    <Text style={[styles.circle_number]}>
+                      Activity { distance } M
+                    </Text>
+                    <Text style={[styles.circle_number]}>
+                        Tokens { tokens }
+                    </Text>
+                    <Text style={[styles.circle_number]}>
+                      Calories 10
+                    </Text>
+                  </View>
+                )
+              }
+              </AnimatedCircularProgress>
+              </Animated.View>
+            :
+            <Animated.View style={{ flex: this.state.fadeAnim, justifyContent: 'center', alignItems: 'center'}}>
             <View style={styles.head_circle}>
               <View>
-                <Text style={styles.unit_head_text}>Type</Text>
-                <Text  style={styles.unit_text}>{this.props.type == null ? '...' : this.props.type.type}</Text>
+                
+                <Icon
+                  name={this.props.type.type == "STILL" ? 'airline-seat-recline-normal' : this.props.type.type == "WALKING" ? 'directions-walk' : this.props.type.type == "IN_VEHICLE" ? "directions-car" : "location-searching"}
+                  type='MaterialIcons'
+                  color='#ffffff'
+                  size = {70}
+                />
+                
+                <Text  style={styles.unit_text}>{this.props.type == "empty" ? 'Detecting..' : this.props.type.type}</Text>
               </View>
 
               <View>
-                <Text  style={styles.unit_head_text}>Distance</Text>
-                <Text  style={styles.unit_text}>{ distance > 5 ? (distance * 100 ).toFixed(2) : (distance * 1000 ).toFixed(2) } m</Text>
+                <Text  style={styles.unit_head_text}>{ distance } m</Text>
+                <Text style={styles.unit_text}>Travelled</Text>
               </View>
-            </View>
-
+              </View>
+              
+              <Text style={[design.white_medium_text, {alignItems: 'center', paddingTop: 25}]}> Speed: {(this.props.speed).toFixed(2)} (approx)</Text>
+            </Animated.View>
+            
+            
+           }
+            
            </ImageBackground>
-           <View style={{flex: 0.1, alignItems: 'center'}}>
+           {/* {<View style={{flex: 0.1, alignItems: 'center'}}>
             <Text style={styles.head_text}>Activity Wise Total Distance/Token</Text>
             <ActivityTab type='normal' switch={!this.state.switchOn2 ? 'left' : 'right'} percent = {this.state.percent}/>
-           </View>
+          </View> } */}
 
-            <View style={{ paddingBottom: 20, marginTop: '-3%', alignItems: 'center'}}>
+            <View style={{ paddingBottom: 18, paddingTop: 30, marginTop: '-3%', alignItems: 'center'}}>
             <SwitchToggle
                   containerStyle={styles.switch_container_style}
                   backgroundColorOn = {this.state.backgroundColorOn}
@@ -200,12 +260,13 @@ const styles = StyleSheet.create({
            backgroundColor: Colors.background,
        },
         img_bg: {
-            width: '100%',
-            height: 200
+          marginTop: -9,
+          width: '100%',
+          height: 230
         },
         head_circle: {
           width: '95%',
-          flex: 1,
+          //flex: 1,
           justifyContent: 'space-around',
           alignItems: 'center',
           flexDirection: 'row'
@@ -306,7 +367,8 @@ const styles = StyleSheet.create({
           textAlign: 'center'
         },
         unit_head_text: {
-          fontSize: 22,
+          marginTop: 20,
+          fontSize: 35,
           color: '#ffffff',
           fontWeight: 'bold',
           textAlign: 'center'
@@ -314,9 +376,23 @@ const styles = StyleSheet.create({
         unit_text: {
           marginTop: '5%',
           color: '#fff',
-          fontSize: 25,
+          fontSize: 16,
           fontWeight: 'bold',
           textAlign: 'center'
+        },
+        under_circle: {
+          alignItems: 'center',
+          justifyContent: 'center'
+        },
+        circle_head: {
+          fontSize: 20,
+          fontWeight: 'bold',
+          color: '#fff'
+        },
+        circle_number: {
+          fontSize: 16,
+          fontWeight: 'bold',
+          color: '#fff'
         }
     })
 

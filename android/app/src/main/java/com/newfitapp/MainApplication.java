@@ -3,6 +3,7 @@ package com.newfitapp;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.oblador.vectoricons.VectorIconsPackage;
 import com.horcrux.svg.SvgPackage;
 import com.xebia.activityrecognition.RNActivityRecognitionPackage;
 import com.magus.fblogin.FacebookLoginPackage;
@@ -26,6 +27,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new VectorIconsPackage(),
             new SvgPackage(),
               new FacebookLoginPackage(),
             new RNActivityRecognitionPackage()

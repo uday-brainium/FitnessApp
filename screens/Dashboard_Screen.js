@@ -36,6 +36,7 @@ class Dashboard_screen extends Component {
       initLng: '',
       updatedLat: '',
       updatedLng: '',
+      speed: 0,
       btn_text: false,
       maxUp: 0,
       prevCount: 0,
@@ -45,7 +46,11 @@ class Dashboard_screen extends Component {
       userdata: {},
       modalErr: '',
       loading: false,
-      saveSuccess: false
+      saveSuccess: false,
+      trackingStatus: false,
+      recordedData: {
+        totalDistance: 0,
+      },
     }
   }
 
@@ -67,7 +72,8 @@ class Dashboard_screen extends Component {
 
 
 
-  componentDidMount() {
+  componentDidMount() { 
+    this.startTracing()
     this.track()
     this.props.navigation.setParams({
           openDrawer: this.openDrawerNow
@@ -86,17 +92,20 @@ class Dashboard_screen extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    //console.log("ALL-STATE", nextProps.allState.fbuserData);
     if(nextProps != null &&  nextProps.allState.fbuserData != null) {
       if(nextProps.allState.fbuserData.modalflag == true) {
+        ls.save('userdata', JSON.stringify(nextProps.allState.fbuserData.fbuserData.res.message))
         ls.save('modalflag', 'true').then(() =>{
+          ls.save('height', this.state.height)
+          ls.save('weight', this.state.weight)
           this.setState({saveSuccess: true}, () => {
             setTimeout(() =>{
               this.setState({modalVisible: false})
-            },2000)
+            },3000)
           })
         })
       }
-      console.log("NextPROS", nextProps.allState.fbuserData.modalflag);
     }
   }
 
@@ -141,7 +150,7 @@ class Dashboard_screen extends Component {
   }
 
   startTracing = () => {
-    this.setState({btn_text: !this.state.btn_text})
+    this.setState({btn_text: !this.state.btn_text, trackingStatus: true})
     var options = {
       enableHighAccuracy: true,
       timeout: 25000,
@@ -167,7 +176,8 @@ class Dashboard_screen extends Component {
         maximumAge: 0
       };
       navigator.geolocation.getCurrentPosition((pos) => {
-        this.setState({updatedLat: pos.coords.latitude, updatedLng: pos.coords.longitude})
+        console.log("POSITION", pos);
+        this.setState({updatedLat: pos.coords.latitude, updatedLng: pos.coords.longitude, speed: pos.coords.speed})
         this.calcDistance()
       }, (err) => {
          console.log("Location error", err);
@@ -175,18 +185,20 @@ class Dashboard_screen extends Component {
   }
 
   stopInterval = () => {
-    this.setState({btn_text: !this.state.btn_text})
+    this.setState({btn_text: !this.state.btn_text, trackingStatus: false, timer: 0})
+    let recordedData = Object.assign({}, this.state.recordedData);
+    recordedData.totalDistance =  this.state.distanceTravelled > 10 ? (this.state.distanceTravelled * 100 ).toFixed(2) : (this.state.distanceTravelled * 1000 ).toFixed(2)
+    this.setState({recordedData}, () => {
+      this.setState({distanceTravelled: 0, initLat: '', initLng: '', latitude: '', longitude: ''},() => {
+        ToastAndroid.showWithGravity(
+          'Activity tracking stopped',
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER,
+        );
+      })
+    });
     clearInterval(timeIntervalFunction);
-  }
-
-  resetCounter = () => {
-    this.setState({distanceTravelled: 0, initLat: '', initLng: '', latitude: '', longitude: ''},() => {
-      ToastAndroid.showWithGravity(
-        'Counter reseted',
-        ToastAndroid.SHORT,
-        ToastAndroid.CENTER,
-      );
-    })
+    clearInterval(timerCount);
   }
 
   saveOtherData = () => {
@@ -201,32 +213,14 @@ class Dashboard_screen extends Component {
         userid: userdata._id
       }
         this.props.saveOtherDetails(sendData)
-        
     }
-     console.log(height,weight, userdata);
-    
   }
+
 
   render() {
     return (
         <Container >
           <Content >
-          <View style={{paddingLeft: '5%', paddingRight: '5%', paddingTop: '5%'}}>
-           <View style={styles.main_row}>
-        
-            <View>
-                <TouchableOpacity  style={styles.track_now_btn} onPress={this.state.btn_text == false ? this.startTracing : this.stopInterval}>
-                 <Text style={styles.btn_text}> {this.state.btn_text == false ? 'Start tracking' : 'STOP'} </Text>
-                </TouchableOpacity>
-            </View>
-            
-            <View>
-              <TouchableOpacity disabled={this.state.btn_text ? true : false}  style={[styles.track_now_btn, {backgroundColor: this.state.btn_text ? 'gray' : '#C5A0F4'}]} onPress={this.resetCounter}>
-                <Text style={styles.btn_text}> Reset </Text>
-              </TouchableOpacity>
-            </View>
-           </View>
-          </View>
 
           <Modal
             animationType="slide"
@@ -290,8 +284,11 @@ class Dashboard_screen extends Component {
 
              <Dashborad
                startActivity = {() => this.startTracing}
-               type = {this.state.mostProb}
+               type = {this.state.mostProb.type == null ? "empty" : this.state.mostProb}
                distance = {this.state.distanceTravelled}
+               speed = {this.state.speed}
+               startedTracking = {this.state.trackingStatus}
+               recordedData = {this.state.recordedData}
               />
           </Content>
       </Container>
@@ -302,13 +299,18 @@ class Dashboard_screen extends Component {
 const styles = StyleSheet.create({
     track_now_btn: {
       padding: 10,
-      borderRadius: 30,
+      borderTopLeftRadius: 20,
+      backgroundColor: '#C5A0F4',
+    },
+    track_now_btn_right: {
+      padding: 10,
+      borderTopRightRadius: 20,
       backgroundColor: '#C5A0F4',
     },
     main_row: {
       flex: 1,
       flexDirection: 'row',
-      justifyContent: 'space-between'
+      justifyContent: 'space-between',
     },
     btn_text: {
       color: '#fff',

@@ -6,8 +6,10 @@ import {
   Text,
   ImageBackground,Dimensions, Image
 } from 'react-native';
+import { connect } from 'react-redux'
 import { Colors } from './../../config/theme'
 let ls = require('react-native-local-storage');
+import { Icon } from 'react-native-elements'
 
 
 class Profile extends Component {
@@ -20,16 +22,29 @@ class Profile extends Component {
 
   componentDidMount() {
     ls.get('userdata').then((data) => {
-      this.setState({profileInfo: JSON.parse(data)}, () =>{
-        console.log('PROFILE_INdex', JSON.parse(data));
-        
-      })
+      this.setState({profileInfo: JSON.parse(data)})
     })
   }
 
+
   render() {
+    console.log("STate", this.state.profileInfo);
+    
     return (
-         <View style={styles.container}>
+      <View>
+        <View style={{ left: '80%', top: '2%', position: 'absolute', zIndex: 9999}}>
+          <Icon
+              name="edit"
+              type='MaterialIcons'
+              color='#000000'
+              raised
+              reverseColor="black"
+              underlayColor="#1fcbbf"
+              onPress ={() => alert('Edit profile will be here')}
+              size = {20}
+            />
+        </View>
+         <View style={styles.container}>          
             <View style={styles.profile_image_part}>
             <View style={{justifyContent: 'center', alignItems: 'center'}}>
              <View style={styles.image_container}>
@@ -75,6 +90,7 @@ class Profile extends Component {
 
             </View>
          </View>
+       </View>
     );
   }
 }
@@ -169,4 +185,10 @@ const styles = StyleSheet.create({
       }
     })
 
-export default Profile;
+function mapStateToProps(state) {
+  return {
+    userData: state.fbuserData
+  }
+}
+
+export default connect(mapStateToProps)(Profile)

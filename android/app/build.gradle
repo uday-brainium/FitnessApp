@@ -153,6 +153,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-vector-icons')
     implementation project(':react-native-svg')
     implementation project(':react-native-activity-recognition')
     implementation fileTree(dir: "libs", include: ["*.jar"])

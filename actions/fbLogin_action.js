@@ -80,12 +80,18 @@ export const saveOtherDetails = (values) => {
     }
      fetch(NetworkConstants.RequestUrl('update_height'), insertData).then ((res) => {
       res.json().then(function(data) {
+        ls.remove('userdata')
+          dispatch({
+            type: FACEBOOK_LOGIN_SUCCESS,
+            payload: data
+          })
           dispatch({
             type: USER_ENTRED_HEIGHT,
             payload: true
           })
+        
       })
-    }) 
-  }  
+    })
+  }
 
 }

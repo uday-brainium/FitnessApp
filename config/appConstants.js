@@ -19,6 +19,8 @@ export class NetworkConstants {
   
 }
 
+export const tokensPerMeter = 0.2
+
 
 
 // export class UIConstants {
