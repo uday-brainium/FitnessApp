@@ -20,6 +20,7 @@ import { Container, Content, Item, Input, Label, Text } from 'native-base';
 import ActivityRecognition from 'react-native-activity-recognition'
 import Dashborad from './../components/dashboard'
 import { design } from '../config/stylsheet';
+const { width, height } = Dimensions.get('window');
 let ls = require('react-native-local-storage');
 var PushNotification = require('react-native-push-notification');
 let timeIntervalFunction
@@ -245,7 +246,7 @@ class Dashboard_screen extends Component {
           if(this.state.lastKnownLat != this.state.updatedLat) {
             walkDistanceAddition = (walkDistanceAddition + distance)
           }
-          this.setState({walkingDistance: (walkDistanceAddition )})
+          this.setState({walkingDistance: (walkDistanceAddition / 1 )})
         }
 
         //Total distance covered by vehicle
@@ -256,7 +257,7 @@ class Dashboard_screen extends Component {
           if(this.state.lastKnownLat != this.state.updatedLat) {
             vehicleDistanceAddition = (vehicleDistanceAddition + distance)
           }
-          this.setState({vehicleDistance: (vehicleDistanceAddition )})
+          this.setState({vehicleDistance: (vehicleDistanceAddition / 1)})
         }
         
         //Total distance covered by cycle
@@ -267,7 +268,7 @@ class Dashboard_screen extends Component {
           if(this.state.lastKnownLat != this.state.updatedLat) {
             cycleDistanceAddition = (cycleDistanceAddition + distance)
           }
-          this.setState({cycleDistance: (cycleDistanceAddition )})
+          this.setState({cycleDistance: (cycleDistanceAddition / 1)})
         }
       }
    // }
@@ -500,7 +501,7 @@ class Dashboard_screen extends Component {
                 }
               </View> */}
             </View>
-
+  
              <Dashborad
                startActivity = {(type) => this.startTracing(type)}
                stopActivity = {() => this.stopInterval()}

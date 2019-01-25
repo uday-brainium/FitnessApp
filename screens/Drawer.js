@@ -19,6 +19,7 @@ import { logoutUser, userDetailsFetch } from '../actions';
 import { connect } from 'react-redux';
 import LoadingSpinner from './../components/Loading/LoadingSpinner';
 let ls = require('react-native-local-storage');
+import { base_url } from './../../config/appConstants'
 
 class Drawer extends Component {
 
@@ -98,7 +99,11 @@ class Drawer extends Component {
                 {  this.state.userInfo != null && this.state.userInfo.user_type == 'Normal' &&
                   <Avatar
                     rkType='big'
-                    source={require('./../assets/images/app-icon.png')} />
+                    source={
+                      this.state.userInfo.image_url == "" ?
+                      require('./../assets/images/app-icon.png') :
+                      {uri: `${base_url}${this.state.userInfo.image_url}`}
+                    } />
                 }
               </View>
 

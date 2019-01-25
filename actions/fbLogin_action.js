@@ -12,6 +12,7 @@ import {Platform} from 'react-native'
 import { NetworkConstants } from './../config/appConstants'
 let ls = require('react-native-local-storage');
 import NavigatorService from './../utils/navigator';
+import  qs from "qs";
 
 
 export const fb_login_action = (values) => {
@@ -138,20 +139,22 @@ export const update_profile_img = (values) => {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: JSON.stringify({
+      body: qs.stringify({
         userid: values.userid,
         base_64: values.base_64
       })
     }
      fetch(NetworkConstants.RequestUrl('update_profile_img'), insertData).then ((res) => {
       res.json().then(function(data) {
-        ls.remove('userdata')
-          dispatch({
-            type: FACEBOOK_LOGIN_SUCCESS,
-            payload: data
-          })
+        if(data.res.response == 200) {
+          ls.remove('userdata')
+            dispatch({
+              type: FACEBOOK_LOGIN_SUCCESS,
+              payload: data
+            })
+         }
       })
     })
   }

@@ -12,7 +12,7 @@ import { Colors } from './../../config/theme'
 let ls = require('react-native-local-storage');
 import { Icon } from 'react-native-elements'
 import PhotoUpload from 'react-native-photo-upload'
-
+import { base_url } from './../../config/appConstants'
 
 class Profile extends Component {
   constructor(props) {
@@ -57,18 +57,6 @@ class Profile extends Component {
             <View style={{justifyContent: 'center', alignItems: 'center'}}>
              <View style={styles.image_container}>
              {this.state.profileInfo.user_type == 'facebook' &&
-              <PhotoUpload
-                onPhotoSelect={avatar => {
-                  if (avatar) {
-                    //console.log('Image base64 string: ', avatar)
-                    let data = {
-                      userid: this.state.profileInfo._id,
-                      base_64: avatar
-                    }
-                    this.props.update_profile_img(data)
-                  }
-                }}
-              >
                 <Image
                   style={{
                     paddingVertical: 30,
@@ -79,7 +67,6 @@ class Profile extends Component {
                   resizeMode='cover'
                   source={{uri: 'http://graph.facebook.com/'+this.state.profileInfo.social_id+'/picture?type=large' }}
                 />
-              </PhotoUpload>
              }
              {this.state.profileInfo.user_type == 'Normal' &&
               <PhotoUpload
@@ -105,7 +92,7 @@ class Profile extends Component {
                   source={
                     this.state.profileInfo.image_url == "" ?
                     require('./../../assets/images/app-icon.png') :
-                    {uri: this.state.profileInfo.image_url}
+                    {uri: `${base_url}${this.state.profileInfo.image_url}`}
                      }
                 />
               </PhotoUpload>
