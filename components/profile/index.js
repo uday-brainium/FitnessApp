@@ -7,9 +7,11 @@ import {
   ImageBackground,Dimensions, Image
 } from 'react-native';
 import { connect } from 'react-redux'
+import { update_profile_img } from './../../actions/fbLogin_action'
 import { Colors } from './../../config/theme'
 let ls = require('react-native-local-storage');
 import { Icon } from 'react-native-elements'
+import PhotoUpload from 'react-native-photo-upload'
 
 
 class Profile extends Component {
@@ -21,15 +23,21 @@ class Profile extends Component {
   }
 
   componentDidMount() {
+    console.log("Props", this.props);
+    
     ls.get('userdata').then((data) => {
+      this.setState({profileInfo: JSON.parse(data)})
+    })
+  }
+
+  componentWillReceiveProps(nextProps) {
+     ls.get('userdata').then((data) => {
       this.setState({profileInfo: JSON.parse(data)})
     })
   }
 
 
   render() {
-    console.log("STate", this.state.profileInfo);
-    
     return (
       <View>
         <View style={{ left: '80%', top: '2%', position: 'absolute', zIndex: 9999}}>
@@ -40,7 +48,7 @@ class Profile extends Component {
               raised
               reverseColor="black"
               underlayColor="#1fcbbf"
-              onPress ={() => alert('Edit profile will be here')}
+              onPress ={() => this.props.showEdit()}
               size = {20}
             />
         </View>
@@ -49,10 +57,58 @@ class Profile extends Component {
             <View style={{justifyContent: 'center', alignItems: 'center'}}>
              <View style={styles.image_container}>
              {this.state.profileInfo.user_type == 'facebook' &&
-              <Image style={styles.profile_image} source={{uri: 'http://graph.facebook.com/'+this.state.profileInfo.social_id+'/picture?type=large' }} />
+              <PhotoUpload
+                onPhotoSelect={avatar => {
+                  if (avatar) {
+                    //console.log('Image base64 string: ', avatar)
+                    let data = {
+                      userid: this.state.profileInfo._id,
+                      base_64: avatar
+                    }
+                    this.props.update_profile_img(data)
+                  }
+                }}
+              >
+                <Image
+                  style={{
+                    paddingVertical: 30,
+                    width: 178,
+                    height: 178,
+                    borderRadius: 75
+                  }}
+                  resizeMode='cover'
+                  source={{uri: 'http://graph.facebook.com/'+this.state.profileInfo.social_id+'/picture?type=large' }}
+                />
+              </PhotoUpload>
              }
              {this.state.profileInfo.user_type == 'Normal' &&
-              <Image style={styles.profile_image} source={require('./../../assets/images/app-icon.png')} />
+              <PhotoUpload
+                onPhotoSelect={avatar => {
+                  if (avatar) {
+                    let data = {
+                      userid: this.state.profileInfo._id,
+                      base_64: avatar
+                    }
+                    this.props.update_profile_img(data)
+                  }
+                }}
+              >
+               
+                <Image
+                  style={{
+                    paddingVertical: 30,
+                    width: 178,
+                    height: 178,
+                    borderRadius: 75
+                  }}
+                  resizeMode='cover'
+                  source={
+                    this.state.profileInfo.image_url == "" ?
+                    require('./../../assets/images/app-icon.png') :
+                    {uri: this.state.profileInfo.image_url}
+                     }
+                />
+              </PhotoUpload>
              }
              </View>
             </View>
@@ -191,4 +247,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(Profile)
+export default connect(mapStateToProps, {update_profile_img})(Profile)

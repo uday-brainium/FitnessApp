@@ -5,7 +5,8 @@ import {
   ERROR_SET,
   LOGIN_USER_SUCCESS,
   LOGIN_USER_FAIL,
-  USER_ENTRED_HEIGHT
+  USER_ENTRED_HEIGHT,
+  USER_PROFILE_UPDATED
 } from './types';
 import {Platform} from 'react-native'
 import { NetworkConstants } from './../config/appConstants'
@@ -95,3 +96,69 @@ export const saveOtherDetails = (values) => {
   }
 
 }
+
+export const update_profile = (values) => {
+  return async (dispatch) => {
+    let insertData = {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userid: values.userid,
+        height: values.height,
+        weight: values.weight,
+        first_name: values.first_name,
+        last_name: values.last_name
+      })
+    }
+     fetch(NetworkConstants.RequestUrl('update_profile'), insertData).then ((res) => {
+      res.json().then(function(data) {
+        ls.remove('userdata')
+          dispatch({
+            type: FACEBOOK_LOGIN_SUCCESS,
+            payload: data
+          })
+          dispatch({
+            type: USER_PROFILE_UPDATED,
+            payload: true
+          })
+        
+      })
+    })
+  }
+
+}
+
+
+export const update_profile_img = (values) => {
+  return async (dispatch) => {
+    let insertData = {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userid: values.userid,
+        base_64: values.base_64
+      })
+    }
+     fetch(NetworkConstants.RequestUrl('update_profile_img'), insertData).then ((res) => {
+      res.json().then(function(data) {
+        ls.remove('userdata')
+          dispatch({
+            type: FACEBOOK_LOGIN_SUCCESS,
+            payload: data
+          })
+      })
+    })
+  }
+
+}
+
+
+
+
+

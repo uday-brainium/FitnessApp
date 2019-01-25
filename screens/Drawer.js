@@ -46,6 +46,12 @@ class Drawer extends Component {
     navigate(screen, { go_back_key: state.key });
   }
 
+  componentWillReceiveProps() {
+     ls.get('userdata').then((data) => {
+      this.setState({userInfo: JSON.parse(data)})
+    })
+  }
+
 
   render() {
     if((typeof this.props.fbuserData != 'undefined')  && (typeof this.props.fbuserData.email != 'undefined') && this.state.callcount < 5) {

@@ -7,7 +7,8 @@ import {
   Dimensions,
   ImageBackground,
   ScrollView,
-  Animated
+  Animated,
+  Image
 } from 'react-native';
 import { Colors } from './../../config/theme'
 import PureChart from 'react-native-pure-chart'
@@ -18,6 +19,8 @@ import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import {tokensPerMeter} from './../../config/appConstants'
 import {design} from './../../config/stylsheet'
 import { Icon } from 'react-native-elements'
+import Activity_list from './../commons/activity_list'
+import {tokenRateVehicle, tokenRateBike, tokenRateWalking} from './../../config/appConstants'
 let sampleData = [
   {
     seriesName: 'series1',
@@ -67,9 +70,11 @@ class Activity_tracker extends Component {
         bikeValue: 200,
         vehicleValue: 100,
         type: 'colored',
-        percent: 10
+        percent: 10,
+        trackingType: ''
       },
-      fadeAnim: new Animated.Value(5), 
+      fadeAnim: new Animated.Value(0),
+      hideAnim: new Animated.Value(0)
     };
   }
 
@@ -83,7 +88,7 @@ class Activity_tracker extends Component {
         //easing: Easing.inOut(Easing.ease)
         //useNativeDriver: true,           // Make it take a while
       }
-    ).start(); 
+    ).start();
   }
 
 
@@ -120,8 +125,12 @@ class Activity_tracker extends Component {
   render() {
     let distance = this.props.distance > 10 ? (this.props.distance * 100 ).toFixed(1) : (this.props.distance * 1000 ).toFixed(1) 
     let tokens = Math.round(distance * tokensPerMeter)
+    let walkrunDistance = (this.props.walkrunDistance * 1000).toFixed(2)
+    let bikeDistance = (this.props.bikeDistance * 1000).toFixed(2)
+    let vehicleDistance = (this.props.vehicleDistance * 1000).toFixed(2)
      //Calculate the percentage of progress circle
-    let progressPercent = (tokens / distance * 100 ) 
+    let progressPercent = (tokens / distance * 100 )
+    
     
     return (
         <ScrollView>
@@ -130,69 +139,195 @@ class Activity_tracker extends Component {
             source={require('./../../assets/images/actTrackbg.png')}
             style={styles.img_bg}
            >
-           {!this.props.startedTracking ?
-            <Animated.View style={{justifyContent: 'center', alignItems: 'center', marginTop: this.state.fadeAnim}}>
-              <AnimatedCircularProgress
-                size={150}
-                width={16}
-                fill={isNaN(progressPercent) ? 0 : Math.round(progressPercent)}
-                lineCap='round'
-                tintColor="#2FDA54"
-                onAnimationComplete={() => console.log('onAnimationComplete')}
-                backgroundColor="#ffffff">
-              {
-                (fill) => (
-                  <View style={styles.under_circle}>
+           {
+            // <Animated.View style={{justifyContent: 'center', alignItems: 'center', marginTop: this.state.fadeAnim}}>
+            //   <AnimatedCircularProgress
+            //     size={150}
+            //     width={16}
+            //     fill={isNaN(progressPercent) ? 0 : Math.round(progressPercent)}
+            //     lineCap='round'
+            //     tintColor="#2FDA54"
+            //     onAnimationComplete={() => console.log('onAnimationComplete')}
+            //     backgroundColor="#ffffff">
+            //   {
+            //     (fill) => (
+            //       <View style={styles.under_circle}>
                     
 
-                    <Text style={[styles.circle_number]}>
-                      Activity { distance } M
-                    </Text>
-                    <Text style={[styles.circle_number]}>
-                        Tokens { tokens }
-                    </Text>
-                    <Text style={[styles.circle_number]}>
-                      Calories 10
-                    </Text>
-                  </View>
-                )
-              }
-              </AnimatedCircularProgress>
-              </Animated.View>
-            :
+            //         <Text style={[styles.circle_number]}>
+            //           Activity { distance } M
+            //         </Text>
+            //         <Text style={[styles.circle_number]}>
+            //             Tokens { tokens }
+            //         </Text>
+            //         <Text style={[styles.circle_number]}>
+            //           Calories 10
+            //         </Text>
+            //       </View>
+            //     )
+            //   }
+            //   </AnimatedCircularProgress>
+            //   </Animated.View>
+           }
             <Animated.View style={{ flex: this.state.fadeAnim, justifyContent: 'center', alignItems: 'center'}}>
             <View style={styles.head_circle}>
               <View>
                 
-                <Icon
+                {/* <Icon
                   name={this.props.type.type == "STILL" ? 'airline-seat-recline-normal' : this.props.type.type == "WALKING" ? 'directions-walk' : this.props.type.type == "IN_VEHICLE" ? "directions-car" : "location-searching"}
                   type='MaterialIcons'
                   color='#ffffff'
                   size = {70}
-                />
+                /> */}
+                {this.props.trackingType === "" ? 
+                  <Icon
+                  name={"accessibility"}
+                  type='MaterialIcons'
+                  color='#fff'
+                  size = {70}
+                /> :
+                <Image style={{width: 70, height: 70, resizeMode: 'contain'}} source ={
+                  this.props.trackingType === 'walkrun' ?
+                  require('./../../assets/images/walkrun2.png') :
+                  this.props.trackingType === 'bycycle' ?
+                  require('./../../assets/images/bike2.png') :
+                  this.props.trackingType === 'vehicle' ?
+                  require('./../../assets/images/racing2.png') :
+                  require('./../../assets/images/walkrun2.png')
+              } />
+                }
                 
-                <Text  style={styles.unit_text}>{this.props.type == "empty" ? 'Detecting..' : this.props.type.type}</Text>
+                <Text style={styles.unit_text}>{this.props.trackingType === 'walkrun' ? 'Walk/Run' : this.props.trackingType === 'bycycle' ? 'Bike/Cycle' : this.props.trackingType === 'vehicle' ? 'Vehicle' : 'Start activity' }</Text>
+                {/* <Text  style={styles.unit_text}>{this.props.type == "empty" ? 'Detecting..' : this.props.type.type}</Text> */}
               </View>
 
               <View>
-                <Text  style={styles.unit_head_text}>{ distance } m</Text>
+                <Text  style={styles.unit_head_text}>{ 
+                  this.props.trackingType === 'walkrun' ?
+                   walkrunDistance :
+                  this.props.trackingType === 'bycycle' ?
+                   bikeDistance :
+                  this.props.trackingType === 'vehicle' ?
+                   vehicleDistance :
+                   distance
+                 } m</Text>
                 <Text style={styles.unit_text}>Travelled</Text>
+                <Text style={design.white_small_text}>Speed: { this.props.speed } m/s</Text>
               </View>
               </View>
               
-              <Text style={[design.white_medium_text, {alignItems: 'center', paddingTop: 25}]}> Speed: {(this.props.speed).toFixed(2)} (approx)</Text>
+              <Text style={[design.white_medium_text, {alignItems: 'center', paddingTop: 25}]}> Total: { distance } meters</Text>
             </Animated.View>
-            
-            
-           }
-            
            </ImageBackground>
-           {/* {<View style={{flex: 0.1, alignItems: 'center'}}>
-            <Text style={styles.head_text}>Activity Wise Total Distance/Token</Text>
-            <ActivityTab type='normal' switch={!this.state.switchOn2 ? 'left' : 'right'} percent = {this.state.percent}/>
-          </View> } */}
+           
+           {/* {this.props.startedTracking &&          
+              <TouchableOpacity onPress={() => this.props.stopActivity()} style={styles.stop_btn}>
+                <Text style={design.white_medium_text}>Stop</Text>
+              </TouchableOpacity>
+           }
+            */}
+          
+          <View style={{justifyContent: 'center', paddingBottom: 20, borderBottomWidth: 2, borderBottomColor: '#c6a0f5'}}>
+            <Text style={[styles.head_text, {fontWeight: 'normal', fontSize: 18}]}>{!this.props.startedTracking ? 'Choose and start activity tracking' : 'Switch activity type by clicking buttons below'}</Text>
+           <View style={design.common_row}>
+              <View>
+                <TouchableOpacity onPress={this.props.trackingType == 'walkrun' ? () => this.props.stopActivity() : () => this.props.startActivity('walkrun')} style={design.circle_view}>
+                  <Image
+                   style={{height: 102, width: 102, marginLeft: -5}} 
+                   source={ this.props.trackingType === 'walkrun' ? 
+                    require('./../../assets/images/walk_run_icon_button_on.png') : 
+                    require('./../../assets/images/walk_run_icon_button_off.png')} />
+                </TouchableOpacity>
+                <View style={design.common_row}>
+                 {this.props.trackingType === 'walkrun' ?
+                   <View style={design.green_bullet}></View> :
+                   <View style={design.red_bullet}></View>
+                   }
+                  <View> 
+                    <Text style={{textAlign: 'center', fontSize: 20, fontWeight: 'bold'}}>Walk/Run</Text>
+                  </View>
+                </View>
+                <Text style={{textAlign: 'center'}}>Distance {walkrunDistance} m</Text>
+                <Text style={{textAlign: 'center'}}>Calorie {Math.round(walkrunDistance * 0.5)}</Text>
+                <Text style={{textAlign: 'center'}}>Tokens {Math.round(walkrunDistance * tokenRateWalking)}</Text>
+              </View>
+              <View>
+                <TouchableOpacity onPress={this.props.trackingType == 'bycycle' ? () => this.props.stopActivity() : () => this.props.startActivity('bycycle')} style={design.circle_view}>
+                  <Image 
+                   style={{height: 102, width: 102, marginLeft: -5}}  
+                   source={this.props.trackingType === 'bycycle' ? 
+                    require('./../../assets/images/bike_icon_button_on.png') : 
+                    require('./../../assets/images/bike_icon_button_off.png')} />
+                </TouchableOpacity>
+                <View style={design.common_row}>
+                  {this.props.trackingType === 'bycycle' ?
+                   <View style={design.green_bullet}></View> :
+                   <View style={design.red_bullet}></View>
+                   }
+                  <View> 
+                    <Text style={{textAlign: 'center', fontSize: 20, fontWeight: 'bold'}}>Bike/Cycle</Text>
+                  </View>
+                </View>
+                <Text style={{textAlign: 'center'}}>Distance {bikeDistance} m</Text>
+                <Text style={{textAlign: 'center'}}>Calorie {Math.round(bikeDistance * 0.5)}</Text>
+                <Text style={{textAlign: 'center'}}>Tokens {Math.round(bikeDistance * tokenRateBike)}</Text>
+              </View>
+              <View>
+                <TouchableOpacity onPress={this.props.trackingType == 'vehicle' ? () => this.props.stopActivity() : () => this.props.startActivity('vehicle')} style={design.circle_view}>
+                   <Image 
+                    style={{height: 100, width: 100}} 
+                    source={this.props.trackingType === 'vehicle' ? 
+                     require('./../../assets/images/vehicle_Icon_button_on.png') : 
+                     require('./../../assets/images/vehicle_Icon_button_off.png')} />
+                </TouchableOpacity>
+                <View style={design.common_row}>
+                   {this.props.trackingType === 'vehicle' ?
+                    <View style={design.green_bullet}></View> :
+                    <View style={design.red_bullet}></View>
+                   }
+                  <View> 
+                    <Text style={{textAlign: 'center', fontSize: 20, fontWeight: 'bold', textAlign: 'center', marginLeft: -20}}>Vehicle</Text>
+                  </View>
+                </View>
+                <Text style={{textAlign: 'center'}}>Distance {vehicleDistance} m</Text>
+                <Text style={{textAlign: 'center'}}>Calorie {Math.round(vehicleDistance * 0.5)}</Text>
+                <Text style={{textAlign: 'center'}}>Tokens {Math.round(vehicleDistance * tokenRateVehicle)}</Text>
+              </View>
+           </View>
+          </View>
+          
 
-            <View style={{ paddingBottom: 18, paddingTop: 30, marginTop: '-3%', alignItems: 'center'}}>
+          <View>
+            <View style={{flexDirection: 'row', margin: 5}}>
+             <View>
+                <Icon
+                name={"timeline"}
+                type='MaterialIcons'
+                color='#c6a0f5'
+                size = {22}
+              />
+             </View>
+             <View> 
+               <Text style={{fontSize: 18, fontWeight: 'bold'}}>Activity History</Text>
+             </View>
+            </View>
+            <Activity_list />
+          </View>
+          
+
+
+           
+           {/* <View style={{flex: 0.1, alignItems: 'center'}}>
+            <Text style={styles.head_text}>Activity Wise Total Distance/Token</Text>
+            <ActivityTab
+             dashborad = {true}
+             activeCircle = {this.props.type.type}
+             type='normal' 
+             percent = {this.state.percent}
+             />
+          </View>  */}
+
+            {/* <View style={{ paddingBottom: 18, paddingTop: 30, marginTop: '-3%', alignItems: 'center'}}>
             <SwitchToggle
                   containerStyle={styles.switch_container_style}
                   backgroundColorOn = {this.state.backgroundColorOn}
@@ -213,11 +348,11 @@ class Activity_tracker extends Component {
                   circleColorOn='#1fcbbf'
                   duration={500}
                   />
-            </View>
+            </View> 
 
             <View style={{flex: 0.1, paddingBottom: 30, alignItems: 'center'}}>
              <ActivityTab type='box' switch={!this.state.switchOn2 ? 'left' : 'right'}  percent = {this.state.percent}/>
-            </View>
+          </View> */}
 
 
            <View style={styles.barchart_view}>
@@ -258,9 +393,9 @@ const styles = StyleSheet.create({
        container: {
            width: Dimensions.get('window').width,
            backgroundColor: Colors.background,
-       },
+         },
         img_bg: {
-          marginTop: -9,
+          marginTop: -20,
           width: '100%',
           height: 230
         },
@@ -272,11 +407,12 @@ const styles = StyleSheet.create({
           flexDirection: 'row'
         },
         head_text: {
-          paddingTop: 2,
-          paddingBottom: 0,
+          textAlign: 'center',
+          marginBottom: 15,
+          marginTop: -5,
           fontSize: 18,
           fontWeight: 'bold',
-          color: 'gray'
+          color: 'gray',
         },
         barChart_text: {
           textAlign: 'left',
@@ -298,7 +434,7 @@ const styles = StyleSheet.create({
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
-          paddingBottom: 0
+          paddingTop: 10
         },
         chartContainer: {
           padding: 25,

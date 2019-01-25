@@ -20,6 +20,11 @@ export class NetworkConstants {
 }
 
 export const tokensPerMeter = 0.2
+export const tokenRateWalking = 0.01
+export const tokenRateBike = 0.001
+export const tokenRateVehicle = 0.0001
+
+
 
 
 
