@@ -3,7 +3,22 @@ import {StyleSheet, Dimensions} from 'react-native'
 export const design = StyleSheet.create({
     white_medium_text: {
         color: '#fff',
-        fontSize: 20,
+        fontSize: 18,
+    },
+    token_text: {
+      color: '#000',
+      fontSize: 20,
+      fontWeight: 'bold',
+      textAlign: 'center',
+      justifyContent: 'center'
+    },
+    heart_text: {
+      position: 'absolute',
+      width: 50,
+      top: 55,
+      left: 37,
+      justifyContent: 'center',
+      alignItems: 'center'
     },
     med_center_text: {
         color: '#ffffff',
@@ -82,15 +97,13 @@ export const design = StyleSheet.create({
     },
     common_row: {
       flexDirection: 'row',
-      justifyContent: 'space-around',
+      justifyContent: 'space-evenly',
       alignItems: 'center'
     },
     circle_view: {
-      height: 100,
-      width: 100,
-      borderRadius: 75,
-      borderWidth: 2,
-      borderColor: '#c6a0f5',
+     // height: 120,
+     // width: 120,
+     // borderRadius: 100,
       overflow: 'hidden'
     },
     green_bullet: {
@@ -98,13 +111,15 @@ export const design = StyleSheet.create({
       width: 10,
       backgroundColor: '#2dcb6e',
       borderRadius: 20,
-      marginRight: 2
+      marginRight: 2,
+      marginTop: 10
     },
     red_bullet: {
       height: 10,
       width: 10,
       backgroundColor: 'red',
       borderRadius: 20,
-      marginRight: 2
+      marginRight: 2,
+      marginTop: 10
     }
 })

@@ -165,6 +165,8 @@ dependencies {
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation 'com.facebook.android:facebook-android-sdk:4.39.0'
     implementation project(':react-native-facebook-login')
+    implementation 'com.facebook.fresco:fresco:1.10.0'
+    implementation 'com.facebook.fresco:animated-gif:1.10.0'
 }
 
 

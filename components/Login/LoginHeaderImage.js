@@ -39,7 +39,7 @@ class LoginHeaderImage extends Component {
 
           return (
           <View style={styles.signUpTextContainer}>
-            <Image style={styles.profileImage} source={require('./../../assets/images/cartLogo.png')}/>
+            {/* <Image style={styles.profileImage} source={require('./../../assets/images/cartLogo.png')}/> */}
             <RkText rkType='h1'>{this.props.headerString}</RkText>
           </View>
           );

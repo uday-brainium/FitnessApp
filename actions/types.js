@@ -21,6 +21,10 @@ export const LOGIN_USER_FAIL = 'login_user_fail';
 export const LOGIN_USER = 'login_user';
 export const LOGOUT_USER = 'logout_user';
 
+//Acitivity 
+export const SAVE_ACTIVITY = 'save_acitivity'
+export const SAVE_ACTIVITY_TODAY = 'save_activity_today'
+export const GET_OVERALL_ACTIVITY = 'get_overall_activity'
 
 // login error /reset handling
 export const RESET_USER = 'reset_user';

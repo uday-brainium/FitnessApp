@@ -19,7 +19,7 @@ import { logoutUser, userDetailsFetch } from '../actions';
 import { connect } from 'react-redux';
 import LoadingSpinner from './../components/Loading/LoadingSpinner';
 let ls = require('react-native-local-storage');
-import { base_url } from './../../config/appConstants'
+import { base_url } from './../config/appConstants'
 
 class Drawer extends Component {
 

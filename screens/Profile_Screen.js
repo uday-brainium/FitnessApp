@@ -205,7 +205,7 @@ class Profile_Screen extends Component {
                         style={styles.input_text}
                         value={this.state.weight}
                         keyboardType="phone-pad"
-                        maxLength={2}
+                        maxLength={3}
                         onChangeText={(weight) => weight == "" ? this.setState({weight, weightErr: true}) : this.setState({weight, weightErr: false}) }
                       />
                     </Item>
