@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import {connect} from 'react-redux'
 import { get_overall_activity } from './../../actions/Activity_action'
+let ls = require('react-native-local-storage');
 
 let overallWalkDistance = 0
 let overallWalkCalorie = 0
@@ -13,21 +14,31 @@ let overallVehicleDistance= 0
 let overallVehicleCalorie= 0
 let overallVehicleToken= 0
 
+
  class Activity_list extends Component {
   constructor(props) {
     super(props);
     this.state = {
-     
+      update: false
     };
   }
 
   componentDidMount() {
-    this.props.get_overall_activity()
+    ls.get('userdata').then((data) => {
+      let data1 = JSON.parse(data)
+      let userId = data1._id
+      this.props.get_overall_activity(userId)
+    })
   }
 
   componentWillReceiveProps(nextProps) {
-    alert(1)
+    //Setting the values to initial lable
+    overallWalkDistance = 0,overallWalkCalorie = 0,overallWalkToken = 0,
+    overallBikeCalorie = 0, overallBikeToken = 0, overallVehicleDistance = 0
+    overallVehicleCalorie = 0, overallVehicleToken = 0, overallBikeDistance = 0
     if(nextProps){
+      //re-render component
+     
       let data = nextProps.all_activity.overall_activity
       for(var i = 0; i < data.length; i++ ){
         overallWalkDistance +=  parseInt(data[i].walkingdistance)
@@ -43,17 +54,6 @@ let overallVehicleToken= 0
     }
   }
 
-  componentWillUnmount() {
-     overallWalkDistance = 0
-     overallWalkCalorie = 0
-     overallWalkToken = 0
-     overallBikeDistance = 0
-     overallBikeCalorie= 0
-     overallBikeToken= 0
-     overallVehicleDistance= 0
-     overallVehicleCalorie= 0
-     overallVehicleToken= 0
-  }
 
   render() {
 
@@ -64,8 +64,8 @@ let overallVehicleToken= 0
             <Text style={styles.history_head_text}>Walking</Text>
             <Text style={styles.history_value_text}>D {
               overallWalkDistance > 999 ?
-               `${overallWalkDistance / 1000} Km` :
-               `${overallWalkDistance} m`
+               `${(overallWalkDistance / 1000).toFixed(2)} km` :
+               `${(overallWalkDistance).toFixed(2)} m`
             }</Text>
             <Text style={styles.history_value_text}>C {overallWalkCalorie} kj</Text>
             <Text style={styles.history_value_text}>T {overallWalkToken}</Text>
@@ -75,8 +75,8 @@ let overallVehicleToken= 0
             <Text style={styles.history_value_text}>
             D {
               overallBikeDistance > 999 ?
-               `${overallBikeDistance / 1000} Km` :
-               `${overallBikeDistance} m`
+               `${(overallBikeDistance / 1000).toFixed(2)} Km` :
+               `${(overallBikeDistance).toFixed(2)} m`
             }
             </Text>
             <Text style={styles.history_value_text}>C {overallBikeCalorie} kj</Text>
@@ -87,8 +87,8 @@ let overallVehicleToken= 0
             <Text style={styles.history_value_text}>
             D {
               overallVehicleDistance > 999 ?
-               `${overallVehicleDistance / 1000} Km` :
-               `${overallVehicleDistance} m`
+               `${(overallVehicleDistance / 1000).toFixed(2)} km` :
+               `${(overallVehicleDistance).toFixed(2)} m`
             }
             </Text>
             <Text style={styles.history_value_text}>C {overallVehicleCalorie} kj</Text>

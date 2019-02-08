@@ -59,14 +59,17 @@ import {
   }
 
 
-  export const get_activity_today = () => {
+  export const get_activity_today = (userid) => {
       return async (dispatch) => {
         let header = {
             method: 'POST',
             headers: {
               'Accept': 'application/json',
-              'Content-Type': 'application/json',
+              'Content-Type': 'application/x-www-form-urlencoded',
             },
+            body: qs.stringify({
+              userid
+            })
           }
         fetch(NetworkConstants.RequestUrl('get_activity_today'), header).then ((res) => {
             res.json().then(function(data) {
@@ -85,14 +88,17 @@ import {
       }
   }
 
-  export const get_overall_activity = () => {
+  export const get_overall_activity = (userid) => {
     return async (dispatch) => {
       let header = {
-          method: 'GET',
+          method: 'POST',
           headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
           },
+          body: qs.stringify({
+            userid
+          })
         }
       fetch(NetworkConstants.RequestUrl('get_overall_activity'), header).then ((res) => {
           res.json().then(function(data) {

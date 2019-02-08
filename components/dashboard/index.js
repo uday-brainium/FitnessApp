@@ -16,7 +16,7 @@ import {design} from './../../config/stylsheet'
 import { Icon } from 'react-native-elements'
 import Activity_list  from './../commons/activity_list'
 import Activity_list_daily from './../commons/Activity_list_daily'
-import {tokenRateVehicle, tokenRateBike, tokenRateWalking, calorieRate} from './../../config/appConstants'
+import {tokenRateVehicle, tokenRateBike, tokenRateWalking, calorieRate, calorieBurnt} from './../../config/appConstants'
 let sampleData = [
   {
     seriesName: 'series1',
@@ -53,15 +53,15 @@ let sampleData = [
 let imagePath = './../../assets/images/'
 
 class Activity_tracker extends Component {
-
+  
 
   render() {
     const {distance, walkrunDistance, bikeDistance, vehicleDistance} = this.props
 
-    let walkDistanceText = walkrunDistance < 1 ? `${(walkrunDistance * 1000).toFixed(1)} m` : `${(walkrunDistance).toFixed(2)} Km`
-    let bikeDistanceText = bikeDistance < 1 ? `${(bikeDistance * 1000).toFixed(1)} m` : `${(bikeDistance).toFixed(2)} Km`
-    let vehicleDistanceText = vehicleDistance < 1 ? `${(vehicleDistance * 1000).toFixed(1)} m` : `${(vehicleDistance).toFixed(2)} Km`
-    let totalDistanceText = distance < 1 ? `${(distance * 1000).toFixed(1)} m` : `${(distance).toFixed(2)} Km`
+    let walkDistanceText = walkrunDistance < 1 ? `${(walkrunDistance * 1000).toFixed(1)} m` : `${(walkrunDistance).toFixed(2)} km`
+    let bikeDistanceText = bikeDistance < 1 ? `${(bikeDistance * 1000).toFixed(1)} m` : `${(bikeDistance).toFixed(2)} km`
+    let vehicleDistanceText = vehicleDistance < 1 ? `${(vehicleDistance * 1000).toFixed(1)} m` : `${(vehicleDistance).toFixed(2)} km`
+    let totalDistanceText = distance < 1 ? `${(distance * 1000).toFixed(1)} m` : `${(distance).toFixed(2)} km`
    
     let walkingTokens = Math.round((walkrunDistance * 1000) * tokenRateWalking)
     let cycleTokens = Math.round((bikeDistance * 1000) * tokenRateBike)
@@ -118,11 +118,11 @@ class Activity_tracker extends Component {
                   <Text style={[design.white_medium_text, {fontSize: 15, textAlign: 'left', textDecorationLine: 'underline'}]}>Calories</Text>
                     <Text  style={styles.unit_head_text}>{
                       this.props.trackingType === 'walkrun' ?
-                       Math.round((walkrunDistance * 1000) * calorieRate) :
+                       Math.round(calorieBurnt('walkrun', this.props.walkingTime, this.props.userWeight)) :
                       this.props.trackingType === 'bycycle' ?
-                       Math.round((bikeDistance * 1000) * calorieRate) :
+                       Math.round(calorieBurnt('bycycle', this.props.bikeTime, this.props.userWeight)) :
                       this.props.trackingType === 'vehicle' ?
-                       Math.round((vehicleDistance * 1000) * calorieRate) :
+                       Math.round(calorieBurnt('vehicle', this.props.vehicleTime, this.props.userWeight)) :
                        0
                     } kj </Text>
                 
@@ -155,18 +155,7 @@ class Activity_tracker extends Component {
                     require(`${imagePath}WalkRun_Start.png`) : 
                     require(`${imagePath}WalkRun_Stop.png`)} />
                 </TouchableOpacity>
-                {/* <View style={{flexDirection: 'row', alignSelf: 'flex-start'}}>
-                 {this.props.trackingType === 'walkrun' ?
-                   <View style={design.green_bullet}></View> :
-                   <View style={design.red_bullet}></View>
-                   }
-                  <View> 
-                    <Text style={{textAlign: 'left', fontSize: 18, fontWeight: 'bold'}}>Walk/Run</Text>
-                  </View>
-                </View> */}
-                {/* <Text style={{textAlign: 'left',marginLeft: 12}}>Distance {walkDistanceText}</Text>
-                <Text style={{textAlign: 'left',marginLeft: 12}}>Calorie {Math.round((walkrunDistance * 1000) * calorieRate)} kj</Text>
-                <Text style={{textAlign: 'left',marginLeft: 12}}>Tokens {Math.round((walkrunDistance * 1000) * tokenRateWalking)}</Text> */}
+               
               </View>
               <View>
                 <TouchableOpacity onPress={this.props.trackingType == 'bycycle' ? () => this.props.stopActivity() : this.props.trackingType == "" ? () => this.props.startActivity('bycycle') : ''} >
@@ -176,20 +165,6 @@ class Activity_tracker extends Component {
                     require(`${imagePath}Bike_Start.png`) : 
                     require(`${imagePath}Bike_Stop.png`)} />
                 </TouchableOpacity>
-                {/* <View style={{flexDirection: 'row', alignSelf: 'flex-start'}}>
-                  {this.props.trackingType === 'bycycle' ?
-                   <View style={design.green_bullet}></View> :
-                   <View style={design.red_bullet}></View>
-                   }
-                  <View> 
-                    <Text style={{textAlign: 'left', fontSize: 18, fontWeight: 'bold'}}>Bike/Cycle</Text>
-                  </View>
-                </View> */}
-                {/* <View>
-                  <Text style={{textAlign: 'left',marginLeft: 12}}>Distance {bikeDistanceText}</Text>
-                  <Text style={{textAlign: 'left',marginLeft: 12}}>Calorie {Math.round((bikeDistance * 1000) * calorieRate)} kj</Text>
-                  <Text style={{textAlign: 'left',marginLeft: 12}}>Tokens {Math.round((bikeDistance * 1000) * tokenRateBike)}</Text>
-                </View> */}
                 
               </View>
               <View>
@@ -200,20 +175,6 @@ class Activity_tracker extends Component {
                      require(`${imagePath}Vehicle_Start.png`) : 
                      require(`${imagePath}Vehicle_Stop.png`)} />
                 </TouchableOpacity>
-                {/* <View style={{flexDirection: 'row', alignSelf: 'flex-start'}}>
-                   {this.props.trackingType === 'vehicle' ?
-                    <View style={design.green_bullet}></View> :
-                    <View style={design.red_bullet}></View>
-                   }
-                  <View> 
-                    <Text style={{textAlign: 'left', fontSize: 18, fontWeight: 'bold'}}>Vehicle</Text>
-                  </View>
-                </View> */}
-                {/* <View>
-                  <Text style={{textAlign: 'left', marginLeft: 12}}>Distance {vehicleDistanceText}</Text>
-                  <Text style={{textAlign: 'left', marginLeft: 12}}>Calorie {Math.round((vehicleDistance * 1000) * calorieRate)} kj</Text>
-                  <Text style={{textAlign: 'left', marginLeft: 12}}>Tokens {Math.round((vehicleDistance * 1000) * tokenRateVehicle)}</Text>
-                </View> */}
                
               </View>
            </View>
@@ -256,7 +217,12 @@ class Activity_tracker extends Component {
                <Text style={{fontSize: 18, fontWeight: 'bold'}}>Activity History</Text>
              </View>
             </View>
-            <Activity_list update = {}/>
+            <Activity_list 
+              dailyDistance = {totalDistanceText}
+              dailyCalories = {totalCalories}
+              daillyToken = {totalToken}
+              updateData = {this.props.startedTracking}
+            />
           </View>
           
            <View style={styles.barchart_view}>

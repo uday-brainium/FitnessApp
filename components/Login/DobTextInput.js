@@ -5,8 +5,6 @@ import {
   RkTextInput,
   RkStyleSheet,
 } from 'react-native-ui-kitten';
-
-
 import { Container, Header, Content, DatePicker, Text } from 'native-base';
 
 import { connect } from 'react-redux';

@@ -70,12 +70,13 @@ let styles = RkStyleSheet.create(theme => ({
     height:scaleVertical(77),
     resizeMode:'contain'
   },
-Container:{  
+Container:{
     flex:1, 
 },
-signTextContainer:{  
+signTextContainer:{
     flex:1,
-    marginLeft:20,
+    marginLeft: 18,
+    marginBottom: -10,
     justifyContent:'flex-end',
       
 },signUpTextContainer:{  

@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import {connect} from 'react-redux'
 import { get_activity_today } from './../../actions/Activity_action'
 import { get_overall_activity } from './../../actions/Activity_action'
+let ls = require('react-native-local-storage');
 
 class Daily_Activity_list extends Component {
     constructor(props) {
@@ -14,10 +15,11 @@ class Daily_Activity_list extends Component {
 
 
     componentDidMount() {
-     // fetching daily activity
-     this.props.get_activity_today()
-     //updating overall activity
-     this.props.get_overall_activity()
+      ls.get('userdata').then((data) => {
+        let data1 = JSON.parse(data)
+        let userId = data1._id
+        this.props.get_activity_today(userId)
+      })
     }
 
     componentWillReceiveProps(nextProps) {
@@ -27,7 +29,9 @@ class Daily_Activity_list extends Component {
     }
   
     render() {
-      return (
+      
+      
+      return ( 
         <View style={styles.container_daily}>
           <View style={{flexDirection: 'row', justifyContent:'space-around'}}>
             <View>  
@@ -36,19 +40,19 @@ class Daily_Activity_list extends Component {
                 {typeof this.props.activity.activity_result != 'undefined' ? 
                  this.props.activity.activity_result.totaldistance != null ?
                   this.props.activity.activity_result.totaldistance > 999 ? 
-                   `${this.props.activity.activity_result.totaldistance / 1000} km` :
-                   `${this.props.activity.activity_result.totaldistance} m`: 
+                   `${(this.props.activity.activity_result.totaldistance / 1000).toFixed(2)} km` :
+                   `${(this.props.activity.activity_result.totaldistance).toFixed(2)} m`:
                   '0' 
                   : '0'}
               </Text>
             </View>
             <View>
               <Text style={styles.history_value_text}>Calorie (C)</Text>
-              <Text style={styles.history_value_text}>{typeof this.props.activity.activity_result != 'undefined' ? this.props.activity.activity_result.totalcalorie != null ? `${this.props.activity.activity_result.totalcalorie} kj` : '0 kj' : '0'}</Text>
+              <Text style={styles.history_value_text}>{typeof this.props.activity.activity_result != 'undefined' ? this.props.activity.activity_result.totalcalories != null ? `${this.props.activity.activity_result.totalcalories} kj` : '0 kj' : '0'}</Text>
             </View>
             <View>
               <Text style={styles.history_value_text}>Token (T)</Text>
-              <Text style={styles.history_value_text}>{typeof this.props.activity.activity_result != 'undefined' ? this.props.activity.activity_result.daillytoken != null ? this.props.activity.activity_result.daillytoken : '0' : '0'}</Text>
+              <Text style={styles.history_value_text}>{typeof this.props.activity.activity_result != 'undefined' ? this.props.activity.activity_result.totaltokens != null ? this.props.activity.activity_result.totaltokens : '0' : '0'}</Text>
             </View>
           </View>
         </View>

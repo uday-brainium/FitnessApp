@@ -13,6 +13,7 @@ import {
 import { connect } from 'react-redux'
 import { saveOtherDetails } from '../actions/fbLogin_action'
 import { save_acitivity } from '../actions/Activity_action'
+import { get_overall_activity } from '../actions/Activity_action'
 import { RkText } from 'react-native-ui-kitten';
 import { Avatar } from '../components/avatar';
 import { Icon } from 'react-native-elements'
@@ -25,7 +26,7 @@ import {defaultConfigNotification, distanceInMeters} from './../config/appConsta
 const { width, height } = Dimensions.get('window');
 let ls = require('react-native-local-storage');
 var PushNotification = require('react-native-push-notification');
-import {tokenRateVehicle, tokenRateBike, tokenRateWalking, calorieRate} from './../config/appConstants'
+import {tokenRateVehicle, tokenRateBike, tokenRateWalking, calorieRate, calorieBurnt} from './../config/appConstants'
 let timeIntervalFunction
 let distanceAddition = 0
 let walkDistanceAddition = 0
@@ -90,7 +91,11 @@ class Dashboard_screen extends Component {
       vehicleDistance: 0,
       alertVisible: 0,
       trackingType: '',
-      callCount: 0
+      callCount: 0,
+
+      vehicleActivityTime: 0,
+      bikeActivityTime: 0,
+      walkingActivityTime: 0
     }
   }
 
@@ -119,7 +124,7 @@ class Dashboard_screen extends Component {
           openDrawer: this.openDrawerNow
       });
     ls.get('userdata').then((data) => {
-      console.log('FBLOGIN USERDATA', JSON.parse(data));
+      //console.log('FBLOGIN USERDATA', JSON.parse(data));
       this.setState({userdata: JSON.parse(data)}, () => {
         if(this.state.userdata.heightWeight == 'false') {
           ls.get('modalflag').then((data) => {
@@ -184,9 +189,7 @@ class Dashboard_screen extends Component {
 
 
   calcDistance = () => {
-   console.log("TEST-DISTANCE===", 
-    this.getDistanceFromLatLonInKm(this.state.lastKnownLat, this.state.LastKnownLng, this.state.updatedLat, this.state.updatedLng));
-   
+  
     //if(this.state.mostProb.type != "STILL") {
       if(this.state.lastKnownLat !== 0) {
           let distance = this.getDistanceFromLatLonInKm(
@@ -195,7 +198,7 @@ class Dashboard_screen extends Component {
           if(this.state.lastKnownLat != this.state.updatedLat) {
             distanceAddition = (distanceAddition + distance)
           }
-        this.setState({distanceTravelled: (distanceAddition / 1.2)})
+        this.setState({distanceTravelled: (distanceAddition / 1)})
 
       //Total distance covered by walking
         if(this.state.trackingType === "walkrun"){
@@ -205,7 +208,7 @@ class Dashboard_screen extends Component {
           if(this.state.lastKnownLat != this.state.updatedLat) {
             walkDistanceAddition = (walkDistanceAddition + distance)
           }
-          this.setState({walkingDistance: (walkDistanceAddition / 1.2 )})
+          this.setState({walkingDistance: (walkDistanceAddition / 1 )})
         }
 
         //Total distance covered by vehicle
@@ -216,7 +219,7 @@ class Dashboard_screen extends Component {
           if(this.state.lastKnownLat != this.state.updatedLat) {
             vehicleDistanceAddition = (vehicleDistanceAddition + distance)
           }
-          this.setState({vehicleDistance: (vehicleDistanceAddition / 1.2)})
+          this.setState({vehicleDistance: (vehicleDistanceAddition / 1)})
         }
         
         //Total distance covered by cycle
@@ -227,14 +230,14 @@ class Dashboard_screen extends Component {
           if(this.state.lastKnownLat != this.state.updatedLat) {
             cycleDistanceAddition = (cycleDistanceAddition + distance)
           }
-          this.setState({cycleDistance: (cycleDistanceAddition / 1.2)})
+          this.setState({cycleDistance: (cycleDistanceAddition / 1)})
         }
       }
    // }
 
     console.log("PREV-LAT", this.state.lastKnownLat);
     console.log("UPDATED-LAT", this.state.updatedLat);
-    console.log("MODE", this.state.mostProb);
+    //console.log("MODE", this.state.mostProb);
      
   }
 
@@ -252,55 +255,6 @@ class Dashboard_screen extends Component {
     let d = R * c; // Distance in km
     return d;
   }
-
-  // getDistanceFromLatLonInKm = (lat1,lon1,lat2,lon2) => {
-  //   var a = 6378137,
-  //    b = 6356752.3142,
-  //    f = 1 / 298.257223563, 
-  //    L = (lon2-lon1)*Math.PI / 180,
-  //    x = Math.atan(1 - f),
-  //    U1 = x * Math.tan(lat1*Math.PI / 180),
-  //    U2 = x * Math.tan(lat2*Math.PI / 180),
-  //    sinU1 = Math.sin(U1),
-  //    cosU1 = Math.cos(U1),
-  //    sinU2 = Math.sin(U2),
-  //    cosU2 = Math.cos(U2),
-  //    lambda = L,
-  //    lambdaP,
-  //    iterLimit = 100;
-  //   do {
-  //     var sinLambda = Math.sin(lambda),
-  //         cosLambda = Math.cos(lambda),
-  //         sinSigma = Math.sqrt((cosU2 * sinLambda) * (cosU2 * sinLambda) + (cosU1 * sinU2 - sinU1 * cosU2 * cosLambda) * (cosU1 * sinU2 - sinU1 * cosU2 * cosLambda))
-  //     if (0 === sinSigma) {
-  //     return 0; // co-incident points
-  //     };
-  //     var cosSigma = sinU1 * sinU2 + cosU1 * cosU2 * cosLambda,
-  //         sigma = Math.atan2(sinSigma, cosSigma),
-  //         sinAlpha = cosU1 * cosU2 * sinLambda / sinSigma,
-  //         cosSqAlpha = 1 - sinAlpha * sinAlpha,
-  //         cos2SigmaM = cosSigma - 2 * sinU1 * sinU2 / cosSqAlpha,
-  //         C = f / 16 * cosSqAlpha * (4 + f * (4 - 3 * cosSqAlpha));
-  //     if (isNaN(cos2SigmaM)) {
-  //     cos2SigmaM = 0; // equatorial line: cosSqAlpha = 0 (§6)
-  //     };
-  //     lambdaP = lambda;
-  //     lambda = L + (1 - C) * f * sinAlpha * (sigma + C * sinSigma * (cos2SigmaM + C * cosSigma * (-1 + 2 * cos2SigmaM * cos2SigmaM)));
-  //   } while (Math.abs(lambda - lambdaP) > 1e-12 && --iterLimit > 0);
-
-  //   if (0 === iterLimit) {
-  //     return 0; // formula failed to converge
-  //   };
-
-  //   var uSq = cosSqAlpha * (a * a - b * b) / (b * b),
-  //       A = 1 + uSq / 16384 * (4096 + uSq * (-768 + uSq * (320 - 175 * uSq))),
-  //       B = uSq / 1024 * (256 + uSq * (-128 + uSq * (74 - 47 * uSq))),
-  //       deltaSigma = B * sinSigma * (cos2SigmaM + B / 4 * (cosSigma * (-1 + 2 * cos2SigmaM * cos2SigmaM) - B / 6 * cos2SigmaM * (-3 + 4 * sinSigma * sinSigma) * (-3 + 4 * cos2SigmaM * cos2SigmaM))),
-  //       s = b * A * (sigma - deltaSigma);
-  //   return (s/1000) // round to 1mm precision
-  // } 
-
-
 
    deg2rad = (deg) => {
     return deg * (Math.PI/180)
@@ -355,6 +309,15 @@ class Dashboard_screen extends Component {
   }
 
   updateNewCords = () => {
+  if(this.state.alertVisible == 2) {
+    this.state.trackingType == 'walkrun' ?
+      this.setState({walkingActivityTime: this.state.walkingActivityTime + 3 }) :
+    this.state.trackingType == 'bycycle' ?
+      this.setState({bikeActivityTime: this.state.bikeActivityTime + 3 }) :
+    this.state.trackingType == 'vehicle' ?
+     this.setState({vehicleActivityTime: this.state.vehicleActivityTime + 3 }) : 0
+  }
+    
       var options = {
         enableHighAccuracy: true,
         timeout: 3000,
@@ -375,6 +338,19 @@ class Dashboard_screen extends Component {
       }, (err) => {
        console.log("Location ERR", err);
       }, options);
+      
+      // let time = 0
+      // if(this.state.trackingType == 'walkrun') {
+      //   time = this.state.walkingActivityTime
+      // } else if(this.state.trackingType == 'bycycle') {
+      //   time = this.state.bikeActivityTime
+      // } else if(this.state.trackingType == 'vehicle') {
+      //   time = this.state.vehicleActivityTime
+      // }
+
+      // let b = calorieBurnt(this.state.trackingType, time, this.state.userdata.weight)
+      // console.log("Calorie-burned", b);
+       
   } 
 
   stopInterval = () => {
@@ -388,7 +364,10 @@ class Dashboard_screen extends Component {
       walkingDistance: 0,
       cycleDistance: 0,
       vehicleDistance: 0,
-      distanceTravelled: 0
+      distanceTravelled: 0,
+      walkingActivityTime: 0,
+      bikeActivityTime: 0,
+      vehicleActivityTime: 0
     })
     distanceAddition = 0
     walkDistanceAddition = 0
@@ -409,17 +388,17 @@ class Dashboard_screen extends Component {
   }
 
   saveActivity = () => {
-    const {userdata, distanceTravelled, walkingDistance, cycleDistance, vehicleDistance} = this.state
+    const {userdata, distanceTravelled, walkingDistance, cycleDistance, vehicleActivityTime, walkingActivityTime, bikeActivityTime, vehicleDistance} = this.state
     let walkdistance = `${(walkingDistance * 1000).toFixed(2)}`
     let vehicleDistances = `${(vehicleDistance * 1000).toFixed(2)}`
     let bikeDistance = `${(cycleDistance * 1000).toFixed(2)}`
     let walkingTokens = Math.round((walkingDistance * 1000) * tokenRateWalking)
     let cycleTokens = Math.round((cycleDistance * 1000) * tokenRateBike)
     let vehicleTokens = Math.round((vehicleDistance * 1000) * tokenRateVehicle)
-    let walkingcalories = Math.round((walkingDistance * 1000) * calorieRate)
-    let bikecalories = Math.round((cycleDistance * 1000) * calorieRate)
-    let vehiclecalories = Math.round((vehicleDistance * 1000) * calorieRate)
-    let totalCalories = Math.round((distanceTravelled * 1000) * calorieRate)
+    let walkingcalories = Math.round(calorieBurnt('walkrun', walkingActivityTime, userdata.weight))
+    let bikecalories = Math.round(calorieBurnt('bycycle', bikeActivityTime, userdata.weight))
+    let vehiclecalories = Math.round(calorieBurnt('vehicle', vehicleActivityTime, userdata.weight))
+    let totalCalories = (walkingcalories + bikecalories + vehiclecalories)
     let totalToken = (walkingTokens + cycleTokens + vehicleTokens)
     let data = {
       _userid: userdata._id,
@@ -436,7 +415,10 @@ class Dashboard_screen extends Component {
       vehiclecalories,
       vehicletokens: vehicleTokens
     }
-    this.props.save_acitivity(data)
+    this.props.save_acitivity(data).then(() => {
+      this.props.get_overall_activity(this.state.userdata._id)
+    })
+    
   }
 
   saveOtherData = () => {
@@ -558,6 +540,10 @@ class Dashboard_screen extends Component {
                walkrunDistance = { this.state.walkingDistance }
                bikeDistance = { this.state.cycleDistance }
                vehicleDistance = { this.state.vehicleDistance }
+               userWeight = {this.state.userdata.weight}
+               walkingTime = {this.state.walkingActivityTime}
+               bikeTime = {this.state.bikeActivityTime}
+               vehicleTime = {this.state.vehicleActivityTime}
               />
           </Content>
       </Container>
@@ -664,4 +650,4 @@ function mapStateToProps(state) {
 }
 
 
-export default connect(mapStateToProps, {saveOtherDetails, save_acitivity})(Dashboard_screen)
+export default connect(mapStateToProps, {saveOtherDetails, save_acitivity, get_overall_activity})(Dashboard_screen)

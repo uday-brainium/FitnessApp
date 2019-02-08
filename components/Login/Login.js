@@ -7,12 +7,15 @@ import {
   ImageBackground,
   Dimensions,
   ScrollView,
+  Text,
   StyleSheet,
-  ActivityIndicator
+  ActivityIndicator,
+  Modal
 } from "react-native";
 import { connect } from "react-redux";
 import {fb_login_action} from './../../actions/fbLogin_action'
 import {FBLogin, FBLoginManager} from 'react-native-facebook-login';
+import { CheckBox } from 'react-native-elements'
 import ErrorMessage from "./../ErrorMessage";
 import LoginHeaderImage from "./LoginHeaderImage";
 import LoginORBar from "./LoginORBar";
@@ -30,6 +33,8 @@ import {
   Container,
   Content,
 } from "native-base";
+
+
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -37,7 +42,8 @@ class Login extends Component {
       keyboardflag: false,
       showEmailPwdState: false,
       user: {},
-      isLoading: false
+      isLoading: false,
+      rememberCheck: false
     };
   }
 
@@ -88,7 +94,7 @@ class Login extends Component {
       // In the case of login screen or if the email pwd button is pressed
       return (
         <View>
-           <EmailTextInput />
+          <EmailTextInput />
           <PwdTextInput />
         </View>
       );
@@ -126,19 +132,33 @@ class Login extends Component {
     let imagePadding = height * 0.15;
     let width_sub = width - 40;
     return (
-      <Container style={styles.content}>
-        <Content>
+      <View style={styles.content}>
+        <View>
           <ImageBackground
             source={require("./../../assets/images/how_it_work_bg.png")}
             style={{ width: width, height: bodyContainer }}
           >
             <View style={{ width: width, height: bodyContainer }}>
               <View style={styles.containerSignInHeader}>
-                <LoadingSpinner />
-                {this.state.isLoading && (
-                  <View style={{flex: 10, justifyContent: 'center', alignItems: 'center', flexDirection: 'row',justifyContent: 'space-around',paddingTop: '45%'}}>
-                    <ActivityIndicator size="large" color="#0000ff" />
-                  </View> 
+               {this.state.isLoading && (
+                  <Modal
+                  animationType="slide"
+                  transparent={true}
+                  visible={this.state.isLoading}
+                  onRequestClose={() => {
+                    this.setState({isLoading: false})
+                  }}> 
+                    <View style={{backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center', flex: 1, height: Dimensions.get('window').height + 20}}>
+                     <View style={styles.popup_screen}>
+                      <View style={{justifyContent: 'center'}}>
+                         <ActivityIndicator size="large" color="#0000ff" />
+                       </View> 
+                     </View>
+                     </View>
+                  </Modal>
+                  // <View style={{justifyContent: 'center', marginTop: '45%'}}>
+                  //   <ActivityIndicator size="large" color="#0000ff" />
+                  // </View> 
                 )}
                 <LoginHeaderImage
                   keyboardflag={this.state.keyboardflag}
@@ -146,8 +166,17 @@ class Login extends Component {
                   headerString={this.props.headerString}
                 />
               </View>
+              
               <View style={styles.containerSignInBody}>
                 {this._renderEmailPwdOption()}
+              </View>
+              <View style={{marginBottom: -20}}>
+              <CheckBox
+                title='Remember me'
+                checked={this.state.rememberCheck}
+                containerStyle={{backgroundColor: 'transparent'}}
+                onPress={() => this.setState({rememberCheck: !this.state.rememberCheck})}
+              />
               </View>
               <View style={styles.containerSignInButtonBody}>
                 <View>{this._renderEmailPwdBTNOption()}</View>
@@ -185,8 +214,8 @@ class Login extends Component {
               </View>
             </View>
           </ImageBackground>
-        </Content>
-      </Container>
+        </View>
+      </View>
     );
   }
 }
@@ -213,7 +242,7 @@ let styles = StyleSheet.create({
     backgroundColor: "transparent"
   },
   containerSignInHeader: {
-    flex: 20,
+    flex: 15,
     alignSelf: "stretch"
   },
   containerSignInBody: {
@@ -222,7 +251,7 @@ let styles = StyleSheet.create({
     paddingTop:20
   },
   containerSignInButtonBody: {
-    flex: 40,
+    flex: 45,
     alignSelf: "stretch"
   },
   containerSignInFooter: {

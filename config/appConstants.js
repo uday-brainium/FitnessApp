@@ -1,4 +1,5 @@
-import {Platform} from 'react-native';
+
+let ls = require('react-native-local-storage');
 
 export class NetworkConstants {
   static RequestUrl = (requestActionName) =>{
@@ -108,6 +109,30 @@ export const defaultConfigNotification = {
         deltaSigma = B * sinSigma * (cos2SigmaM + B / 4 * (cosSigma * (-1 + 2 * cos2SigmaM * cos2SigmaM) - B / 6 * cos2SigmaM * (-3 + 4 * sinSigma * sinSigma) * (-3 + 4 * cos2SigmaM * cos2SigmaM))),
         s = b * A * (sigma - deltaSigma);
     return s.toFixed(3); // round to 1mm precision
+  }
+
+  export const calorieBurnt = (activityType, activityTime, weight) => {
+    let MET = 0
+
+       if(activityType == 'walkrun') {
+         //Walking MET
+          MET = 3.5
+       } else if(activityType == 'bycycle'){
+          //bycycle MET
+          MET = 6.0
+       } else if(activityType == 'vehicle') {
+          //Vehicle MET
+          MET = 1.3
+       }
+
+       let totalMinute = (activityTime / 60)
+
+       //Calorie generated per minute // 
+       let formula = (.0175 * MET * weight)
+       let totalCalorie = (formula * totalMinute)
+
+       return totalCalorie
+
   }
 
 // export class UIConstants {
