@@ -1,7 +1,8 @@
 import {
     SAVE_ACTIVITY,
     SAVE_ACTIVITY_TODAY,
-    GET_OVERALL_ACTIVITY
+    GET_OVERALL_ACTIVITY,
+    GET_MONTHLY_ACTIVITY
   } from './types';
   import {Platform} from 'react-native'
   import { NetworkConstants } from './../config/appConstants'
@@ -117,3 +118,33 @@ import {
     }
 }
 
+export const get_monthly_activity = (userid) => {
+  return async (dispatch) => {
+    let header = {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: qs.stringify({
+          userid
+        })
+      }
+    fetch(NetworkConstants.RequestUrl('monthly_activity'), header).then ((res) => {
+        res.json().then(function(data) {
+          //console.log('ACTION-RESPONSE', data.res.response[0]);
+            if(data.res.status == '200') {
+              console.log("MONTHLY DATA", data);
+              
+                dispatch({
+                    type: GET_MONTHLY_ACTIVITY,
+                    payload: data.res.data
+                  })
+             }
+        })
+      }).catch((err) => {
+        console.log("ERROR---", err);
+        
+      })
+  }
+}

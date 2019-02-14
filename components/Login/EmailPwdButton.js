@@ -28,10 +28,13 @@ class EmailPwdButton extends Component {
   onButtonPress() {
 
     if (this.props.emailPwdBtnStr == 'Sign in') {
-       console.log('inside Sign in button press: '+this.props.emailPwdBtnStr);
+
         const { email, password } = this.props;
         if ( this.validateInput('email', email) && this.validateInput('password', password)) {
-
+            if(this.props.remember) {
+              let credentials = {email, password}
+              ls.save('remember', JSON.stringify(credentials))
+            }
           this.props.loginUser({ email, password });
           // NetInfo.isConnected.fetch().then(isConnected => {
           //   //console.log('First, is ' + (isConnected ? 'online' : 'offline'));
@@ -137,7 +140,7 @@ class EmailPwdButton extends Component {
     return (
       <View  >
         <RkButton
-                  onPress={() => {console.log("Hello"); this.onButtonPress() }}
+                  onPress={() => { this.onButtonPress() }}
                   rkType='stretch'
                   style={[styles.button, styles.text]}
         >

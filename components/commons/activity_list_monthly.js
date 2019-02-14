@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import {connect} from 'react-redux'
-import { get_overall_activity } from './../../actions/Activity_action'
+import { get_monthly_activity } from './../../actions/Activity_action'
 let ls = require('react-native-local-storage');
 
 let overallWalkDistance = 0
@@ -15,7 +15,7 @@ let overallVehicleCalorie= 0
 let overallVehicleToken= 0
 
 
- class Activity_list extends Component {
+ class Activity_list_monthly extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -27,7 +27,7 @@ let overallVehicleToken= 0
     ls.get('userdata').then((data) => {
       let data1 = JSON.parse(data)
       let userId = data1._id
-      this.props.get_overall_activity(userId)
+      this.props.get_monthly_activity(userId)
     })
   }
 
@@ -38,8 +38,7 @@ let overallVehicleToken= 0
     overallVehicleCalorie = 0, overallVehicleToken = 0, overallBikeDistance = 0
     if(nextProps){
       //re-render component
-     
-      let data = nextProps.all_activity.overall_activity
+      let data = nextProps.all_activity.monthly_activity
       for(var i = 0; i < data.length; i++ ){
         overallWalkDistance +=  parseInt(data[i].walkingdistance)
         overallWalkCalorie +=  parseInt(data[i].walkingcalories)
@@ -67,7 +66,7 @@ let overallVehicleToken= 0
                `${(overallWalkDistance / 1000).toFixed(2)} km` :
                `${(overallWalkDistance).toFixed(2)} m`
             }</Text>
-            <Text style={styles.history_value_text}>C {overallWalkCalorie} cal</Text>
+            <Text style={styles.history_value_text}>C {overallWalkCalorie} kj</Text>
             <Text style={styles.history_value_text}>T {overallWalkToken}</Text>
           </View>
           <View>
@@ -79,7 +78,7 @@ let overallVehicleToken= 0
                `${(overallBikeDistance).toFixed(2)} m`
             }
             </Text>
-            <Text style={styles.history_value_text}>C {overallBikeCalorie} cal</Text>
+            <Text style={styles.history_value_text}>C {overallBikeCalorie} kj</Text>
             <Text style={styles.history_value_text}>T {overallBikeToken}</Text>
           </View>
           <View>
@@ -91,7 +90,7 @@ let overallVehicleToken= 0
                `${(overallVehicleDistance).toFixed(2)} m`
             }
             </Text>
-            <Text style={styles.history_value_text}>C {overallVehicleCalorie} cal</Text>
+            <Text style={styles.history_value_text}>C {overallVehicleCalorie} kj</Text>
             <Text style={styles.history_value_text}>T {overallVehicleToken}</Text>
           </View>
         </View>
@@ -102,11 +101,11 @@ let overallVehicleToken= 0
 
 function mapStateToProps(state) {
   return{
-    all_activity: state.overallActivity
+    all_activity: state.monthlyActivity
   }
 }
 
-export default connect(mapStateToProps, {get_overall_activity})(Activity_list)
+export default connect(mapStateToProps, {get_monthly_activity})(Activity_list_monthly)
 
 const styles = StyleSheet.create({
     container: {

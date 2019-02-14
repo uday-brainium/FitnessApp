@@ -13,7 +13,8 @@ import {
 import { connect } from 'react-redux'
 import { saveOtherDetails } from '../actions/fbLogin_action'
 import { save_acitivity } from '../actions/Activity_action'
-import { get_overall_activity } from '../actions/Activity_action'
+import { get_overall_activity, get_monthly_activity } from '../actions/Activity_action'
+import  Activity_warning  from './../components/commons/activity_warning'
 import { RkText } from 'react-native-ui-kitten';
 import { Avatar } from '../components/avatar';
 import { Icon } from 'react-native-elements'
@@ -134,6 +135,9 @@ class Dashboard_screen extends Component {
         }
       })
     })
+
+    ls.get('remember').then((data) => {console.log('remember', data);
+    })
   }
 
   componentWillUnmount() {
@@ -235,8 +239,8 @@ class Dashboard_screen extends Component {
       }
    // }
 
-    console.log("PREV-LAT", this.state.lastKnownLat);
-    console.log("UPDATED-LAT", this.state.updatedLat);
+    //console.log("PREV-LAT", this.state.lastKnownLat);
+   // console.log("UPDATED-LAT", this.state.updatedLat);
     //console.log("MODE", this.state.mostProb);
      
   }
@@ -263,6 +267,7 @@ class Dashboard_screen extends Component {
   track = () => {
     this.unsubscribe = ActivityRecognition.subscribe((detectedActivities) => {
       this.setState({mostProb: detectedActivities.sorted[0]})
+      console.log('Object', detectedActivities);
     })
 
     let detectionIntervalMillis = 0
@@ -302,10 +307,20 @@ class Dashboard_screen extends Component {
           )
       }, options);
     
-   //this.updateNewCords()
-    timeIntervalFunction = setInterval( () => {
-      this.updateNewCords()
-    }, 3000)
+  
+   //Waiting for trackingType state to be stated
+   setTimeout(()=> {
+    if(this.state.trackingType != '' && this.state.trackingType == 'vehicle') {
+      timeIntervalFunction = setInterval( () => {
+        this.updateNewCords()
+      }, 1000)
+     } else {
+      timeIntervalFunction = setInterval( () => {
+        this.updateNewCords()
+      }, 3000)
+     }
+   }, 1000)
+
   }
 
   updateNewCords = () => {
@@ -330,7 +345,7 @@ class Dashboard_screen extends Component {
           if(pos.coords.accuracy < 30) {
             this.state.alertVisible === 1 ? this.showNotification() : ''
             this.setState({updatedLat: pos.coords.latitude, updatedLng: pos.coords.longitude, speed: pos.coords.speed, alertVisible: 2})
-            setTimeout(() => { this.setState({lastKnownLat: pos.coords.latitude, LastKnownLng: pos.coords.longitude}) }, 1500)
+            setTimeout(() => { this.setState({lastKnownLat: pos.coords.latitude, LastKnownLng: pos.coords.longitude}) }, 700)
             this.calcDistance()
           }
         }
@@ -416,6 +431,7 @@ class Dashboard_screen extends Component {
       vehicletokens: vehicleTokens
     }
     this.props.save_acitivity(data).then(() => {
+      this.props.get_monthly_activity(this.state.userdata._id)
       this.props.get_overall_activity(this.state.userdata._id)
     })
     
@@ -434,6 +450,10 @@ class Dashboard_screen extends Component {
       }
         this.props.saveOtherDetails(sendData)
     }
+  }
+
+  caughtCheat = () => {
+    this.stopInterval()
   }
 
 
@@ -510,6 +530,8 @@ class Dashboard_screen extends Component {
                </View>
               </View>
             </Modal>
+
+            <Activity_warning {...this.state} caught={() => this.caughtCheat()} />
 
             <View style={{ paddingTop: 15, width: '90%', alignSelf: 'center', flexDirection: 'row', justifyContent: 'space-between'}}>
               {/* <View>
@@ -650,4 +672,4 @@ function mapStateToProps(state) {
 }
 
 
-export default connect(mapStateToProps, {saveOtherDetails, save_acitivity, get_overall_activity})(Dashboard_screen)
+export default connect(mapStateToProps, {saveOtherDetails, save_acitivity, get_overall_activity, get_monthly_activity})(Dashboard_screen)

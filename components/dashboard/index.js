@@ -16,6 +16,7 @@ import {design} from './../../config/stylsheet'
 import { Icon } from 'react-native-elements'
 import Activity_list  from './../commons/activity_list'
 import Activity_list_daily from './../commons/Activity_list_daily'
+import Activity_list_monthly from './../commons/activity_list_monthly'
 import {tokenRateVehicle, tokenRateBike, tokenRateWalking, calorieRate, calorieBurnt} from './../../config/appConstants'
 let sampleData = [
   {
@@ -190,7 +191,7 @@ class Activity_tracker extends Component {
                 />
               </View>
               <View> 
-                <Text style={{fontSize: 18, fontWeight: 'bold'}}>Daily Activity</Text>
+                <Text style={{fontSize: 18, fontWeight: 'bold', marginLeft: 5}}>Daily Activity</Text>
               </View>
               </View>
               <Activity_list_daily
@@ -200,6 +201,28 @@ class Activity_tracker extends Component {
               />
             </View>
 
+          </View>
+
+          <View>
+            <View style={{flexDirection: 'row', margin: 5}}>
+             <View>
+                <Icon
+                name={"today"}
+                type='MaterialIcons'
+                color='#c6a0f5'
+                size = {22}
+              />
+             </View>
+             <View> 
+               <Text style={{fontSize: 18, fontWeight: 'bold', marginLeft: 5}}>Monthly activity</Text>
+             </View>
+            </View>
+            <Activity_list_monthly
+              dailyDistance = {totalDistanceText}
+              dailyCalories = {totalCalories}
+              daillyToken = {totalToken}
+              updateData = {this.props.startedTracking}
+            />
           </View>
           
 
@@ -214,7 +237,7 @@ class Activity_tracker extends Component {
               />
              </View>
              <View> 
-               <Text style={{fontSize: 18, fontWeight: 'bold'}}>Activity History</Text>
+               <Text style={{fontSize: 18, fontWeight: 'bold', marginLeft: 5}}>Overall Activity</Text>
              </View>
             </View>
             <Activity_list 
@@ -225,7 +248,7 @@ class Activity_tracker extends Component {
             />
           </View>
           
-           <View style={styles.barchart_view}>
+           {/* <View style={styles.barchart_view}>
               <View style={{justifyContent: 'center', alignItems:'center'}}>
                 <Text style={styles.barChart_left_text}>Monthly Overview</Text>
               </View>
@@ -246,12 +269,12 @@ class Activity_tracker extends Component {
                   </View>
                 </View>
               </View>
-           </View>
+           </View> */}
 
 
-            <View style={styles.chartContainer}>
+            {/* <View style={styles.chartContainer}>
              <PureChart data={sampleData} type='bar' />
-            </View>
+            </View> */}
 
          </View>
         </ScrollView>

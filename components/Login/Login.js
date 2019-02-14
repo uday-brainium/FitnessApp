@@ -43,7 +43,7 @@ class Login extends Component {
       showEmailPwdState: false,
       user: {},
       isLoading: false,
-      rememberCheck: false
+      rememberCheck: false,
     };
   }
 
@@ -109,7 +109,7 @@ class Login extends Component {
       // In the case of login screen or if the email pwd button is pressed
       return (
         <View>
-          <EmailPwdButton emailPwdBtnStr={"Sign in"} />
+          <EmailPwdButton emailPwdBtnStr={"Sign in"} remember={this.state.rememberCheck} />
         </View>
       );
     }

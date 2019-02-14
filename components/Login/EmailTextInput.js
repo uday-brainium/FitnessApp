@@ -10,7 +10,9 @@ import {
   Form,Item,Label ,Input,Button,Text} from "native-base";
 import { connect } from 'react-redux';
 import validator from 'validator';
-import { emailChanged } from './../../actions';
+import { emailChanged, passwordChanged } from './../../actions';
+let ls = require('react-native-local-storage');
+
 
 class EmailTextInput extends Component {
 
@@ -29,6 +31,15 @@ class EmailTextInput extends Component {
       if ( this.props.email != '') {
         this.validateInput('email', this.props.email);
       }
+  }
+
+  componentDidMount() {
+    ls.get('remember').then((data) => {
+      if(data!= null) {
+        this.props.emailChanged(JSON.parse(data).email);
+        this.props.passwordChanged(JSON.parse(data).password);
+      }
+    })
   }
 
   onEmailChange(text) {
@@ -109,5 +120,5 @@ const mapStateToProps = ({ auth }) => {
 };
 
 export default connect(mapStateToProps, {
-  emailChanged
+  emailChanged,passwordChanged
 })(EmailTextInput);

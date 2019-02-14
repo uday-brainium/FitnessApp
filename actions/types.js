@@ -25,6 +25,7 @@ export const LOGOUT_USER = 'logout_user';
 export const SAVE_ACTIVITY = 'save_acitivity'
 export const SAVE_ACTIVITY_TODAY = 'save_activity_today'
 export const GET_OVERALL_ACTIVITY = 'get_overall_activity'
+export const GET_MONTHLY_ACTIVITY = 'get_monthly_activity'
 
 // login error /reset handling
 export const RESET_USER = 'reset_user';
