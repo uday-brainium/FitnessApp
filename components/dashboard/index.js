@@ -18,9 +18,54 @@ import Activity_list  from './../commons/activity_list'
 import Activity_list_daily from './../commons/Activity_list_daily'
 import Activity_list_monthly from './../commons/activity_list_monthly'
 import {tokenRateVehicle, tokenRateBike, tokenRateWalking, calorieRate, calorieBurnt} from './../../config/appConstants'
+
+
+let dataObj = [
+  {x: 'January', 'y': 12},
+  {x: 'February', 'y': 15},
+  {x: 'March', 'y': 1},
+  {x: 'April', 'y': 7},
+  {x: 'May', 'y': 2},
+  {x: 'June', 'y': 120},
+  {x: 'July', 'y': 20},
+  {x: 'August', 'y': 78},
+  {x: 'September', 'y': 34},
+  {x: 'October', 'y': 54},
+  {x: 'November', 'y': 12},
+  {x: 'December', 'y': 45},
+]
+
+let dataObjToken = [
+  {x: 'Token', 'y': 12},
+  {x: 'Token', 'y': 15},
+  {x: 'Token', 'y': 1},
+  {x: 'Token', 'y': 7},
+  {x: 'Token', 'y': 2},
+  {x: 'Token', 'y': 120},
+  {x: 'Token', 'y': 20},
+  {x: 'Token', 'y': 78},
+  {x: 'Token', 'y': 34},
+  {x: 'Token', 'y': 54},
+  {x: 'Token', 'y': 12},
+  {x: 'Token', 'y': 45},
+]
+
+// let sampleData = [
+//   {
+//     seriesName: 'Months',
+//     data: dataObj,
+//     color: 'violet'
+//   }, {
+//     seriesName: 'Tokens',
+//     data: dataObjToken,
+//     color: 'pink'
+//   }
+ 
+// ]
+
 let sampleData = [
   {
-    seriesName: 'series1',
+    seriesName: 'Months',
     data: [
       {x: 'Jan', y: 430},
       {x: 'feb', y: 200},
@@ -35,7 +80,7 @@ let sampleData = [
     color: 'violet'
   },
   {
-    seriesName: 'series2',
+    seriesName: 'Tokens',
     data: [
       {x: 'Jan', y: 10},
       {x: 'feb', y: 270},
@@ -125,7 +170,7 @@ class Activity_tracker extends Component {
                       this.props.trackingType === 'vehicle' ?
                        Math.round(calorieBurnt('vehicle', this.props.vehicleTime, this.props.userWeight)) :
                        0
-                    } kj </Text>
+                    } cal </Text>
                 
                 <Text style={[design.white_medium_text, {fontSize: 15, textAlign: 'left', textDecorationLine: 'underline'}]}>Tokens</Text>
                     <Text  style={styles.unit_head_text}>{
@@ -248,7 +293,7 @@ class Activity_tracker extends Component {
             />
           </View>
           
-           {/* <View style={styles.barchart_view}>
+           <View style={styles.barchart_view}>
               <View style={{justifyContent: 'center', alignItems:'center'}}>
                 <Text style={styles.barChart_left_text}>Monthly Overview</Text>
               </View>
@@ -269,12 +314,12 @@ class Activity_tracker extends Component {
                   </View>
                 </View>
               </View>
-           </View> */}
+           </View>
 
 
-            {/* <View style={styles.chartContainer}>
+            <View style={styles.chartContainer}>
              <PureChart data={sampleData} type='bar' />
-            </View> */}
+            </View>
 
          </View>
         </ScrollView>
@@ -298,7 +343,7 @@ const styles = StyleSheet.create({
           justifyContent: 'space-evenly',
           alignItems: 'flex-start',
           flexDirection: 'row',
-          marginTop: 2
+          marginTop: 2,
         },
         head_text: {
           textAlign: 'center',

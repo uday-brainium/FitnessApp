@@ -114,8 +114,8 @@ class Reset_Screen extends Component {
                 <FooterNavButtons
                   emailPwdBtnStr={'Profile Screen'}
                   onForgotPassword={''}
-                  onNavString1={'Already have an account?'}
-                  onNavString2={'Sign in now'}
+                  onNavString1={'Already have an account ? '}
+                  onNavString2={' Sign in now'}
                   onNavPress={() => NavigatorService.reset('login_screen')}
                   keyboardflag={this.state.keyboardflag}
                   showEmailPwdState={true}

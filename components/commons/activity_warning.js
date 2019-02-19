@@ -23,43 +23,44 @@ export default class Activity_warning extends Component {
       activityInspector = setInterval(() => {
          this.detectCheating()
       }, 15000);
-    
   }
 
   detectCheating = () => {
-    if(this.state.trackingStatus == true) {
-      if(this.checkDevicePosition() || this.checkSpeed()) {
-        if(this.state.cheatingCount > 3) {
-          this.setState({warningModal: true, cheatingCount: 0}, () => {
+      if(this.checkSpeed()) {
             this.props.caught()
-          })
-        } else {
-          this.setState({cheatingCount: this.state.cheatingCount + 1, alertModal: true})
-        }
+            this.props.switchActivity('vehicle')
+            this.setState({alertModal: true})
+        // if(this.state.cheatingCount > 3) {
+        //   this.setState({warningModal: true, cheatingCount: 0}, () => {
+        //     this.props.caught()
+        //     this.props.switchActivity('vehicle')
+        //   })
+        // } else {
+        //   this.setState({cheatingCount: this.state.cheatingCount + 1, alertModal: true})
+        // }
       }
-    }
   }
 
-  checkDevicePosition = () => {
-    let checkStatus = false
-    let position = this.props.mostProb
-    let currentAcitivity = this.props.trackingType
-    console.log("TYPE", currentAcitivity);
+  // checkDevicePosition = () => {
+  //   let checkStatus = false
+  //   let position = this.props.mostProb
+  //   let currentAcitivity = this.props.trackingType
+  //   console.log("TYPE", currentAcitivity);
     
-    if(position != '' && position.type != null) {
-       if(currentAcitivity == 'vehicle' && position.type == 'STILL'){
-         checkStatus = true
-       } else if(currentAcitivity == 'walkrun' && (position.type == 'STILL' || position.type == 'IN_VEHICLE' || position.type == 'ON_BICYCLE' || position.type == 'RUNNING')) {
-         checkStatus = true
-       } else if(currentAcitivity == 'bycycle' && (position.type == 'STILL' || position.type == 'IN_VEHICLE' || position.type == 'WALKING')) {
-         checkStatus = true
-       } else {
-         checkStatus = false
-       }
-    }
+  //   if(position != '' && position.type != null) {
+  //      if(currentAcitivity == 'vehicle' && position.type == 'STILL'){
+  //        checkStatus = true
+  //      } else if(currentAcitivity == 'walkrun' && (position.type == 'STILL' || position.type == 'IN_VEHICLE' || position.type == 'ON_BICYCLE' || position.type == 'RUNNING')) {
+  //        checkStatus = true
+  //      } else if(currentAcitivity == 'bycycle' && (position.type == 'STILL' || position.type == 'IN_VEHICLE' || position.type == 'WALKING')) {
+  //        checkStatus = true
+  //      } else {
+  //        checkStatus = false
+  //      }
+  //   }
 
-    return checkStatus
-  }
+  //   return checkStatus
+  // }
 
  checkSpeed = () => {
    let speedStatus = false
@@ -77,9 +78,9 @@ export default class Activity_warning extends Component {
  }
   
   UNSAFE_componentWillReceiveProps(nextProps) {
-    console.log('CHECKDEVICE', this.checkDevicePosition());
+   // console.log('CHECKDEVICE', this.checkDevicePosition());
     //console.log('SPEED', this.checkSpeed());
-    console.log("POSITION", this.props.mostProb);
+    //console.log("POSITION", this.props.mostProb);
     if(this.props.trackingType == 'walkrun') {
       this.setState({typeString: 'Walking'})
     } else if(this.props.trackingType == 'bycycle') {
@@ -138,7 +139,7 @@ export default class Activity_warning extends Component {
 
 
          <Modal
-         animationType="slide"
+         animationType="fade"
          transparent={true}
          visible={this.state.alertModal}
          onRequestClose={() => {
@@ -148,13 +149,13 @@ export default class Activity_warning extends Component {
              <View style={styles.popup_screen}>
               <View style={styles.warningBox}>
                 <Image
-                 style={{width: 130, height: 130, marginBottom: 20}}
+                 style={{width: 90, height: 90, marginBottom: 20}}
                  source={require('./../../assets/images/warning_icon.png')}
                 />
 
-                <Text style={styles.headAlert}>Activity warning !</Text>
+                <Text style={styles.headAlert}>Activity switched !</Text>
                 <Text style={styles.alertText}>
-                  We have detected that you are not {this.state.typeString}.
+                 Detected speed increase so activity type switched to Vehicle.
                 </Text>                
               </View>
 
@@ -184,7 +185,7 @@ export default class Activity_warning extends Component {
 const styles = StyleSheet.create({
   popup_screen: {
     width: '90%',
-    height: 320,
+    height: 270,
     backgroundColor: '#fff',
     padding: 10,
     borderRadius: 10,

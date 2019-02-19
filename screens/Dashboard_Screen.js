@@ -8,8 +8,9 @@ import {
   Modal,
   ActivityIndicator,
   Alert,
-  BackHandler
+  BackHandler, 
 } from 'react-native';
+let moment = require('moment');
 import { connect } from 'react-redux'
 import { saveOtherDetails } from '../actions/fbLogin_action'
 import { save_acitivity } from '../actions/Activity_action'
@@ -119,6 +120,9 @@ class Dashboard_screen extends Component {
 
 
   componentDidMount() {
+    console.log("DATE-today", moment().format('DD-MM-YYYY'))
+    console.log("TEST", new Date().toLocaleString());
+    
     BackHandler.addEventListener('hardwareBackPress', this.handleBackPress); 
     this.track()
     this.props.navigation.setParams({
@@ -135,16 +139,13 @@ class Dashboard_screen extends Component {
         }
       })
     })
-
-    ls.get('remember').then((data) => {console.log('remember', data);
-    })
   }
 
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if(nextProps != null &&  nextProps.allState.fbuserData != null) {
       if(nextProps.allState.fbuserData.modalflag == true) {
         ls.save('userdata', JSON.stringify(nextProps.allState.fbuserData.fbuserData.res.message))
@@ -267,7 +268,7 @@ class Dashboard_screen extends Component {
   track = () => {
     this.unsubscribe = ActivityRecognition.subscribe((detectedActivities) => {
       this.setState({mostProb: detectedActivities.sorted[0]})
-      console.log('Object', detectedActivities);
+     // console.log('Object', detectedActivities);
     })
 
     let detectionIntervalMillis = 0
@@ -308,19 +309,11 @@ class Dashboard_screen extends Component {
       }, options);
     
   
-   //Waiting for trackingType state to be stated
-   setTimeout(()=> {
-    if(this.state.trackingType != '' && this.state.trackingType == 'vehicle') {
-      timeIntervalFunction = setInterval( () => {
-        this.updateNewCords()
-      }, 1000)
-     } else {
-      timeIntervalFunction = setInterval( () => {
-        this.updateNewCords()
-      }, 3000)
-     }
-   }, 1000)
-
+  //A loop of collecting coordinates per 3 sec
+  timeIntervalFunction = setInterval( () => {
+    this.updateNewCords()
+  }, 3000)
+    
   }
 
   updateNewCords = () => {
@@ -342,7 +335,7 @@ class Dashboard_screen extends Component {
         console.log("POSITION-WATCH", pos);
         this.setState({callCount: this.state.callCount + 1})
         if(this.state.trackingStatus) {
-          if(pos.coords.accuracy < 30) {
+          if(pos.coords.accuracy < 100) {
             this.state.alertVisible === 1 ? this.showNotification() : ''
             this.setState({updatedLat: pos.coords.latitude, updatedLng: pos.coords.longitude, speed: pos.coords.speed, alertVisible: 2})
             setTimeout(() => { this.setState({lastKnownLat: pos.coords.latitude, LastKnownLng: pos.coords.longitude}) }, 700)
@@ -452,6 +445,7 @@ class Dashboard_screen extends Component {
     }
   }
 
+  //if cheating stop the activity
   caughtCheat = () => {
     this.stopInterval()
   }
@@ -531,7 +525,9 @@ class Dashboard_screen extends Component {
               </View>
             </Modal>
 
-            <Activity_warning {...this.state} caught={() => this.caughtCheat()} />
+            <Activity_warning {...this.state} 
+             caught={() => this.caughtCheat()}
+             switchActivity = {(type) => this.startTracing(type)} />
 
             <View style={{ paddingTop: 15, width: '90%', alignSelf: 'center', flexDirection: 'row', justifyContent: 'space-between'}}>
               {/* <View>

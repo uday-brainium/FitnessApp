@@ -34,6 +34,8 @@ class EmailPwdButton extends Component {
             if(this.props.remember) {
               let credentials = {email, password}
               ls.save('remember', JSON.stringify(credentials))
+            } else {
+              ls.remove('remember')
             }
           this.props.loginUser({ email, password });
           // NetInfo.isConnected.fetch().then(isConnected => {

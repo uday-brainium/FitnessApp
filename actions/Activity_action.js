@@ -9,9 +9,12 @@ import {
   let ls = require('react-native-local-storage');
   import NavigatorService from './../utils/navigator';
   import  qs from "qs";
-  
+  let moment = require('moment');
+  let today = moment().format('YYYY-MM-DD')
+
   
   export const save_acitivity = (values) => {
+
     return async (dispatch) => {
       if(values) {
         let insertData = {
@@ -22,6 +25,7 @@ import {
           },
           body: qs.stringify({
             userid: values._userid,
+            activitydate: today,
             totaltokens: values.totalToken,
             totalcalories: values.totalCalories,
             totaldistance: values.totalDistance,
@@ -69,7 +73,8 @@ import {
               'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: qs.stringify({
-              userid
+              userid,
+              activitydate: today
             })
           }
         fetch(NetworkConstants.RequestUrl('get_activity_today'), header).then ((res) => {

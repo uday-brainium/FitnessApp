@@ -3,6 +3,7 @@ import { View, Text, Platform, StyleSheet } from 'react-native';
 import Modal from 'react-native-modal';
 import { connect } from 'react-redux';
 import { errorSet } from '../actions';
+import NavigatorService from './../utils/navigator';
 
 import { Button } from 'react-native-elements';
 import {
@@ -12,13 +13,26 @@ import {GradientButton} from './../components/';
 
 class ErrorMessage extends Component {
 
+  onButtonClick = () => {
+    if(this.props.error == "New password is sent toyour mail.") {
+      alert(1)
+      NavigatorService.reset('terms_screen')
+      this.props.errorSet('')
+    } else {
+     // alert(1)
+      this.props.errorSet('')
+      NavigatorService.reset('login_screen')
+    }
+    
+  }
+
   renderModalContent = () => (
     <View style={styles.modalContent}>
       <View style={{marginTop: 10, marginLeft: 5, marginRight: 5, marginBottom: 25}}>
         <RkText rkType='header6' > {this.props.error} </RkText>
       </View>
         <GradientButton
-          onPress={ () => this.props.errorSet('') }
+          onPress={ this.onButtonClick }
           rkType='medium'
           text='Close'>
         </GradientButton>

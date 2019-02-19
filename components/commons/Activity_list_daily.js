@@ -48,7 +48,7 @@ class Daily_Activity_list extends Component {
             </View>
             <View>
               <Text style={styles.history_value_text}>Calorie (C)</Text>
-              <Text style={styles.history_value_text}>{typeof this.props.activity.activity_result != 'undefined' ? this.props.activity.activity_result.totalcalories != null ? `${this.props.activity.activity_result.totalcalories} kj` : '0 kj' : '0'}</Text>
+              <Text style={styles.history_value_text}>{typeof this.props.activity.activity_result != 'undefined' ? this.props.activity.activity_result.totalcalories != null ? `${this.props.activity.activity_result.totalcalories} cal` : '0 cal' : '0'}</Text>
             </View>
             <View>
               <Text style={styles.history_value_text}>Token (T)</Text>

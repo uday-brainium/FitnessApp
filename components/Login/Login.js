@@ -26,7 +26,7 @@ import EmailPwdButton from "./EmailPwdButton";
 import FooterNavButtons from "./FooterNavButtons";
 import LoadingSpinner from "./../Loading/LoadingSpinner";
 import  FBLoginView from './../FBLoginView'
-
+let ls = require('react-native-local-storage');
 
 import { RkStyleSheet } from "react-native-ui-kitten";
 import {
@@ -68,6 +68,14 @@ class Login extends Component {
     // remove the listeners upon exit
     this.keyboardDidShowListener.remove();
     this.keyboardDidHideListener.remove();
+  }
+
+  componentDidMount() {
+    ls.get('remember').then((data) => {
+      if(JSON.parse(data) != null){
+        this.setState({rememberCheck: true})
+      }
+    })
   }
 
   _keyboardDidShow() {
@@ -183,7 +191,6 @@ class Login extends Component {
 
                 <LoginORBar />
                 <View>
-
                    <FBLogin
                       buttonView={<FBLoginView />}
                       ref={(fbLogin) => { this.fbLogin = fbLogin }}
