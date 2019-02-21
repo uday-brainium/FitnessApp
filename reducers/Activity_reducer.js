@@ -1,6 +1,7 @@
 import {
     SAVE_ACTIVITY,
     SAVE_ACTIVITY_TODAY,
+    GET_CHART_DATA
    } from '../actions/types';
   export default function(state = {}, action) {
     switch (action.type) {

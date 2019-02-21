@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import {connect} from 'react-redux'
 import { get_activity_today } from './../../actions/Activity_action'
 import { get_overall_activity } from './../../actions/Activity_action'
@@ -9,7 +9,8 @@ class Daily_Activity_list extends Component {
     constructor(props) {
       super(props);
       this.state = {
-        activityData: {}
+        activityData: {},
+        loading: true
       };
     }
 
@@ -24,16 +25,22 @@ class Daily_Activity_list extends Component {
 
     componentWillReceiveProps(nextProps) {
       if(nextProps) {
+        if(nextProps.activity.activity_result != null){
+          this.setState({loading: false})
+        }
         this.setState({activityData: nextProps.activity.activity_result})
       }
     }
   
     render() {
-      
-      
-      return ( 
+      return (
+
         <View style={styles.container_daily}>
-          <View style={{flexDirection: 'row', justifyContent:'space-around'}}>
+        {this.state.loading &&
+          <ActivityIndicator size="large" color="gray" />
+        }
+        {!this.state.loading && 
+         <View style={{flexDirection: 'row', justifyContent:'space-around'}}>
             <View>  
               <Text style={styles.history_value_text}>Distance (D)</Text>
               <Text style={styles.history_value_text}>
@@ -55,7 +62,9 @@ class Daily_Activity_list extends Component {
               <Text style={styles.history_value_text}>{typeof this.props.activity.activity_result != 'undefined' ? this.props.activity.activity_result.totaltokens != null ? this.props.activity.activity_result.totaltokens : '0' : '0'}</Text>
             </View>
           </View>
+        }
         </View>
+
       );
     }
   }

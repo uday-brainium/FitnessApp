@@ -8,7 +8,8 @@ import {
   ImageBackground,
   ScrollView,
   Animated,
-  Image
+  Image,
+  ActivityIndicator
 } from 'react-native';
 import { Colors } from './../../config/theme'
 import PureChart from 'react-native-pure-chart'
@@ -19,36 +20,8 @@ import Activity_list_daily from './../commons/Activity_list_daily'
 import Activity_list_monthly from './../commons/activity_list_monthly'
 import {tokenRateVehicle, tokenRateBike, tokenRateWalking, calorieRate, calorieBurnt} from './../../config/appConstants'
 
+let sampleData
 
-let dataObj = [
-  {x: 'January', 'y': 12},
-  {x: 'February', 'y': 15},
-  {x: 'March', 'y': 1},
-  {x: 'April', 'y': 7},
-  {x: 'May', 'y': 2},
-  {x: 'June', 'y': 120},
-  {x: 'July', 'y': 20},
-  {x: 'August', 'y': 78},
-  {x: 'September', 'y': 34},
-  {x: 'October', 'y': 54},
-  {x: 'November', 'y': 12},
-  {x: 'December', 'y': 45},
-]
-
-let dataObjToken = [
-  {x: 'Token', 'y': 12},
-  {x: 'Token', 'y': 15},
-  {x: 'Token', 'y': 1},
-  {x: 'Token', 'y': 7},
-  {x: 'Token', 'y': 2},
-  {x: 'Token', 'y': 120},
-  {x: 'Token', 'y': 20},
-  {x: 'Token', 'y': 78},
-  {x: 'Token', 'y': 34},
-  {x: 'Token', 'y': 54},
-  {x: 'Token', 'y': 12},
-  {x: 'Token', 'y': 45},
-]
 
 // let sampleData = [
 //   {
@@ -63,43 +36,34 @@ let dataObjToken = [
  
 // ]
 
-let sampleData = [
-  {
-    seriesName: 'Months',
-    data: [
-      {x: 'Jan', y: 430},
-      {x: 'feb', y: 200},
-      {x: 'Mar', y: 170},
-      {x: 'Apr', y: 250},
-      {x: 'May', y: 10},
-      {x: 'June', y: 30},
-      {x: 'July', y: 200},
-      {x: 'Aug', y: 170},
-      {x: 'Sep', y: 250},
-    ],
-    color: 'violet'
-  },
-  {
-    seriesName: 'Tokens',
-    data: [
-      {x: 'Jan', y: 10},
-      {x: 'feb', y: 270},
-      {x: 'Mar', y: 470},
-      {x: 'Apr', y: 257},
-      {x: 'May', y: 60},
-      {x: 'June', y: 80},
-      {x: 'July', y: 20},
-      {x: 'Aug', y: 470},
-      {x: 'Sep', y: 259},
-    ],
-    color: 'green'
-  }
-]
+
 
 let imagePath = './../../assets/images/'
 
 class Activity_tracker extends Component {
-  
+  constructor(props){
+    super(props)
+    this.state = {
+      chartLoading :true
+    }
+  }
+
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if(nextProps.chartData != null && this.props.chartData != nextProps.chartData){
+       this.setState({chartLoading: false})
+       sampleData = [
+        { seriesName: 'Months',
+          data: nextProps.chartData.dataObjCalorie,
+          color: 'violet'
+        },
+        {
+          seriesName: 'Tokens',
+          data: nextProps.chartData.dataObjToken,
+          color: 'green'
+        }
+      ]
+    }
+  }
 
   render() {
     const {distance, walkrunDistance, bikeDistance, vehicleDistance} = this.props
@@ -236,7 +200,7 @@ class Activity_tracker extends Component {
                 />
               </View>
               <View> 
-                <Text style={{fontSize: 18, fontWeight: 'bold', marginLeft: 5}}>Daily Activity</Text>
+                <Text style={{fontSize: 18, fontWeight: 'bold', marginLeft: 5}}>Daily activity</Text>
               </View>
               </View>
               <Activity_list_daily
@@ -259,7 +223,7 @@ class Activity_tracker extends Component {
               />
              </View>
              <View> 
-               <Text style={{fontSize: 18, fontWeight: 'bold', marginLeft: 5}}>Monthly activity</Text>
+               <Text style={{fontSize: 18, fontWeight: 'bold', marginLeft: 5}}>Weekly activity</Text>
              </View>
             </View>
             <Activity_list_monthly
@@ -275,14 +239,14 @@ class Activity_tracker extends Component {
             <View style={{flexDirection: 'row', margin: 5}}>
              <View>
                 <Icon
-                name={"timeline"}
+                name={"today"}
                 type='MaterialIcons'
                 color='#c6a0f5'
                 size = {22}
               />
              </View>
              <View> 
-               <Text style={{fontSize: 18, fontWeight: 'bold', marginLeft: 5}}>Overall Activity</Text>
+               <Text style={{fontSize: 18, fontWeight: 'bold', marginLeft: 5}}>Overall activity</Text>
              </View>
             </View>
             <Activity_list 
@@ -294,6 +258,16 @@ class Activity_tracker extends Component {
           </View>
           
            <View style={styles.barchart_view}>
+              
+              <View style={{marginLeft: 5, marginRight: -15}}>
+                  <Icon
+                  name='timeline'
+                  type='MaterialIcons'
+                  color='#c6a0f5'
+                  size = {22}
+                />
+              </View>
+            
               <View style={{justifyContent: 'center', alignItems:'center'}}>
                 <Text style={styles.barChart_left_text}>Monthly Overview</Text>
               </View>
@@ -303,13 +277,13 @@ class Activity_tracker extends Component {
                   <View style={{ margin: 5}}>
                     <View style={{flex:1, flexDirection: 'row',}}>
                       <View style={{width: 15, height: 15, backgroundColor: 'violet', borderRadius: 5, marginTop: 3}}></View>
-                      <View><Text style={styles.barChart_text}>Token</Text></View>
+                      <View><Text style={styles.barChart_text}>Calories</Text></View>
                     </View>
                   </View>
                   <View style={{margin: 5}}>
                   <View style={{flex:1, flexDirection: 'row',}}>
                     <View style={{width: 15, height: 15, backgroundColor: 'green', borderRadius: 5, marginTop: 3}}></View>
-                    <View><Text style={styles.barChart_text}>Calories</Text></View>
+                    <View><Text style={styles.barChart_text}>Tokens</Text></View>
                    </View>
                   </View>
                 </View>
@@ -318,8 +292,14 @@ class Activity_tracker extends Component {
 
 
             <View style={styles.chartContainer}>
+            {this.state.chartLoading &&
+               <ActivityIndicator size="large" color="gray" />
+            }
+            {!this.state.chartLoading &&
              <PureChart data={sampleData} type='bar' />
+            }
             </View>
+            
 
          </View>
         </ScrollView>
@@ -376,12 +356,14 @@ const styles = StyleSheet.create({
           paddingTop: 10
         },
         chartContainer: {
-          padding: 25,
-          flex:1,
-          height: 250,
-          padding: '5%',
+         marginTop: 10,
+         marginLeft: 15,
+         marginRight: 30,
+          // flex:1,
+          height: 200,
+        //  padding: '5%',
           width: '90%',
-          alignItems: 'center'
+  
         },
         toggle_switch: {
           paddingTop: 30,

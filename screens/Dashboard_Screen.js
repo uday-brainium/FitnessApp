@@ -15,6 +15,7 @@ import { connect } from 'react-redux'
 import { saveOtherDetails } from '../actions/fbLogin_action'
 import { save_acitivity } from '../actions/Activity_action'
 import { get_overall_activity, get_monthly_activity } from '../actions/Activity_action'
+import { chart_data } from '../actions/Yearly_chart_action'
 import  Activity_warning  from './../components/commons/activity_warning'
 import { RkText } from 'react-native-ui-kitten';
 import { Avatar } from '../components/avatar';
@@ -119,13 +120,14 @@ class Dashboard_screen extends Component {
 
 
 
-  componentDidMount() {    
+  componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.handleBackPress); 
     this.track()
     this.props.navigation.setParams({
           openDrawer: this.openDrawerNow
       });
     ls.get('userdata').then((data) => {
+      this.props.chart_data(JSON.parse(data)._id)
       //console.log('FBLOGIN USERDATA', JSON.parse(data));
       this.setState({userdata: JSON.parse(data)}, () => {
         if(this.state.userdata.heightWeight == 'false') {
@@ -451,7 +453,7 @@ class Dashboard_screen extends Component {
 
 
   render() {
-    return (
+     return (
         <Container >
           {this.state.alertVisible === 1 && 
               <View style={{padding: 5, backgroundColor: '#f78649'}}>
@@ -561,6 +563,7 @@ class Dashboard_screen extends Component {
                walkingTime = {this.state.walkingActivityTime}
                bikeTime = {this.state.bikeActivityTime}
                vehicleTime = {this.state.vehicleActivityTime}
+               chartData = {this.props.allState.chartData.chart_data}
               />
           </Content>
       </Container>
@@ -667,4 +670,4 @@ function mapStateToProps(state) {
 }
 
 
-export default connect(mapStateToProps, {saveOtherDetails, save_acitivity, get_overall_activity, get_monthly_activity})(Dashboard_screen)
+export default connect(mapStateToProps, {saveOtherDetails, save_acitivity, get_overall_activity, get_monthly_activity, chart_data})(Dashboard_screen)

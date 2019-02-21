@@ -2,7 +2,8 @@ import {
     SAVE_ACTIVITY,
     SAVE_ACTIVITY_TODAY,
     GET_OVERALL_ACTIVITY,
-    GET_MONTHLY_ACTIVITY
+    GET_MONTHLY_ACTIVITY,
+    GET_CHART_DATA
   } from './types';
   import {Platform} from 'react-native'
   import { NetworkConstants } from './../config/appConstants'
@@ -152,3 +153,4 @@ export const get_monthly_activity = (userid) => {
       })
   }
 }
+

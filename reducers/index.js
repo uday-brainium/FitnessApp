@@ -6,6 +6,7 @@ import fbLogin_reducer from './fbLogin_reducer'
 import activity from './Activity_reducer'
 import overall_activity from './Overall_activity_reducer'
 import monthly_activity from './Monthly_activity_reducer'
+import chart_data from './Yearly_chart_reducer'
 
 export default combineReducers({
   auth: AuthReducer,
@@ -14,5 +15,6 @@ export default combineReducers({
   fbuserData: fbLogin_reducer,
   activityData: activity,
   overallActivity: overall_activity,
-  monthlyActivity: monthly_activity
+  monthlyActivity: monthly_activity,
+  chartData: chart_data
 });

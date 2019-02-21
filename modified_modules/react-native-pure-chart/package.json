@@ -1,0 +1,102 @@
+{
+  "_args": [
+    [
+      "react-native-pure-chart@0.0.24",
+      "/home/bit/uday/projects/newFitApp"
+    ]
+  ],
+  "_from": "react-native-pure-chart@0.0.24",
+  "_id": "react-native-pure-chart@0.0.24",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/react-native-pure-chart",
+  "_nodeVersion": "6.11.1",
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/react-native-pure-chart_0.0.24_1532883633941_0.3195971993265041"
+  },
+  "_npmUser": {
+    "email": "oksktank@gmail.com",
+    "name": "ramphastos"
+  },
+  "_npmVersion": "5.7.1",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "react-native-pure-chart",
+    "raw": "react-native-pure-chart@0.0.24",
+    "rawSpec": "0.0.24",
+    "scope": null,
+    "spec": "0.0.24",
+    "type": "version"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/react-native-pure-chart/-/react-native-pure-chart-0.0.24.tgz",
+  "_shasum": "6a06d803d6bce0d6cdb94ee426e32cfce95f19a1",
+  "_shrinkwrap": null,
+  "_spec": "react-native-pure-chart@0.0.24",
+  "_where": "/home/bit/uday/projects/newFitApp",
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/oksktank/react-native-pure-chart/issues"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4",
+    "prop-types": "^15.6.0"
+  },
+  "description": "[![NPM Version](https://img.shields.io/npm/v/react-native-pure-chart.svg?style=flat)](https://www.npmjs.org/package/react-native-pure-chart) [![npm](https://img.shields.io/npm/dm/react-native-pure-chart.svg?style=flat)](https://www.npmjs.org/package/react",
+  "devDependencies": {
+    "expo": "^21.0.2",
+    "jest-expo": "~20.0.0",
+    "react-native-scripts": "1.3.1",
+    "react-test-renderer": "16.0.0-alpha.12"
+  },
+  "directories": {},
+  "dist": {
+    "fileCount": 24,
+    "integrity": "sha512-YczRMLyR1PY5u5qpYc4ScrYdbPVAD9GxIdnR8m7zbttwytlHVjn90+buYBnHW3Lm/JXHVzCMjTQkXQ5cskvB+Q==",
+    "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJbXfKyCRA9TVsSAnZWagAA0y0QAKATnQmI1ur0dD13Q8yo\n5ARe6yCmMhsZtu6otbfeOSep5id8ftWntBcIbuiT0oiTmvnOlmN0+OmUY213\nF7pgSk5zZxjaEU2P9OhKIQBQU0t34sJpf/oQgWGlFgHVytIlVGqSBkK+hRYg\npcouEaZ3OOI8HleRG+8YyaTKs4EBWYunQqbso3Hz/LOjAZFHdpTU9juldhxl\ntX0W2EUUdwvY3aoxSfqRH/Toqy1bRWeZGx5GtqI62jZX4Si1pHLmh10pUngP\nq5TkhR3nbpxllEw7AkxagkGuOb9r5M3vbQygo4eTHHJjphIk6JpgNutS2n9S\n4KEaoxjNoVmo9k24TTpfi/MJGHlPND0aQ45ZHKR4L0BEX6ATH5p/usrhQaIS\nmoe9PF6vuYnURQF1xc5pLzyEtvteTBpLkROoAOQ/gJTZy1e2ivKvSst+TjTz\nBnp2HC5CAjakGQ0QqALimE8huBbAOUaGXdF3jetGXxrpih0A06u2H4W8xM4q\n51XixqgfZzHeRnUFNfH7pLK9LLbN2sTZZYNztMpiy7mJ3Tlt1mPBBK9WK21f\nRgOwAl9e9VlN9UZmJsV0knowv48YnDe+uSlieVrFDxVSzs2QYHysXFH+3Jor\nPrnLnyF67+TJqqy6fjn1/58ACFPJIiRcqk06uPlpJrgNQ+bS0ebzlJAu8FIG\nqhsa\r\n=85Rt\r\n-----END PGP SIGNATURE-----\r\n",
+    "shasum": "6a06d803d6bce0d6cdb94ee426e32cfce95f19a1",
+    "tarball": "https://registry.npmjs.org/react-native-pure-chart/-/react-native-pure-chart-0.0.24.tgz",
+    "unpackedSize": 2771568
+  },
+  "gitHead": "6a13f24eb7ad197eb086ad116f60efa009fbdaff",
+  "homepage": "https://github.com/oksktank/react-native-pure-chart#readme",
+  "jest": {
+    "preset": "jest-expo"
+  },
+  "keywords": [
+    "chart",
+    "pure",
+    "react",
+    "react-native"
+  ],
+  "license": "MIT",
+  "main": "./examples/pure-chart/index.js",
+  "maintainers": [
+    {
+      "name": "hyungeun",
+      "email": "kingwang09@gmail.com"
+    },
+    {
+      "name": "ramphastos",
+      "email": "oksktank@gmail.com"
+    }
+  ],
+  "name": "react-native-pure-chart",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oksktank/react-native-pure-chart.git"
+  },
+  "scripts": {
+    "android": "react-native-scripts android",
+    "eject": "react-native-scripts eject",
+    "ios": "react-native-scripts ios",
+    "start": "react-native-scripts start",
+    "test": "node node_modules/jest/bin/jest.js --watch"
+  },
+  "version": "0.0.24"
+}

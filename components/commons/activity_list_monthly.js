@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import {connect} from 'react-redux'
 import { get_monthly_activity } from './../../actions/Activity_action'
 let ls = require('react-native-local-storage');
@@ -19,7 +19,8 @@ let overallVehicleToken= 0
   constructor(props) {
     super(props);
     this.state = {
-      update: false
+      update: false,
+      loading: true
     };
   }
 
@@ -37,6 +38,9 @@ let overallVehicleToken= 0
     overallBikeCalorie = 0, overallBikeToken = 0, overallVehicleDistance = 0
     overallVehicleCalorie = 0, overallVehicleToken = 0, overallBikeDistance = 0
     if(nextProps){
+      if(nextProps.all_activity.monthly_activity != null) {
+        this.setState({loading: false})
+      }
       //re-render component
       let data = nextProps.all_activity.monthly_activity
       for(var i = 0; i < data.length; i++ ){
@@ -58,7 +62,11 @@ let overallVehicleToken= 0
 
     return (
       <View style={styles.container}>
-        <View style={{flexDirection: 'row', justifyContent:'space-around'}}>
+      {this.state.loading &&
+         <ActivityIndicator size="large" color="gray" />
+      }
+      {!this.state.loading &&
+         <View style={{flexDirection: 'row', justifyContent:'space-around'}}>
           <View>  
             <Text style={styles.history_head_text}>Walking</Text>
             <Text style={styles.history_value_text}>D {
@@ -94,6 +102,7 @@ let overallVehicleToken= 0
             <Text style={styles.history_value_text}>T {overallVehicleToken}</Text>
           </View>
         </View>
+      }
       </View>
     );
   }
