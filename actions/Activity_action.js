@@ -10,7 +10,7 @@ import {
   import NavigatorService from './../utils/navigator';
   import  qs from "qs";
   let moment = require('moment');
-  let today = moment().format('YYYY-MM-DD')
+  var today = new Date().toLocaleDateString("en-US", {timeZone: "Australia/Brisbane"});
 
   
   export const save_acitivity = (values) => {
@@ -25,7 +25,7 @@ import {
           },
           body: qs.stringify({
             userid: values._userid,
-            activitydate: today,
+            activitydate: today.trim(),
             totaltokens: values.totalToken,
             totalcalories: values.totalCalories,
             totaldistance: values.totalDistance,
@@ -149,7 +149,6 @@ export const get_monthly_activity = (userid) => {
         })
       }).catch((err) => {
         console.log("ERROR---", err);
-        
       })
   }
 }

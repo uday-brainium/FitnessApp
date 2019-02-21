@@ -119,10 +119,7 @@ class Dashboard_screen extends Component {
 
 
 
-  componentDidMount() {
-    console.log("DATE-today", moment().format('DD-MM-YYYY'))
-    console.log("TEST", new Date().toLocaleString());
-    
+  componentDidMount() {    
     BackHandler.addEventListener('hardwareBackPress', this.handleBackPress); 
     this.track()
     this.props.navigation.setParams({
@@ -365,6 +362,8 @@ class Dashboard_screen extends Component {
     this.saveActivity()
     this.cancleNotification()
     this.setState({
+      btn_text: !this.state.btn_text, 
+      trackingStatus: false, 
       btn_text: !this.state.btn_text, 
       trackingStatus: false, 
       alertVisible: 5,
