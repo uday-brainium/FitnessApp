@@ -17,27 +17,10 @@ import {design} from './../../config/stylsheet'
 import { Icon } from 'react-native-elements'
 import Activity_list  from './../commons/activity_list'
 import Activity_list_daily from './../commons/Activity_list_daily'
-import Activity_list_monthly from './../commons/activity_list_monthly'
 import {tokenRateVehicle, tokenRateBike, tokenRateWalking, calorieRate, calorieBurnt} from './../../config/appConstants'
+import Activity_list_weekly from '../commons/activity_list_weekly';
 
 let sampleData
-
-
-// let sampleData = [
-//   {
-//     seriesName: 'Months',
-//     data: dataObj,
-//     color: 'violet'
-//   }, {
-//     seriesName: 'Tokens',
-//     data: dataObjToken,
-//     color: 'pink'
-//   }
- 
-// ]
-
-
-
 let imagePath = './../../assets/images/'
 
 class Activity_tracker extends Component {
@@ -73,9 +56,9 @@ class Activity_tracker extends Component {
     let vehicleDistanceText = vehicleDistance < 1 ? `${(vehicleDistance * 1000).toFixed(1)} m` : `${(vehicleDistance).toFixed(2)} km`
     let totalDistanceText = distance < 1 ? `${(distance * 1000).toFixed(1)} m` : `${(distance).toFixed(2)} km`
    
-    let walkingTokens = Math.round((walkrunDistance * 1000) * tokenRateWalking)
-    let cycleTokens = Math.round((bikeDistance * 1000) * tokenRateBike)
-    let vehicleTokens = Math.round((vehicleDistance * 1000) * tokenRateVehicle)
+    let walkingTokens = ((walkrunDistance * 1000) * tokenRateWalking).toFixed(4)
+    let cycleTokens = ((bikeDistance * 1000) * tokenRateBike).toFixed(4)
+    let vehicleTokens = ((vehicleDistance * 1000) * tokenRateVehicle).toFixed(4)
 
     let totalCalories = Math.round((distance * 1000) * calorieRate)
     let totalToken = (walkingTokens + cycleTokens + vehicleTokens)
@@ -128,11 +111,11 @@ class Activity_tracker extends Component {
                   <Text style={[design.white_medium_text, {fontSize: 15, textAlign: 'left', textDecorationLine: 'underline'}]}>Calories</Text>
                     <Text  style={styles.unit_head_text}>{
                       this.props.trackingType === 'walkrun' ?
-                       Math.round(calorieBurnt('walkrun', this.props.walkingTime, this.props.userWeight)) :
+                       (calorieBurnt('walkrun', this.props.walkingTime, this.props.userWeight).toFixed(2)) :
                       this.props.trackingType === 'bycycle' ?
-                       Math.round(calorieBurnt('bycycle', this.props.bikeTime, this.props.userWeight)) :
+                       (calorieBurnt('bycycle', this.props.bikeTime, this.props.userWeight).toFixed(2)) :
                       this.props.trackingType === 'vehicle' ?
-                       Math.round(calorieBurnt('vehicle', this.props.vehicleTime, this.props.userWeight)) :
+                       (calorieBurnt('vehicle', this.props.vehicleTime, this.props.userWeight).toFixed(2)) :
                        0
                     } cal </Text>
                 
@@ -148,12 +131,13 @@ class Activity_tracker extends Component {
                     } </Text>
                 {/* <Text style={styles.unit_text}>Speed</Text> */}
                 <Text style={[design.white_medium_text, {fontSize: 15, textAlign: 'left', textDecorationLine: 'underline'}]}>Speed</Text>
-                <Text style={styles.unit_head_text}>{Math.round(this.props.speed).toFixed(2)} m/s</Text>
+                <Text style={styles.unit_head_text}>{(this.props.speed).toFixed(2)} m/s</Text>
               </View>
               </View>
             </Animated.View>
            </ImageBackground>
-          
+
+          {/* On / Off Round buttons */}
           <View style={{justifyContent: 'center', paddingBottom: 20, borderBottomWidth: 2, borderBottomColor: '#c6a0f5'}}>
             <Text style={[styles.head_text, {fontWeight: 'normal', fontSize: 18}]}>{!this.props.startedTracking ? 'Choose and start activity tracking' : 'Switch activity type by clicking buttons below'}</Text>
            <View style={[design.common_row, {marginLeft: 10}]}>
@@ -188,7 +172,8 @@ class Activity_tracker extends Component {
                
               </View>
            </View>
-
+            
+          {/* Daily activity list/data */}
             <View>
               <View style={{flexDirection: 'row', margin: 5, paddingTop: 15}}>
               <View>
@@ -203,15 +188,12 @@ class Activity_tracker extends Component {
                 <Text style={{fontSize: 18, fontWeight: 'bold', marginLeft: 5}}>Daily activity</Text>
               </View>
               </View>
-              <Activity_list_daily
-                dailyDistance = {totalDistanceText}
-                dailyCalories = {totalCalories}
-                daillyToken = {totalToken}
-              />
-            </View>
+               <Activity_list_daily/>
+             </View>
 
           </View>
-
+          
+          {/* Activity list Weekly[ Written monthly cause before it was monthly ] */}
           <View>
             <View style={{flexDirection: 'row', margin: 5}}>
              <View>
@@ -226,15 +208,11 @@ class Activity_tracker extends Component {
                <Text style={{fontSize: 18, fontWeight: 'bold', marginLeft: 5}}>Weekly activity</Text>
              </View>
             </View>
-            <Activity_list_monthly
-              dailyDistance = {totalDistanceText}
-              dailyCalories = {totalCalories}
-              daillyToken = {totalToken}
+            <Activity_list_weekly
               updateData = {this.props.startedTracking}
             />
           </View>
           
-
           <View>
             <View style={{flexDirection: 'row', margin: 5}}>
              <View>
@@ -250,15 +228,12 @@ class Activity_tracker extends Component {
              </View>
             </View>
             <Activity_list 
-              dailyDistance = {totalDistanceText}
-              dailyCalories = {totalCalories}
-              daillyToken = {totalToken}
               updateData = {this.props.startedTracking}
             />
           </View>
           
+          {/* All year data in line graph chart */}
            <View style={styles.barchart_view}>
-              
               <View style={{marginLeft: 5, marginRight: -15}}>
                   <Icon
                   name='timeline'

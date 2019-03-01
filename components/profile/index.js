@@ -23,7 +23,6 @@ class Profile extends Component {
   }
 
   componentDidMount() {
-
     ls.get('userdata').then((data) => {
       this.setState({profileInfo: JSON.parse(data)})
     })

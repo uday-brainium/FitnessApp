@@ -14,7 +14,7 @@ let moment = require('moment');
 import { connect } from 'react-redux'
 import { saveOtherDetails } from '../actions/fbLogin_action'
 import { save_acitivity } from '../actions/Activity_action'
-import { get_overall_activity, get_monthly_activity } from '../actions/Activity_action'
+import { get_overall_activity, get_weekly_activity } from '../actions/Activity_action'
 import { chart_data } from '../actions/Yearly_chart_action'
 import  Activity_warning  from './../components/commons/activity_warning'
 import { RkText } from 'react-native-ui-kitten';
@@ -334,7 +334,7 @@ class Dashboard_screen extends Component {
         console.log("POSITION-WATCH", pos);
         this.setState({callCount: this.state.callCount + 1})
         if(this.state.trackingStatus) {
-          if(pos.coords.accuracy < 100) {
+          if(pos.coords.accuracy < 300) {
             this.state.alertVisible === 1 ? this.showNotification() : ''
             this.setState({updatedLat: pos.coords.latitude, updatedLng: pos.coords.longitude, speed: pos.coords.speed, alertVisible: 2})
             setTimeout(() => { this.setState({lastKnownLat: pos.coords.latitude, LastKnownLng: pos.coords.longitude}) }, 700)
@@ -376,7 +376,8 @@ class Dashboard_screen extends Component {
       distanceTravelled: 0,
       walkingActivityTime: 0,
       bikeActivityTime: 0,
-      vehicleActivityTime: 0
+      vehicleActivityTime: 0,
+      speed: 0
     })
     distanceAddition = 0
     walkDistanceAddition = 0
@@ -398,22 +399,22 @@ class Dashboard_screen extends Component {
 
   saveActivity = () => {
     const {userdata, distanceTravelled, walkingDistance, cycleDistance, vehicleActivityTime, walkingActivityTime, bikeActivityTime, vehicleDistance} = this.state
-    let walkdistance = `${(walkingDistance * 1000).toFixed(2)}`
-    let vehicleDistances = `${(vehicleDistance * 1000).toFixed(2)}`
-    let bikeDistance = `${(cycleDistance * 1000).toFixed(2)}`
-    let walkingTokens = Math.round((walkingDistance * 1000) * tokenRateWalking)
-    let cycleTokens = Math.round((cycleDistance * 1000) * tokenRateBike)
-    let vehicleTokens = Math.round((vehicleDistance * 1000) * tokenRateVehicle)
-    let walkingcalories = Math.round(calorieBurnt('walkrun', walkingActivityTime, userdata.weight))
-    let bikecalories = Math.round(calorieBurnt('bycycle', bikeActivityTime, userdata.weight))
-    let vehiclecalories = Math.round(calorieBurnt('vehicle', vehicleActivityTime, userdata.weight))
+    let walkdistance = (walkingDistance * 1000)
+    let vehicleDistances = (vehicleDistance * 1000)
+    let bikeDistance = (cycleDistance * 1000)
+    let walkingTokens = ((walkingDistance * 1000) * tokenRateWalking)
+    let cycleTokens = ((cycleDistance * 1000) * tokenRateBike)
+    let vehicleTokens =((vehicleDistance * 1000) * tokenRateVehicle)
+    let walkingcalories = (calorieBurnt('walkrun', walkingActivityTime, userdata.weight))
+    let bikecalories = (calorieBurnt('bycycle', bikeActivityTime, userdata.weight))
+    let vehiclecalories = (calorieBurnt('vehicle', vehicleActivityTime, userdata.weight))
     let totalCalories = (walkingcalories + bikecalories + vehiclecalories)
     let totalToken = (walkingTokens + cycleTokens + vehicleTokens)
     let data = {
       _userid: userdata._id,
       totalToken,
       totalCalories,
-      totalDistance: `${(distanceTravelled * 1000).toFixed(2)}`,
+      totalDistance: `${(distanceTravelled * 1000)}`,
       walkdistance,
       walkingcalories,
       walkingtokens: walkingTokens,
@@ -425,8 +426,9 @@ class Dashboard_screen extends Component {
       vehicletokens: vehicleTokens
     }
     this.props.save_acitivity(data).then(() => {
-      this.props.get_monthly_activity(this.state.userdata._id)
+      this.props.get_weekly_activity(this.state.userdata._id)
       this.props.get_overall_activity(this.state.userdata._id)
+      this.props.chart_data(this.state.userdata._id)
     })
     
   }
@@ -670,4 +672,4 @@ function mapStateToProps(state) {
 }
 
 
-export default connect(mapStateToProps, {saveOtherDetails, save_acitivity, get_overall_activity, get_monthly_activity, chart_data})(Dashboard_screen)
+export default connect(mapStateToProps, {saveOtherDetails, save_acitivity, get_overall_activity, get_weekly_activity, chart_data})(Dashboard_screen)

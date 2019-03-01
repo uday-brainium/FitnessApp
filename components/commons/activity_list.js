@@ -44,15 +44,15 @@ let overallVehicleToken= 0
      }
       let data = nextProps.all_activity.overall_activity
       for(var i = 0; i < data.length; i++ ){
-        overallWalkDistance +=  parseInt(data[i].walkingdistance)
-        overallWalkCalorie +=  parseInt(data[i].walkingcalories)
-        overallWalkToken +=  parseInt(data[i].walkingtokens)
-        overallBikeDistance += parseInt(data[i].bikedistance)
-        overallBikeCalorie +=  parseInt(data[i].bikecalories)
-        overallBikeToken += parseInt(data[i].biketokens)
-        overallVehicleDistance += parseInt(data[i].vehicledistance)
-        overallVehicleCalorie += parseInt(data[i].vehiclecalories)
-        overallVehicleToken +=  parseInt(data[i].vehicletokens)
+        overallWalkDistance +=  Number(data[i].walkingdistance)
+        overallWalkCalorie +=  Number(data[i].walkingcalories)
+        overallWalkToken +=  Number(data[i].walkingtokens)
+        overallBikeDistance += Number(data[i].bikedistance)
+        overallBikeCalorie +=  Number(data[i].bikecalories)
+        overallBikeToken += Number(data[i].biketokens)
+        overallVehicleDistance += Number(data[i].vehicledistance)
+        overallVehicleCalorie += Number(data[i].vehiclecalories)
+        overallVehicleToken +=  Number(data[i].vehicletokens)
       }
     }
   }
@@ -74,20 +74,20 @@ let overallVehicleToken= 0
                `${(overallWalkDistance / 1000).toFixed(2)} km` :
                `${(overallWalkDistance).toFixed(2)} m`
             }</Text>
-            <Text style={styles.history_value_text}>C {overallWalkCalorie} cal</Text>
-            <Text style={styles.history_value_text}>T {overallWalkToken}</Text>
+            <Text style={styles.history_value_text}>C {overallWalkCalorie.toFixed(2)} cal</Text>
+            <Text style={styles.history_value_text}>T {overallWalkToken.toFixed(4)}</Text>
           </View>
           <View>
             <Text style={styles.history_head_text}>Cycling</Text>
             <Text style={styles.history_value_text}>
             D {
               overallBikeDistance > 999 ?
-               `${(overallBikeDistance / 1000).toFixed(2)} Km` :
+               `${(overallBikeDistance / 1000).toFixed(2)} km` :
                `${(overallBikeDistance).toFixed(2)} m`
             }
             </Text>
-            <Text style={styles.history_value_text}>C {overallBikeCalorie} cal</Text>
-            <Text style={styles.history_value_text}>T {overallBikeToken}</Text>
+            <Text style={styles.history_value_text}>C {overallBikeCalorie.toFixed(2)} cal</Text>
+            <Text style={styles.history_value_text}>T {overallBikeToken.toFixed(4)}</Text>
           </View>
           <View>
             <Text style={styles.history_head_text}>Vehicle</Text>
@@ -98,8 +98,8 @@ let overallVehicleToken= 0
                `${(overallVehicleDistance).toFixed(2)} m`
             }
             </Text>
-            <Text style={styles.history_value_text}>C {overallVehicleCalorie} cal</Text>
-            <Text style={styles.history_value_text}>T {overallVehicleToken}</Text>
+            <Text style={styles.history_value_text}>C {overallVehicleCalorie.toFixed(2)} cal</Text>
+            <Text style={styles.history_value_text}>T {overallVehicleToken.toFixed(4)}</Text>
           </View>
         </View>
       }

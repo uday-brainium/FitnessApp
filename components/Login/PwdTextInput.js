@@ -54,7 +54,7 @@ class PwdTextInput extends Component {
 
     if (inputName == 'password') {
       if (this.state.passwordError !='') {
-        return (<RkText rkType='danger'>{this.state.passwordError}</RkText>);
+        return (<RkText style={{marginBottom: 10}} rkType='danger'>{this.state.passwordError}</RkText>);
       }
     }
   }
@@ -70,7 +70,7 @@ class PwdTextInput extends Component {
                  autoCapitalize="none"               
                  secureTextEntry={true}
                  value={this.props.password}
-                onChangeText={password => this.onPasswordChange(password)}
+                 onChangeText={password => this.onPasswordChange(password)}
                  onBlur={() => { this.validateInput('password', this.props.password); }} />
            
       </View>

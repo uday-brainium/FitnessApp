@@ -66,7 +66,7 @@ class EmailTextInput extends Component {
   renderFormError(inputName) {
     if (inputName == 'email') {
       if (this.state.emailError !='') {
-        return (<RkText rkType='danger'>{this.state.emailError}</RkText>);
+        return (<RkText style={{marginBottom: -10}} rkType='danger'>{this.state.emailError}</RkText>);
       }
     }
   }

@@ -124,7 +124,7 @@ import {
     }
 }
 
-export const get_monthly_activity = (userid) => {
+export const get_weekly_activity = (userid) => {
   return async (dispatch) => {
     let header = {
         method: 'POST',

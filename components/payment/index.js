@@ -107,7 +107,7 @@ class Payment extends Component {
                   <Label style={styles.fields}>Cvv</Label>
                   <Input
                    value={this.state.cvv} 
-                   keyboardType="phone-pad" 
+                   keyboardType="number-pad" 
                    secureTextEntry
                    password={true}
                    maxLength={3}

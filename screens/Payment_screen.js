@@ -40,7 +40,6 @@ class Payment_screen extends Component {
 
 
     render(){
-      console.log('PAYMENT screen', this.props);
         return(
            <View>
                <Payment />

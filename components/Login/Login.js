@@ -154,7 +154,7 @@ class Login extends Component {
                   transparent={true}
                   visible={this.state.isLoading}
                   onRequestClose={() => {
-                    this.setState({isLoading: false})
+                    this.setState({isLoading: true})
                   }}> 
                     <View style={{backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center', flex: 1, height: Dimensions.get('window').height + 20}}>
                      <View style={styles.popup_screen}>
@@ -182,7 +182,7 @@ class Login extends Component {
               <CheckBox
                 title='Remember me'
                 checked={this.state.rememberCheck}
-                containerStyle={{backgroundColor: 'transparent'}}
+                containerStyle={{backgroundColor: 'transparent', marginTop: 5}}
                 onPress={() => this.setState({rememberCheck: !this.state.rememberCheck})}
               />
               </View>
@@ -255,7 +255,7 @@ let styles = StyleSheet.create({
   containerSignInBody: {
     flex: 30,
     alignSelf: "stretch",
-    paddingTop:20
+    paddingTop:40
   },
   containerSignInButtonBody: {
     flex: 45,

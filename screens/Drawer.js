@@ -92,12 +92,14 @@ class Drawer extends Component {
             <View style={styles.body}>
               <View style={styles.profile_img}>
                 {  this.state.userInfo != null && this.state.userInfo.user_type == 'facebook' &&
-                  <Avatar
+                  <Image
+                     style={{height: 140, width: 140}}
                     rkType='big'
                     source={{uri: 'http://graph.facebook.com/'+this.state.userInfo.social_id +'/picture?type=large' }} />
                 }
                 {  this.state.userInfo != null && this.state.userInfo.user_type == 'Normal' &&
-                  <Avatar
+                  <Image
+                    style={{height: 140, width: 140}}
                     rkType='big'
                     source={
                       this.state.userInfo.image_url == "" ?
@@ -204,7 +206,16 @@ text: {
   profile_img: {
     marginTop: 10,
     marginBottom: -30
-},
+  },
+  profile_img: {
+    height: 135,
+    width: 135,
+    borderRadius: 100,
+    resizeMode: 'contain',
+    borderWidth: 2,
+    overflow: 'hidden',
+    borderColor: '#c6a0f5'
+  }
 
 }));
 
