@@ -136,7 +136,7 @@ export const get_weekly_activity = (userid) => {
           userid
         })
       }
-    fetch(NetworkConstants.RequestUrl('monthly_activity'), header).then ((res) => {
+    fetch(NetworkConstants.RequestUrl('weekly_activity'), header).then ((res) => {
         res.json().then(function(data) {
           //console.log('ACTION-RESPONSE', data.res.response[0]);
             if(data.res.status == '200') {

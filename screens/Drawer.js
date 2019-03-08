@@ -120,7 +120,7 @@ class Drawer extends Component {
                   <RkText rkType='header6' style={[styles.textStyle, routes == 'profile_screen' ? {color: 'blue'} : {color: 'black'}]} onPress={() => this.navigateTo('profile_screen')}> Profile </RkText>
                   <RkText rkType='header6' style={[styles.textStyle, routes == 'dashboard_screen' ? {color: 'blue'} : {color: 'black'}]} onPress={() => this.navigateTo('dashboard_screen')}> Activity Tracker </RkText>
                   <RkText rkType='header6' style={[styles.textStyle, routes == 'Token_transfer' ? {color: 'blue'} : {color: 'black'}]} onPress={() => this.navigateTo('Token_transfer')}> Token Transfer </RkText>
-                  <RkText rkType='header6' style={[styles.textStyle, routes == 'calorie_tracker_screen' ? {color: 'blue'} : {color: 'black'}]} onPress={() => this.navigateTo('calorie_tracker_screen')}> Calorie Tracker </RkText>
+                  {/* <RkText rkType='header6' style={[styles.textStyle, routes == 'calorie_tracker_screen' ? {color: 'blue'} : {color: 'black'}]} onPress={() => this.navigateTo('calorie_tracker_screen')}> Calorie Tracker </RkText> */}
                   <RkText rkType='header6' onPress={() => this.navigateTo('subscription_screen')} style={[styles.textStyle, routes == 'subscription_screen' ? {color: 'blue'} : {color: 'black'}]}> Subscription </RkText>
                   <RkText rkType='header6' style={[styles.textStyle, routes == 'payment_screen' ? {color: 'blue'} : {color: 'black'}]} onPress={() => this.navigateTo('payment_screen')}> Payment </RkText>
                  {this.state.userInfo != null && this.state.userInfo.user_type == 'Normal' &&

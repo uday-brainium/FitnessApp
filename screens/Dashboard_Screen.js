@@ -334,7 +334,7 @@ class Dashboard_screen extends Component {
         console.log("POSITION-WATCH", pos);
         this.setState({callCount: this.state.callCount + 1})
         if(this.state.trackingStatus) {
-          if(pos.coords.accuracy < 300) {
+          if(pos.coords.accuracy < 30) {
             this.state.alertVisible === 1 ? this.showNotification() : ''
             this.setState({updatedLat: pos.coords.latitude, updatedLng: pos.coords.longitude, speed: pos.coords.speed, alertVisible: 2})
             setTimeout(() => { this.setState({lastKnownLat: pos.coords.latitude, LastKnownLng: pos.coords.longitude}) }, 700)

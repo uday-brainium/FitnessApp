@@ -38,6 +38,8 @@ let overallVehicleToken= 0
     overallBikeCalorie = 0, overallBikeToken = 0, overallVehicleDistance = 0
     overallVehicleCalorie = 0, overallVehicleToken = 0, overallBikeDistance = 0
     if(nextProps){
+      console.log("nexprops", nextProps.all_activity);
+      
       if(nextProps.all_activity.monthly_activity != null) {
         this.setState({loading: false})
       }

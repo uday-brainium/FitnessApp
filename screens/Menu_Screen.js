@@ -69,7 +69,7 @@ class Menu_Screen extends Component {
                   <RkText rkType='header6' style={styles.textStyle} onPress={() => this.navigateTo('profile_screen')}> Profile </RkText>
                   <RkText rkType='header6' style={styles.textStyle} onPress={() => this.navigateTo('dashboard_screen')}> Activity Tracker </RkText>
                   <RkText rkType='header6' style={styles.textStyle} onPress={() => this.navigateTo('Token_transfer')}> Token Transfer </RkText>
-                  <RkText rkType='header6' style={styles.textStyle} onPress={() => this.navigateTo('calorie_tracker_screen')}> Calorie Tracker </RkText>
+                  {/* <RkText rkType='header6' style={styles.textStyle} onPress={() => this.navigateTo('calorie_tracker_screen')}> Calorie Tracker </RkText> */}
                   <RkText rkType='header6' onPress={() => this.navigateTo('subscription_screen')} style={styles.textStyle}> Subscription </RkText>
                   <RkText rkType='header6' style={styles.textStyle} onPress={() => this.navigateTo('payment_screen')}> Payment </RkText>
                   <RkText rkType='header6' style={styles.textStyle} onPress={() => this.navigateTo('changePasswordScreen')} > Change Password </RkText>
