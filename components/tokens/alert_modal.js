@@ -10,6 +10,11 @@ export default class Alert_modal extends Component {
     };
   }
 
+  subscribe_screen = () => {
+    this.props.nav.navigate('subscription_screen')
+    this.props.close()
+  }
+
   render() {
     return (
       <View>
@@ -30,7 +35,7 @@ export default class Alert_modal extends Component {
               </View>
               <View style={styles.button_row}>
                 <View>
-                  <TouchableOpacity style={styles.subscribe_btn}>
+                  <TouchableOpacity onPress={this.subscribe_screen} style={styles.subscribe_btn}>
                     <Text style={styles.btn_text}>Subscribe</Text>
                   </TouchableOpacity>
                 </View>

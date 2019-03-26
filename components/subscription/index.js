@@ -1,24 +1,61 @@
 import React, {Component} from 'react'
-import {View, Text, ImageBackground, Image, Button, Platform, TouchableOpacity, ScrollView, StyleSheet, Dimensions } from 'react-native'
+import {View, Text, ImageBackground, Image, Alert, TouchableOpacity, ScrollView, StyleSheet, Dimensions } from 'react-native'
 import { Colors } from './../../config/theme'
+import {connect} from 'react-redux'
+import { check_subscription, subscribe } from '../../actions/payment_action'
 const ls = require('react-native-local-storage')
+import {paypal_client_id} from './../../config/credentials'
+import PayPal from 'react-native-paypal-wrapper'
+import Loader from './../../components/commons/Loader'
 
 
 class Subscription extends Component {
     constructor(props){
-        super(props);
-
+      super(props);
+      this.state = {
+        is_subscribed: false,
+        userid: '',
+        loading: true
+      }
     }
 
     componentDidMount() {
-        ls.get('userData').then ((data) => {
-            console.log('Localstore', data);
-        }) 
-        
+      ls.get('userdata').then ((data) => {
+          let userid = JSON.parse(data)._id
+          this.setState({userid})
+          this.props.check_subscription(userid)
+      })
     }
 
-    onProccedTouch = () => {
-        alert('Procced button tapped !');
+    UNSAFE_componentWillReceiveProps(nextProps) {
+      if(nextProps){
+        this.setState({is_subscribed: nextProps.subscribed.is_subscribed},  () => {
+          this.state.is_subscribed ? 
+          this.props.nav.navigate('Token_transfer') : 
+          this.setState({loading: false})
+        })
+      }
+    }
+
+    paymentInit = () => {
+      PayPal.initialize(PayPal.SANDBOX, paypal_client_id);
+      PayPal.pay({
+        price: '10',
+        currency: 'AUD',
+        description: 'Pay subscription fee for fitnessApp',
+      }).then((confirm) => {
+        let  subscribe_data = {
+          userid: this.state.userid,
+          trans_id: confirm.response.id
+        }
+        this.props.subscribe(subscribe_data).then(() => {
+          Alert.alert('You have subscribed successfully', 'Your one time subscription is completed now are able to transfer tokens to your TRON wallet.',
+          [
+            {text: 'Okay', onPress: () => this.props.nav.navigate('Token_transfer')},
+          ], {cancelable: false})
+        })
+      })
+       .catch(error => console.log('User cancled!'));
     }
 
     render(){
@@ -35,7 +72,7 @@ class Subscription extends Component {
                     </View>
                   </View>
                </ImageBackground>
-
+                <Loader loading={this.state.loading} />
                <View style={styles.subscription_view}>
                  <Text style={styles.subscription_text}> One Time Subscription </Text>
                  <Image style={styles.line} source={require('./../../assets/images/Line17.png')}/>
@@ -45,23 +82,31 @@ class Subscription extends Component {
                    <Text style={styles.reward_text}>You will be rewared 500 Tokens with this subscription </Text>
                    <Text></Text>
                </View>
-               <View style={styles.token_view}>
-                   <Text style={styles.token_text}>Each token is valuable at $0.02 USD </Text>
-                   <Text></Text>
-               </View>
             
-              <View style={styles.button_view}>
-              <TouchableOpacity onPress={this.onProccedTouch} style={styles.procced_button}>
-                <Text style={styles.procced_button_text}>
-                    Procced
-                </Text>
-               </TouchableOpacity>
-              </View>
-              
+              {this.state.is_subscribed ?
+                <View style={styles.button_view}>
+                  <Text style={styles.subscribed_text}>You are already subscribed !</Text>
+                </View> : 
+                <View style={styles.button_view}>
+                <TouchableOpacity disabled={this.state.is_subscribed} onPress={this.paymentInit} style={styles.procced_button}>
+                  <Text style={styles.procced_button_text}>
+                      Procced
+                  </Text>
+                 </TouchableOpacity>
+                </View>
+              }   
            </View>
         )
     }
 }
+
+function mapStateToProps(state) {
+  return{
+    subscribed: state.is_subscribed
+  }
+}
+
+export default connect(mapStateToProps, {check_subscription, subscribe})(Subscription)
 
 const styles = StyleSheet.create({
     container: {
@@ -164,9 +209,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '95%',
         paddingBottom: '17%'
+    },
+    subscribed_text: {
+      padding: 10,
+      backgroundColor: '#1fcbbf',
+      borderRadius: 20,
+      color: '#fff',
+      fontSize: 20,
     }
 })
-
-
-
-export default Subscription;

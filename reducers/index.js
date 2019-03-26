@@ -7,6 +7,7 @@ import activity from './Activity_reducer'
 import overall_activity from './Overall_activity_reducer'
 import monthly_activity from './Monthly_activity_reducer'
 import chart_data from './Yearly_chart_reducer'
+import payment_reducer from './payment_reducer'
 
 export default combineReducers({
   auth: AuthReducer,
@@ -16,5 +17,6 @@ export default combineReducers({
   activityData: activity,
   overallActivity: overall_activity,
   monthlyActivity: monthly_activity,
-  chartData: chart_data
+  chartData: chart_data,
+  is_subscribed: payment_reducer
 });

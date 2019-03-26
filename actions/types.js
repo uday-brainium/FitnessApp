@@ -28,6 +28,9 @@ export const GET_OVERALL_ACTIVITY = 'get_overall_activity'
 export const GET_MONTHLY_ACTIVITY = 'get_monthly_activity'
 export const GET_CHART_DATA = 'get_chart_data'
 
+//Payment
+export const IS_SUBSCRIBED = 'is_subscribed'
+
 // login error /reset handling
 export const RESET_USER = 'reset_user';
 export const RESET_ONLY_LOGIN_DATA = 'reset_only_login_data';

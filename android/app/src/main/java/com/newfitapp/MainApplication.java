@@ -3,6 +3,7 @@ package com.newfitapp;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.taessina.paypal.RNPaypalWrapperPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.rnfs.RNFSPackage;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
@@ -31,6 +32,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNPaypalWrapperPackage(),
             new ReactNativePushNotificationPackage(),
             new RNFSPackage(),
             new ImageResizerPackage(),

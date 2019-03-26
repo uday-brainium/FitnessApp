@@ -27,6 +27,8 @@ import Activity_Tracker_screen from './screens/Activity_Tracker_screen';
 import Payment_screen from './screens/Payment_screen';
 import ChangePasswordScreen from './screens/ChangePasswordScreen';
 import Terms_Screen from './screens/Terms_screen';
+import Tron_wallet from './screens/Tron_account_screen';
+import Create_tron_wallet from './screens/Create_new_wallet'
 
 
 const LoginNavigator = createStackNavigator({
@@ -46,6 +48,8 @@ const LoginNavigator = createStackNavigator({
   activity_tracker_screen: { screen: Activity_Tracker_screen },
   payment_screen: { screen: Payment_screen },
   terms_screen: { screen: Terms_Screen },
+  tron_wallet: { screen: Tron_wallet },
+  new_tron_wallet: { screen: Create_tron_wallet },
   },
   {
     drawerLabel: 'Home',
@@ -80,7 +84,9 @@ const LoginNavigator = createStackNavigator({
     Token_transfer: {screen : Token_transfer},
     payment_screen: { screen: Payment_screen },
     terms_screen: { screen: Terms_Screen },
-    changePasswordScreen: { screen: ChangePasswordScreen}
+    changePasswordScreen: { screen: ChangePasswordScreen},
+    tron_wallet: { screen: Tron_wallet },
+    new_tron_wallet: { screen: Create_tron_wallet },
     },{initialRouteName: 'dashboard_screen',}
     )
   const NavigatorSubscription = createStackNavigator({
@@ -92,7 +98,9 @@ const LoginNavigator = createStackNavigator({
     Token_transfer: {screen : Token_transfer},
     payment_screen: { screen: Payment_screen },
     terms_screen: { screen: Terms_Screen },
-    changePasswordScreen: { screen: ChangePasswordScreen}
+    changePasswordScreen: { screen: ChangePasswordScreen},
+    tron_wallet: { screen: Tron_wallet },
+    new_tron_wallet: { screen: Create_tron_wallet },
     },{initialRouteName: 'subscription_screen',}
     )
   const NavigatorCalorieTracker = createStackNavigator({
@@ -104,7 +112,8 @@ const LoginNavigator = createStackNavigator({
     Token_transfer: {screen : Token_transfer},
     payment_screen: { screen: Payment_screen },
     terms_screen: { screen: Terms_Screen },
-    changePasswordScreen: { screen: ChangePasswordScreen}
+    changePasswordScreen: { screen: ChangePasswordScreen},
+    tron_wallet: { screen: Tron_wallet },
     },{initialRouteName: 'calorie_tracker_screen',}
     )
   const NavigatorTokenTransfer = createStackNavigator({
@@ -116,7 +125,8 @@ const LoginNavigator = createStackNavigator({
     Token_transfer: {screen : Token_transfer},
     payment_screen: { screen: Payment_screen },
     terms_screen: { screen: Terms_Screen },
-    changePasswordScreen: { screen: ChangePasswordScreen}
+    changePasswordScreen: { screen: ChangePasswordScreen},
+    tron_wallet: { screen: Tron_wallet },
     },{initialRouteName: 'Token_transfer',}
     )
   const NavigatorPayment = createStackNavigator({
@@ -128,7 +138,8 @@ const LoginNavigator = createStackNavigator({
     Token_transfer: {screen : Token_transfer},
     payment_screen: { screen: Payment_screen },
     terms_screen: { screen: Terms_Screen },
-    changePasswordScreen: { screen: ChangePasswordScreen}
+    changePasswordScreen: { screen: ChangePasswordScreen},
+    tron_wallet: { screen: Tron_wallet },
     },{initialRouteName: 'payment_screen',}
     )
   const NavigatorChangePass = createStackNavigator({

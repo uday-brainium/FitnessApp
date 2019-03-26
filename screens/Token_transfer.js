@@ -41,7 +41,7 @@ class Token_transfer extends Component {
     render(){
         return(
            <View>
-               <TokenTransfer />
+               <TokenTransfer nav={this.props.navigation}/>
            </View>
         )
     }

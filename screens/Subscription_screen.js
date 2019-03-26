@@ -41,7 +41,7 @@ class Subscription_screen extends Component {
     render(){
         return(
            <View>
-               <Subscription />
+               <Subscription nav={this.props.navigation}/>
            </View>
         )
     }

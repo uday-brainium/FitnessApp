@@ -38,11 +38,11 @@ let vehicleDistanceAddition = 0
 
 PushNotification.configure({
   onRegister: function(token) {
-      console.log( 'TOKEN:', token );
+      // console.log( 'TOKEN:', token );
   },
  // (required) Called when a remote or local notification is opened or received
   onNotification: function(notification) {
-    console.log( 'NOTIFICATION:', notification );
+    // console.log( 'NOTIFICATION:', notification );
     let currentPath = NavigatorService.getCurrentRoute()
   },
   // ANDROID ONLY: GCM or FCM Sender ID (product_number) (optional - not required for local notifications, but is need to receive remote push notifications)

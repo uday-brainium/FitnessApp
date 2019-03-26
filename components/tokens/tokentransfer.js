@@ -4,8 +4,13 @@ import { Colors } from '../../config/theme';
 import {  Item, Input } from 'native-base';
 import {connect} from 'react-redux'
 import Submit_button from './../commons/submit_button'
+import { check_subscription } from '../../actions/payment_action'
+import * as config  from './../../config/credentials'
 import Alert_modal from './alert_modal'
+import Transfer_pop from './transfer_pop'
 import TronWeb from 'tronweb'
+const ls = require('react-native-local-storage')
+import Loader from './../../components/commons/Loader'
 
 const HttpProvider = TronWeb.providers.HttpProvider;
 
@@ -19,20 +24,30 @@ class TokenTransfer extends Component {
         this.state = {
           tokenField: '',
           modalVisible: false,
-          showAlert: false
+          showAlert: false,
+          showPop: false,
+          loading: true,
+          is_subscribed: false
         }
-        this.fullNode =  new HttpProvider('https://api.trongrid.io');
-        this.solidityNode = new HttpProvider('https://api.trongrid.io');
-        this.fullNode_test =  new HttpProvider('https://api.shasta.trongrid.io');
-        this.solidityNode_test = new HttpProvider('https://api.shasta.trongrid.io');
-        this.eventServer = 'https://api.trongrid.io/'
-        this.privateKey = '50D7B10D01E72BDCFF3F0B783DA08968F7C8535F9D4953C7825D5EACACEDF124'
-        this.myaddress = '41486C088A211DBE147DD91D70C3E51606C29FC34C'
-        this.tronWeb = new TronWeb(this.fullNode_test, this.solidityNode_test)
+        this.fullNode =  new HttpProvider(config.fullNode);
+        this.solidityNode = new HttpProvider(config.solidityNode);
+        this.fullNode_test =  new HttpProvider(config.fullNode_test);
+        this.solidityNode_test = new HttpProvider(config.solidityNode_test);
+        this.privateKey = config.privateKey
+        this.myaddress = config.myAddress
+        this.tronWeb = new TronWeb(this.fullNode, this.solidityNode)
         this.tronWeb.setPrivateKey(this.privateKey)
     }
 
+    check_subscribed = () => {
+      ls.get('userdata').then((data) => {
+        let userid = JSON.parse(data)._id
+        this.props.check_subscription(userid)
+      })
+    }
+
     componentDidMount(){
+      this.check_subscribed()
       totalDistance = 0
       totalTokens = 0
       let data = this.props.data.overall_activity
@@ -41,9 +56,6 @@ class TokenTransfer extends Component {
         totalTokens = totalTokens + data[i].totaltokens
       }
       this.setState({test: true})
-      let date = new Date().toISOString()
-      console.log('Date', date);
-
       const tronWeb = new TronWeb(this.fullNode, this.solidityNode);
       
       tronWeb.setAddress('41486C088A211DBE147DD91D70C3E51606C29FC34C');
@@ -77,13 +89,32 @@ class TokenTransfer extends Component {
       //   console.log(`User's balance is:`, userBalance);
       //   });
 
-      this.tronWeb.trx.sendToken("TQUnSEm7C5jMWsbG1U9Zx5UapXM6uXsvjA", 5, "1000211", this.privateKey, (error, userBalance) => {
-        if(error)
-          return console.log(error);
+    //   this.tronWeb.trx.sendToken("TQUnSEm7C5jMWsbG1U9Zx5UapXM6uXsvjA", 5, "1000239", this.privateKey, (error, userBalance) => {
+    //     if(error)
+    //       return console.log(error);
+    //     console.log(`User's balance is:`, userBalance);
+    //     });
 
+        // this.tronWeb.createAccount((err, res) => {
+        //     console.log('acc', res);
+            
+        // })
+
+        this.tronWeb.trx.sendToken("TQUnSEm7C5jMWsbG1U9Zx5UapXM6uXsvjA", 5, "1000239", this.privateKey, (error, userBalance) => {
+        if(error)
+            return console.log(error);
         console.log(`User's balance is:`, userBalance);
         });
+     }
 
+     UNSAFE_componentWillReceiveProps(nextProps) {
+       if(nextProps){
+         if(!nextProps.subscribed.is_subscribed) {
+           this.setState({ loading: false})
+         } else {
+          this.setState({loading: false, is_subscribed: true})
+         }
+       }
      }
 
      inputChange = (val) => {
@@ -93,14 +124,23 @@ class TokenTransfer extends Component {
      }
 
      onTransferTouch = () => {
-    // this.setState({showAlert: true})
-      this.testCall()
+       if(this.state.is_subscribed) {
+        this.setState({showPop: true})
+       } else {
+        this.setState({showAlert: true})
+       }
+     }
+
+     componentWillUnmount() {
+      this.setState({showAlert: false, showPop: false})
      }
 
      closeAlert = () => {
        this.setState({showAlert: false})
      }
-    
+    closePop = () => {
+      this.setState({showPop: false})
+    }
     render(){
       
         return(
@@ -119,6 +159,7 @@ class TokenTransfer extends Component {
                     </View>
 
                 </View>
+                <Loader loading={this.state.loading} />
                 <KeyboardAvoidingView style={styles.bottom_view} behavior="padding" enabled>
                  <View style={styles.input_view}>
                     <Text style={styles.bottom_text}>How many tokens you want to transfer to your TRON wallet ?</Text>
@@ -135,7 +176,8 @@ class TokenTransfer extends Component {
                       </Text>
                     </TouchableOpacity>
                  </View>
-                 <Alert_modal showAlert={this.state.showAlert} close={this.closeAlert}/>
+                 <Alert_modal showAlert={this.state.showAlert} nav={this.props.nav} close={this.closeAlert}/>
+                 <Transfer_pop showAlert={this.state.showPop} nav={this.props.nav} close={this.closePop} />
             </View>
             
         )
@@ -144,11 +186,12 @@ class TokenTransfer extends Component {
 
 function mapStateToProps(state){ 
     return{
-      data: state.overallActivity
+      data: state.overallActivity,
+      subscribed: state.is_subscribed
     }
 }
 
-export default connect(mapStateToProps)(TokenTransfer)
+export default connect(mapStateToProps, {check_subscription})(TokenTransfer)
 
 
 

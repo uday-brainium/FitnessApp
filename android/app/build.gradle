@@ -153,6 +153,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-paypal-wrapper')
     implementation project(':react-native-push-notification')
     implementation project(':react-native-fs')
     implementation project(':react-native-image-resizer')
