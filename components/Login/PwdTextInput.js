@@ -54,7 +54,7 @@ class PwdTextInput extends Component {
 
     if (inputName == 'password') {
       if (this.state.passwordError !='') {
-        return (<RkText style={{marginBottom: 10}} rkType='danger'>{this.state.passwordError}</RkText>);
+        return (<RkText style={{fontSize: 16, marginHorizontal: -5}} rkType='danger'>{this.state.passwordError}</RkText>);
       }
     }
   }

@@ -31,8 +31,8 @@ export class Walkthrough3 extends React.Component {
     let contentHeight = scaleModerate(375, 1);
     let height = Dimensions.get('window').height;
     let width = Dimensions.get('window').width;
-    let height_sub = height*0.33;
-    let imagePadding = height*0.15;
+    let height_sub = height*0.37;
+    let imagePadding = height*0.07;
     let width_sub = width - 40; 
 
     image_circle = <Image style={{ resizeMode: 'contain', height: height_sub, width: width_sub }} source={require('../../assets/images/how_it_work_circle.png')}/> ;
@@ -42,10 +42,17 @@ export class Walkthrough3 extends React.Component {
       <View style={[styles.container,{paddingTop:imagePadding}]}>
       {image_circle} 
       {how_it_work_line}
-      <RkText rkType='header2'>How it work 1 </RkText> 
-      <RkText  style={styles.text} >A fitness app is an application that can be downloaded on any mobile device and used anywhere to get fit. ...
-       They can be used as a platform to promote healthy behavior change with personalized workouts, 
-        fitness advice and nutrition plans.  </RkText>            
+      <RkText rkType='header2'>TRON blockchain...</RkText> 
+      <RkText  style={styles.text} >
+        You will need a wallet from the TRON network. 
+        Go to https://tronscan.org/#/wallet/new to create a new wallet.
+        Follow instructions asked by the TRON foundation.
+        Save your private key.
+        Do not lose it! TRON Foundation cannot help you to recover a lost private key. Do not share it! Make a backup!
+        Remember your TRON wallet address.
+        You will need to be a subscriber to access built-in features.
+        Donations will help the 3CO network to fast-tracked our app for further developments and adding new features.
+      </RkText>            
       </View>
       
     )

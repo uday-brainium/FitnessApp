@@ -28,7 +28,10 @@ import {
   RESET_USER ,
   RESET_ONLY_LOGIN_DATA,
   LOADING_SPINNER_STATE,
-  FACEBOOK_LOGIN_SUCCESS
+  FACEBOOK_LOGIN_SUCCESS,
+  IS_SUBSCRIBED,
+  CITY_CHANGED,
+  COUNTRY_CHANGED
 } from './types';
 
 import NavigatorService from './../utils/navigator';
@@ -101,6 +104,20 @@ export const firstnameChanged = (text) => {
   };
 };
 
+export const cityChange = (text) => {
+  return {
+          type: CITY_CHANGED,
+          payload: text
+        };
+};
+
+export const countryChange = (text) => {
+  return {
+          type: COUNTRY_CHANGED,
+          payload: text
+        };
+};
+
 export const lastnameChanged = (text) => {
   return {
     type: LASTNAME_CHANGED,
@@ -110,13 +127,17 @@ export const lastnameChanged = (text) => {
 
 export const genderChanged = (text) => {
 
-  return {    type: GENDER_CHANGED,
+  return {    
+    type: GENDER_CHANGED,
     payload: text
   };
 };
 
 export const dobChanged = (text) => {
-  return {    type: DOB_CHANGED,
+  console.log('action-text',text);
+  
+  return {    
+    type: DOB_CHANGED,
     payload: text
   };
 };
@@ -371,12 +392,16 @@ export const logoutUser = () => {
               ls.remove('modalflag')
               NavigatorService.reset('login_screen');
            })
+          dispatch({
+            type: IS_SUBSCRIBED,
+            payload: false
+          })
         }
 
   };
 };
 
-export const signupUser = ({ email, password, gender, height, weight, dob, phone, firstname, lastname }) => {
+export const signupUser = ( email, password, gender, height, weight, dob, phone, firstname, lastname, city, country ) => {
   return async (dispatch) => {
     dispatch({
       type: LOGIN_STATUS_CHANGED,
@@ -393,12 +418,16 @@ try {
       "mobile":phone,
       "name_first":firstname,
       "name_last":lastname,
-      "gender":gender,
-      "height":height,
-      "weight":weight,
+      "gender": gender,
+      "height": height,
+      "weight": weight,
       "dob":dob,
+      "city": city,
+      "country": country,
       "heightWeight": true
       });
+      console.log('req-data', reqData);
+      
         let response = await fetch(reqUrl,reqData);
         if(response)
         {

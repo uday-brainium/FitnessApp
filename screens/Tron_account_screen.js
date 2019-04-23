@@ -1,34 +1,43 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Clipboard, ActivityIndicator } from 'react-native';
+import { View, Alert, Text, StyleSheet, TextInput, TouchableOpacity, Clipboard, ActivityIndicator } from 'react-native';
 import { Icon } from 'react-native-elements'
-import TronWeb from 'tronweb'
-import * as config  from './../config/credentials'
-const HttpProvider = TronWeb.providers.HttpProvider;
+import Apis from './../actions/common_action'
+let ls = require('react-native-local-storage');
+import * as tronApi from './../config/Tron'
+import Transfer_loader from './../components/commons/transfer_loader'
+import * as theme from './../config/theme'
 
 export default class Tron_account_screen extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      userid: '',
       address: '',
+      shaAdd: '',
       addressDetails: {},
       showDetails: false,
-      loading: false
+      loading: false,
+      transfering: false,
+      token_issued: false
     };
-    this.fullNode =  new HttpProvider(config.fullNode);
-    this.solidityNode = new HttpProvider(config.solidityNode);
-    this.fullNode_test =  new HttpProvider(config.fullNode_test);
-    this.solidityNode_test = new HttpProvider(config.solidityNode_test);
-    this.privateKey = config.privateKey
-    this.myaddress = config.myAddress
-    this.tronWeb = new TronWeb(this.fullNode_test, this.solidityNode_test)
-    this.tronWeb.setPrivateKey(this.privateKey)
-    this.tronWeb.setAddress('41486C088A211DBE147DD91D70C3E51606C29FC34C');
   }
 
   static navigationOptions = {
     title: 'TRON wallet',
   };
 
+ componentDidMount() {
+    this.setState({loading: true})
+    ls.get('userdata').then((data) => {
+      let userid = JSON.parse(data)._id
+      Apis.get_user(userid)
+      .then(res => res.json())
+      .then((response) => {
+        this.setState({userid, token_issued: response.response.token_issued, loading: false})
+      })
+    })
+  }
+ 
   pasteAddress = async () => {
     let string = await Clipboard.getString()
     this.setState({address: string.trim()})
@@ -40,16 +49,17 @@ export default class Tron_account_screen extends Component {
     } else {
     this.setState({loading: true})
     let address = this.state.address
-    this.tronWeb.trx.getAccount(address, (err, res) => {
-      if(err) {
-        this.setState({loading: false})
-        alert('Something went wrong !')
+    //Fetching info from address
+    tronApi.getAddress(address).then(res => {
+      if(res.address) {
+        this.setState({addressDetails: res, shaAdd: address, showDetails: true, loading: false})
       } else {
-        this.setState({addressDetails: res, showDetails: true, loading: false}, () => {
-          console.log('state', this.state.addressDetails);
-        })
+        Alert.alert('Could not fetch address details')
       }
-    });
+    }, err => {
+      this.setState({loading: false})
+      Alert.alert(err)
+    }) 
    }
   }
 
@@ -58,12 +68,40 @@ export default class Tron_account_screen extends Component {
   }
 
   confirmEntry = () => {
-
+    this.setState({loading: true, showDetails: false})
+    let {address} = this.state.addressDetails
+    let data = {
+      userid: this.state.userid,
+      address: this.state.shaAdd
+    }
+    Apis.saveWallet(data)
+    .then(res => res.json())
+    .then((response) => {
+      //Sending initial Tokens
+      if(!this.state.token_issued) {
+        this.setState({transfering: true})
+        //Params are address, tokens, userid, if first transaction true or false
+        tronApi.sendToken(address, 500, this.state.userid, true).then(res => {
+          this.setState({loading: false, transfering: false})
+          Alert.alert('Transfer successfull', '500 TRAN transfered & Tron wallet added to your account tokens will be transfered to this wallet.')
+          this.props.navigation.navigate('Token_transfer')
+        }, err => {
+          this.setState({loading: false, transfering: false})
+          Alert.alert('Error', err)
+        })
+      } else {
+        Alert.alert('Wallet added', 'Tron wallet added to your account tokens will be transfered to this wallet.')
+        this.props.navigation.navigate('Token_transfer')
+      }
+    })
   }
+  
 
   render() {
+
     return (
       <View style={styles.main_container}>
+      <Transfer_loader isLoading={this.state.transfering} />
       {this.state.showDetails &&
         <View>
         <View style={styles.details}>
@@ -75,7 +113,7 @@ export default class Tron_account_screen extends Component {
             <Text style={styles.value_text}>{this.state.addressDetails.account_name == null ? 'No information' : this.state.addressDetails.account_name}</Text>
             </View>
           </View>
-
+    
           <View style={styles.details_container}>
             <View >
               <Text style={styles.head_details_text}>Address (HEX)</Text>
@@ -98,11 +136,11 @@ export default class Tron_account_screen extends Component {
         <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
             <View>
               <TouchableOpacity style={styles.re_enter_btn} onPress={this.cancleEntry}>
-                <Text style={{color: '#fff'}}>Cancle</Text>
+                <Text style={{color: '#fff'}}>Cancel</Text>
               </TouchableOpacity>
             </View>
             <View>
-              <TouchableOpacity style={styles.confirm_btn}>
+              <TouchableOpacity onPress={this.confirmEntry} style={styles.confirm_btn}>
                 <Text style={{color: '#fff'}}>Confirm</Text>
               </TouchableOpacity>
             </View>
@@ -113,8 +151,9 @@ export default class Tron_account_screen extends Component {
           <ActivityIndicator style={{paddingTop: 100}} hidesWhenStopped={true} size="large" color="#c6a0f5"/>
         }
         
+       {!this.state.showDetails &&
         <View style={styles.address_input}>
-          <Text style={styles.head_text}> Please enter your address</Text>
+          <Text style={styles.head_text}> Preferred TRON wallet address</Text>
           <Icon
             containerStyle={styles.paste_icon}
             name='paste'
@@ -124,15 +163,16 @@ export default class Tron_account_screen extends Component {
           <TextInput
             style={styles.input_field}
             onChangeText={(address) => this.setState({address})}
-            placeholder="Please enter tron wallet address"
+            placeholder="TRON wallet address ONLY"
             value={this.state.address}
             editable={!this.state.showDetails}
             selectTextOnFocus={!this.state.showDetails}
           />
           <TouchableOpacity disabled={this.state.showDetails} style={styles.add_btn} onPress={this.fetchTronAccount}>
-            <Text style={styles.btn_text}>Add</Text>
+            <Text style={styles.btn_text}>Update</Text>
           </TouchableOpacity>
         </View>
+       }
       </View>
     );
   }
@@ -219,7 +259,7 @@ const styles = StyleSheet.create({
       paddingLeft: 50,
       paddingRight: 50,
       padding: 10,
-      backgroundColor: '#1fcbbf',
+      backgroundColor: theme.Colors.green,
       borderRadius: 20
     }
 })

@@ -46,7 +46,7 @@ PushNotification.configure({
     let currentPath = NavigatorService.getCurrentRoute()
   },
   // ANDROID ONLY: GCM or FCM Sender ID (product_number) (optional - not required for local notifications, but is need to receive remote push notifications)
-  senderID: "FitnessAPP",
+  senderID: "TRAN",
   permissions: {
       alert: true,
       badge: false,
@@ -448,9 +448,23 @@ class Dashboard_screen extends Component {
     }
   }
 
-  //if cheating stop the activity
+  //if cheating stop the activity and clear the data
   caughtCheat = () => {
-    this.stopInterval()
+    const {trackingType} = this.state
+ 
+    this.setState({
+      vehicleDistance: trackingType == 'walkrun' ? this.state.walkingDistance : this.state.cycleDistance,
+      vehicleTokens: trackingType == 'walkrun' ? (this.state.walkingTokens / 100) : (this.state.cycleTokens / 10) ,
+    }, () => {
+      this.setState({
+        walkingDistance: 0,
+        walkingTokens: 0,
+        cycleDistance: 0,
+        cycleTokens: 0
+      }, () => {
+        this.stopInterval()
+      })
+    })
   }
 
 

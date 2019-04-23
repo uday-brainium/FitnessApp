@@ -23,26 +23,34 @@ class Subscription extends Component {
       ls.get('userdata').then ((data) => {
           let userid = JSON.parse(data)._id
           this.setState({userid})
-          this.props.check_subscription(userid)
+          this.props.check_subscription(userid).then(()=> {
+            setTimeout(() => {
+             this.setState({loading: false})
+            }, 1000)
+            
+          })
       })
     }
+
+
 
     UNSAFE_componentWillReceiveProps(nextProps) {
       if(nextProps){
         this.setState({is_subscribed: nextProps.subscribed.is_subscribed},  () => {
-          this.state.is_subscribed ? 
-          this.props.nav.navigate('Token_transfer') : 
-          this.setState({loading: false})
+          if(this.state.is_subscribed) {
+            this.props.nav.navigate('Token_transfer')
+          }
         })
       }
     }
 
     paymentInit = () => {
-      PayPal.initialize(PayPal.SANDBOX, paypal_client_id);
+      //LIVE MODE
+      PayPal.initialize(PayPal.PRODUCTION, paypal_client_id);
       PayPal.pay({
         price: '10',
         currency: 'AUD',
-        description: 'Pay subscription fee for fitnessApp',
+        description: 'Pay subscription fee for TRAN',
       }).then((confirm) => {
         let  subscribe_data = {
           userid: this.state.userid,
@@ -61,7 +69,7 @@ class Subscription extends Component {
     render(){
         return(
            <View style={styles.container}>
-               <ImageBackground style={styles.head_image} source={ require('./../../assets/images/Group512.png') }>
+               <View style={styles.head_image }>
                   <View style={styles.topView}>
                     <View style={styles.price_unit}>
                         <Text style={styles.price_unitText}>$</Text>
@@ -71,7 +79,7 @@ class Subscription extends Component {
                         <Text style={styles.priceText}>10</Text> 
                     </View>
                   </View>
-               </ImageBackground>
+               </View>
                 <Loader loading={this.state.loading} />
                <View style={styles.subscription_view}>
                  <Text style={styles.subscription_text}> One Time Subscription </Text>
@@ -129,7 +137,7 @@ const styles = StyleSheet.create({
         marginTop: Dimensions.get('window').width <= 320 ? 20 : 30,
         marginLeft: 20,
         fontSize: 30,
-        color: '#ffffff',
+        color: '#6a6e93',
         fontWeight: 'bold'
     },
     price: {
@@ -141,7 +149,7 @@ const styles = StyleSheet.create({
     priceText: {
         marginTop: '-50%',
         fontSize: Dimensions.get('window').width <= 320 ? 70 : 80,
-        color: '#ffffff',
+        color: '#6a6e93',
         fontWeight: 'bold'
     },
     topView: {
@@ -159,7 +167,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 25,
         fontWeight: 'bold',
-        color: 'gray',
+        color: '#6a6e93',
         paddingBottom: '5%'
     },
     line: {

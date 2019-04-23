@@ -36,7 +36,7 @@ export const defaultConfigNotification = {
         autoCancel: true, // (optional) default: true
         largeIcon: "app_icon", // (optional) default: "ic_launcher"
         smallIcon: "app_icon", // (optional) default: "ic_notification" with fallback for "ic_launcher"
-        bigText: "FitnessApp activity tracker is tracking your activity", // (optional) default: "message" prop
+        bigText: "TRAN activity tracker is tracking your activity", // (optional) default: "message" prop
         //subText: "This is a subText", // (optional) default: none
         color: "green", // (optional) default: system default
         vibrate: true, // (optional) default: true
@@ -55,7 +55,7 @@ export const defaultConfigNotification = {
     
         /* iOS and Android properties */
         title: "Activity tracker running..", // (optional)
-        message: "FitnessApp activity tracker is tracking your activity", // (required)
+        message: "TRAN activity tracker is tracking your activity", // (required)
         playSound: true, // (optional) default: true
         soundName: 'default', // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
         number: '10', // (optional) Valid 32 bit integer specified as string. default: none (Cannot be zero)

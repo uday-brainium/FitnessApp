@@ -31,8 +31,8 @@ export class Walkthrough1 extends React.Component {
     let contentHeight = scaleModerate(375, 1);
     let height = Dimensions.get('window').height;
     let width = Dimensions.get('window').width;
-    let height_sub = height*0.33;
-    let imagePadding = height*0.15;
+    let height_sub = height*0.37;
+    let imagePadding = height*0.07;
     let width_sub = width - 40; 
 
     image_circle = <Image style={{ resizeMode: 'contain', height: height_sub, width: width_sub }} source={require('../../assets/images/how_it_work_circle.png')}/> ;
@@ -42,10 +42,15 @@ export class Walkthrough1 extends React.Component {
       <View style={[styles.container,{paddingTop:imagePadding}]}>
       {image_circle} 
       {how_it_work_line}
-      <RkText rkType='header2'>How it work 1 </RkText> 
-      <RkText  style={styles.text} >A fitness app is an application that can be downloaded on any mobile device and used anywhere to get fit. ...
-       They can be used as a platform to promote healthy behavior change with personalized workouts, 
-        fitness advice and nutrition plans.  </RkText>            
+      <RkText rkType='header2'>Introducing the 3CO network...</RkText> 
+      <RkText  style={styles.text}> A financial rewards from a social and health based token.
+        What if your health could be converted into wealth?
+        Your healthy habits earning rewards powering a better tomorrow.
+        A cleaner, energy efficient and friendlier ecosystem powered by the hope of a brighter future.
+        Unlock your willpower to change the world through a blockchain fuelled by introducing a sustainable ecosystem.
+        Join a global network of people just like you.
+
+        Earning rewards while working for a brighter future.</RkText>            
       </View>
       
     )
@@ -59,10 +64,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     resizeMode: 'cover'    
   },
-  container: {   
+  container: {
+    margin: 0,
     flex: 1, 
     justifyContent: "flex-start",
-    paddingTop:140,
     alignItems: 'center',    
   },
   headerText: {

@@ -52,7 +52,7 @@ class FirstnameTextInput extends Component {
 
     if (inputName == 'firstname') {
       if (this.state.firstnameError !='') {
-        return (<RkText rkType='danger'> {this.state.firstnameError} </RkText>);
+        return (<RkText rkType='danger' style={{fontSize: 16, marginHorizontal: -5}}> {this.state.firstnameError} </RkText>);
       }
     }
   }

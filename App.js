@@ -29,6 +29,7 @@ import ChangePasswordScreen from './screens/ChangePasswordScreen';
 import Terms_Screen from './screens/Terms_screen';
 import Tron_wallet from './screens/Tron_account_screen';
 import Create_tron_wallet from './screens/Create_new_wallet'
+import Transfer_history from './screens/Transfer_history'
 
 
 const LoginNavigator = createStackNavigator({
@@ -50,6 +51,7 @@ const LoginNavigator = createStackNavigator({
   terms_screen: { screen: Terms_Screen },
   tron_wallet: { screen: Tron_wallet },
   new_tron_wallet: { screen: Create_tron_wallet },
+  Transfer_history: {screen: Transfer_history}
   },
   {
     drawerLabel: 'Home',
@@ -127,6 +129,7 @@ const LoginNavigator = createStackNavigator({
     terms_screen: { screen: Terms_Screen },
     changePasswordScreen: { screen: ChangePasswordScreen},
     tron_wallet: { screen: Tron_wallet },
+    Transfer_history: {screen: Transfer_history}
     },{initialRouteName: 'Token_transfer',}
     )
   const NavigatorPayment = createStackNavigator({
@@ -166,7 +169,7 @@ const LoginNavigator = createStackNavigator({
     TokenTransfer: {screen : NavigatorTokenTransfer},
     changePasswordScreen: { screen: NavigatorChangePass},
     payment_screen: { screen: NavigatorPayment },
-    terms_screen: { screen: Terms_Screen }
+    terms_screen: { screen: Terms_Screen },
   },{
     drawerType: 'front',
     useNativeAnimations: false,
@@ -177,7 +180,7 @@ const LoginNavigator = createStackNavigator({
   LoginNavigator.navigationOptions = ({ navigation }) => {
    name = (navigation.state.index !== undefined ? navigation.state.routes[navigation.state.index] : navigation.state.routeName)
     let drawerLockMode = 'locked-closed'
-    if (name.routeName != 'login_screen' && name.routeName != 'signup_screen' && name.routeName != 'splash_screen' && name.routeName != 'welcome_screen') {
+    if (name.routeName != 'login_screen' && name.routeName != 'signup_screen' && name.routeName != 'splash_screen' && name.routeName != 'welcome_screen' && name.routeName != 'Transfer_history') {
       drawerLockMode = 'unlocked'
     }
 

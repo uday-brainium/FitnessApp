@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, Modal, Dimensions, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Alert, Text, Modal, Dimensions, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Icon } from 'react-native-elements'
 import { Right } from 'native-base';
+import Alert_modal from '../tokens/alert_modal';
+import * as theme from './../../config/theme'
 let activityInspector
-
+let warning_wait 
 
 export default class Activity_warning extends Component {
   constructor(props){
@@ -27,17 +29,11 @@ export default class Activity_warning extends Component {
 
   detectCheating = () => {
       if(this.checkSpeed()) {
-            this.props.caught()
-            this.props.switchActivity('vehicle')
             this.setState({alertModal: true})
-        // if(this.state.cheatingCount > 3) {
-        //   this.setState({warningModal: true, cheatingCount: 0}, () => {
-        //     this.props.caught()
-        //     this.props.switchActivity('vehicle')
-        //   })
-        // } else {
-        //   this.setState({cheatingCount: this.state.cheatingCount + 1, alertModal: true})
-        // }
+            warning_wait = setTimeout(() => {
+              this.setState({alertModal: false})
+               this.props.caught()
+            }, 10000)
       }
   }
 
@@ -76,6 +72,12 @@ export default class Activity_warning extends Component {
 
    return speedStatus
  }
+
+  agreeBtn = () => {
+    this.props.switchActivity('vehicle')
+    this.setState({alertModal: false})
+    clearTimeout(warning_wait)
+  }
   
   UNSAFE_componentWillReceiveProps(nextProps) {
    // console.log('CHECKDEVICE', this.checkDevicePosition());
@@ -149,29 +151,26 @@ export default class Activity_warning extends Component {
              <View style={styles.popup_screen}>
               <View style={styles.warningBox}>
                 <Image
-                 style={{width: 90, height: 90, marginBottom: 20}}
-                 source={require('./../../assets/images/warning_icon.png')}
+                 style={{width: 120, height: 120, marginBottom: 0}}
+                 source={require('./../../assets/images/Vehicle_Start.png')}
                 />
 
-                <Text style={styles.headAlert}>Activity switched !</Text>
+                <Text style={styles.headAlert}>Warning !</Text>
                 <Text style={styles.alertText}>
-                 Detected speed increase so activity type switched to Vehicle.
-                </Text>                
+                  You're going too fast!
+                </Text>
+                <Text style={styles.sub_head}>
+                 TRAN should be played fairly!
+                </Text>       
               </View>
 
-              <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
+             
                 <View>
-                {/* <TouchableOpacity style={styles.okBtn}>
-                    <Text style={{textAlign: 'right'}}>Okay</Text> 
-                  </TouchableOpacity> */}
-                </View>
-                <View>
-                  <TouchableOpacity onPress={() => this.setState({alertModal: false})} style={styles.okBtn}>
-                    <Text style={styles.okBtnText}>Continue</Text> 
+                  <TouchableOpacity onPress={this.agreeBtn} style={styles.okBtn}>
+                    <Text style={styles.okBtnText}>I AGREE</Text> 
                   </TouchableOpacity>
                 </View>
-              </View>
-             
+
              </View>
            </View>
          </Modal>
@@ -213,21 +212,26 @@ const styles = StyleSheet.create({
     color: 'red'
   },
   okBtn: {
-    justifyContent:'flex-end',
+    justifyContent:'center',
+    width: '100%',
     marginTop: 15,
-    marginRight: 20,
-    borderWidth: 2,
-    padding: 5,
-    borderRadius: 5
+    padding: 7,
+    borderRadius: 5,
+    backgroundColor: theme.Colors.green
   },
   okBtnText: {
-    textAlign: 'right',
-    fontSize: 16,
+    color: '#fff',
+    textAlign: 'center',
+    fontSize: 18,
     fontWeight: 'bold'
   },
   alertText: {
     textAlign: 'center',
     color: '#ffb108',
+    fontSize: 20,
+    fontWeight: 'bold'
+  },
+  sub_head: {
     fontSize: 18,
   },
   headAlert: {

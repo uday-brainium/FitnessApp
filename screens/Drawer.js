@@ -16,6 +16,7 @@ import { Avatar } from '../components/avatar';
 import NavigatorService from './../utils/navigator';
 import { Header } from 'react-navigation';
 import { logoutUser, userDetailsFetch } from '../actions';
+import {check_subscription} from  '../actions/payment_action'
 import { connect } from 'react-redux';
 import LoadingSpinner from './../components/Loading/LoadingSpinner';
 let ls = require('react-native-local-storage');
@@ -27,24 +28,38 @@ class Drawer extends Component {
     super(props);
     this.state = {
       userInfo: {},
-      callcount: 0
+      callcount: 0,
+      is_subscribed: false
     }
 
   setTimeout(() => {
-    ls.get('userdata').then((data) => {
-      this.setState({userInfo: JSON.parse(data)})
-    })
+    this.fetchuser()
   },1000)
-
+  this.fetchuser()
   }
 
   static navigationOptions = {
     header: null,
   };
 
+  fetchuser = () => {
+    ls.get('userdata').then((data) => {
+      let uid = JSON.parse(data)._id
+      this.props.check_subscription(uid)
+    })
+  }
+
   navigateTo = (screen) => {
     const { state, navigate } = this.props.navigation;
-    navigate(screen, { go_back_key: state.key });
+    if(screen == 'subscription_screen') {
+      if(this.props.subscribed == true) {
+        navigate('Token_transfer', { go_back_key: state.key });
+      } else {
+        navigate('subscription_screen', { go_back_key: state.key });
+      }
+    } else {
+      navigate(screen, { go_back_key: state.key });
+    }
   }
 
   componentWillReceiveProps() {
@@ -55,6 +70,7 @@ class Drawer extends Component {
 
 
   render() {
+    
     if((typeof this.props.fbuserData != 'undefined')  && (typeof this.props.fbuserData.email != 'undefined') && this.state.callcount < 5) {
       ls.get('userdata').then((data) => {
         this.setState({userInfo: JSON.parse(data), callcount: this.state.callcount + 1})
@@ -120,7 +136,7 @@ class Drawer extends Component {
                   <RkText rkType='header6' style={[styles.textStyle, routes == 'profile_screen' ? {color: 'blue'} : {color: 'black'}]} onPress={() => this.navigateTo('profile_screen')}> Profile </RkText>
                   <RkText rkType='header6' style={[styles.textStyle, routes == 'dashboard_screen' ? {color: 'blue'} : {color: 'black'}]} onPress={() => this.navigateTo('dashboard_screen')}> Activity Tracker </RkText>
                   <RkText rkType='header6' style={[styles.textStyle, routes == 'Token_transfer' ? {color: 'blue'} : {color: 'black'}]} onPress={() => this.navigateTo('Token_transfer')}> Token Transfer </RkText>
-                  {/* <RkText rkType='header6' style={[styles.textStyle, routes == 'calorie_tracker_screen' ? {color: 'blue'} : {color: 'black'}]} onPress={() => this.navigateTo('calorie_tracker_screen')}> Calorie Tracker </RkText> */}
+                  <RkText rkType='header6' style={[styles.textStyle, routes == 'calorie_tracker_screen' ? {color: 'blue'} : {color: 'black'}]} onPress={() => this.navigateTo('Transfer_history')}> Transfer History </RkText>
                   <RkText rkType='header6' onPress={() => this.navigateTo('subscription_screen')} style={[styles.textStyle, routes == 'subscription_screen' ? {color: 'blue'} : {color: 'black'}]}> Subscription </RkText>
                   {/* <RkText rkType='header6' style={[styles.textStyle, routes == 'payment_screen' ? {color: 'blue'} : {color: 'black'}]} onPress={() => this.navigateTo('payment_screen')}> Payment </RkText> */}
                  {this.state.userInfo != null && this.state.userInfo.user_type == 'Normal' &&
@@ -223,9 +239,9 @@ text: {
 const mapStateToProps = (state, auth) => {
  const { fbuserData } = state.fbuserData;
 
-  return { fbuserData, auth };
+  return { fbuserData, auth, subscribed: state.is_subscribed.is_subscribed };
 };
 
 export default connect(mapStateToProps, {
-  logoutUser, userDetailsFetch
+  logoutUser, userDetailsFetch, check_subscription
 })(Drawer);

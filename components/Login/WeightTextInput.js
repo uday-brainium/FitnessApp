@@ -52,7 +52,7 @@ class WeightTextInput extends Component {
 
     if (inputName == 'weight') {
       if (this.state.weightError !='') {
-        return (<RkText rkType='danger'> {this.state.weightError} </RkText>);
+        return (<RkText rkType='danger' style={{fontSize: 16, marginHorizontal: -5}}> {this.state.weightError} </RkText>);
       }
     }
   }
@@ -62,7 +62,7 @@ class WeightTextInput extends Component {
       <View style = {styles.emailPwdContainer}>
 
            
-              <Label>Weight (Kg)</Label>
+              <Label>Weight (kg)</Label>
               <Input style = {styles.inputStyle}
                  keyboardType="numeric"
                  autoCorrect={false}

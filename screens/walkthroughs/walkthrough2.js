@@ -31,8 +31,8 @@ export class Walkthrough2 extends React.Component {
     let contentHeight = scaleModerate(375, 1);
     let height = Dimensions.get('window').height;
     let width = Dimensions.get('window').width;
-    let height_sub = height*0.33;
-    let imagePadding = height*0.15;
+    let height_sub = height*0.37;
+    let imagePadding = height*0.07;
     let width_sub = width - 40; 
 
     image_circle = <Image style={{ resizeMode: 'contain', height: height_sub, width: width_sub }} source={require('../../assets/images/how_it_work_circle.png')}/> ;
@@ -42,10 +42,13 @@ export class Walkthrough2 extends React.Component {
       <View style={[styles.container,{paddingTop:imagePadding}]}>
       {image_circle} 
       {how_it_work_line}
-      <RkText rkType='header2'>How it work 1 </RkText> 
-      <RkText  style={styles.text} >A fitness app is an application that can be downloaded on any mobile device and used anywhere to get fit. ...
-       They can be used as a platform to promote healthy behavior change with personalized workouts, 
-        fitness advice and nutrition plans.  </RkText>            
+      <RkText rkType='header2'>What is TRAN...</RkText> 
+      <RkText  style={styles.text} >It is an app supported on both iOS and Android platform.
+        It is a fitness app that uses GPS to track your daily, weekly and monthly workouts routine.
+        All ages can use it by offering three modes of rewarding.
+        It promotes healthy living and fights obesity by rewarding tokens to generates wealth.
+        It can be download onto your mobile device with regular updates and enhancements.
+      </RkText>            
       </View>
       
     )

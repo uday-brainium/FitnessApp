@@ -54,10 +54,10 @@ class EmailPwdButton extends Component {
         }
     } else if (this.props.emailPwdBtnStr == 'Sign up') {
          console.log('inside Sign up button press: '+this.props.emailPwdBtnStr);
-         const {  email, password, gender, height, weight, dob, phone, firstname, lastname } = this.props;
+         const {  email, password, gender, height, weight, dob, phone, firstname, lastname, city, country } = this.props;
 
         if ( this.validateInput('email', email) && this.validateInput('password', password)) {
-          this.props.signupUser({  email, password, gender, height, weight, dob, phone, firstname, lastname });
+          this.props.signupUser( email, password, gender, height, weight, dob, phone, firstname, lastname, city, country );
           // NetInfo.isConnected.fetch().then(isConnected => {
           //   //console.log('First, is ' + (isConnected ? 'online' : 'offline'));
           //   if(isConnected)
@@ -160,14 +160,13 @@ let styles = RkStyleSheet.create(theme => ({
     backgroundColor: theme.colors.green,
   },
   text: {
-    color: theme.colors.screen.base,
   }
 }));
 
 const mapStateToProps = ({ auth }) => {
-  const {emailReset, email, password,oldPassword,newPassword,confirmPassword, gender, height, weight, dob,phone, firstname, lastname,user } = auth;
+  const {emailReset, email, password,oldPassword,newPassword,confirmPassword, gender, height, weight, dob,phone, firstname, lastname,user, city, country } = auth;
 
-  return { emailReset,email, password,oldPassword,newPassword,confirmPassword, gender, height, weight, dob, phone, firstname, lastname,user };
+  return { emailReset,email, password,oldPassword,newPassword,confirmPassword, gender, height, weight, dob, phone, firstname, lastname,user, city, country };
 };
 
 export default connect(mapStateToProps, {

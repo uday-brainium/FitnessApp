@@ -17,20 +17,20 @@ export default class Alert_modal extends Component {
 
   render() {
     return (
-      <View>
+  
        <Modal
-          animationType="slide"
-          transparent={false}
+          animationType="fade"
+          transparent={true}
           visible={this.props.showAlert}
           onRequestClose={() => {
             console.log('request to close');
           }}>
-         <View style={{backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center', flex: 1, height: Dimensions.get('window').height + 20}}>
+         <View style={{backgroundColor: 'rgba(0,0,0,0.7)', justifyContent: 'center', alignItems: 'center', flex: 1, height: Dimensions.get('window').height + 20}}>
            <View style={styles.popup_screen}>
               <View>
                 <Text style={styles.alert_text}>
-                  This feature will be enable once you subscribe.
-                  you will then be able to transfer your token to TRON wallet.
+                  This feature will be enabled once you subscribe.
+                  You will then be able to transfer your token to TRON wallet.
                 </Text>
               </View>
               <View style={styles.button_row}>
@@ -49,7 +49,6 @@ export default class Alert_modal extends Component {
            </View>
          </View>
         </Modal>
-      </View>
     );
   }
 }
@@ -80,7 +79,7 @@ const styles = StyleSheet.create({
   button_row: {
     marginTop: 10,
     flexDirection: 'row',
-    justifyContent: 'space-around'
+    justifyContent: 'space-around',
   },
   subscribe_btn: {
     //padding: 10,

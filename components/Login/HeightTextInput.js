@@ -51,7 +51,7 @@ class HeightTextInput extends Component {
   renderFormError(inputName) {
     if (inputName == 'height') {
       if (this.state.heightError !='') {
-        return (<RkText rkType='danger'> {this.state.heightError} </RkText>);
+        return (<RkText rkType='danger' style={{fontSize: 16, marginHorizontal: -5}}> {this.state.heightError} </RkText>);
       }
     }
   }

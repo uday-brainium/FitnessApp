@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import { Picker, Item } from 'native-base';
 import {
   RkText,
@@ -10,13 +10,6 @@ import { connect } from 'react-redux';
 import validator from 'validator';
 import { genderChanged } from './../../actions';
 
-const data = [
-  {'title' : 'Fruits',
-  'items' : ["Banana", "Apple", "Strawberry"]
-  },
-  {'title' : 'Foods',
-  'items' : ["1", "2", "3"]}
-]
 
 
 class GenderTextInput extends Component { 
@@ -41,7 +34,7 @@ class GenderTextInput extends Component {
 
     if (inputName == 'gender') {
       if (this.state.genderError !='') {
-        return (<RkText rkType='danger'> {this.state.genderError} </RkText>);
+        return (<RkText rkType='danger' style={{fontSize: 16, marginHorizontal: -5}}> {this.state.genderError} </RkText>);
       }
     }
   }
@@ -49,18 +42,18 @@ class GenderTextInput extends Component {
   render() {
     return (
       <View style = {styles.emailPwdContainer}>
-
+            <Text style={{fontSize: 16}}>Gender</Text>
             <Picker
               note
               mode="dropdown"
-              style={{ width: 220 , height:30 }}
+              style={{ width: '100%', height:20, marginBottom: -10, marginTop: 5, marginLeft: -5 }}
               selectedValue={this.state.selected}
               onValueChange={this.onGenderChange.bind(this)}
             >
               <Picker.Item label="Male" value="male" />
               <Picker.Item label="Female" value="female" />
               <Picker.Item label="Other" value="other" />             
-            </Picker>
+            </Picker>   
 
             {/* <Button primary onPress={this.onClickButton}><Text>Click Me! </Text>  </Button>
 
@@ -98,7 +91,8 @@ class GenderTextInput extends Component {
 let styles = RkStyleSheet.create(theme => ({
   emailPwdContainer: {   
     marginHorizontal: 20,
-    marginTop: 20
+    marginTop: 20,
+    borderBottomWidth: 1
   },
   field: {
     height: 30,

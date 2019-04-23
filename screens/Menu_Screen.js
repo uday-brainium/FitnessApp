@@ -23,6 +23,9 @@ class Menu_Screen extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      userdata: {}
+    }
   }
 
   static navigationOptions = {
@@ -35,6 +38,8 @@ class Menu_Screen extends Component {
   }
 
   render() {
+    console.log('hello', this.props);
+    
     let {width, height} = Dimensions.get('window') ;
     // 80% width
     let percentageWidth = (width * .8) ;
