@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import {
-  Form,Item,Label ,Input,Button,Text} from "native-base";
+  Form,Item,Label ,Input,Button} from "native-base";
 import {
   RkText,
   RkTextInput,
@@ -30,6 +30,7 @@ class NewPwdTextInput extends Component {
 
   onPasswordChange(text) {
     this.props.newPasswordChanged(text);
+   
   }
 
   // Validate the form inputs
@@ -37,9 +38,16 @@ class NewPwdTextInput extends Component {
 
     if (inputName == 'newPassword') {
       if (validator.isAscii(inputVal)){
-        this.setState({ passwordError: '' });
-        this.setState({ passwordFlag: 1 });
-        return true;
+
+        if(inputVal.length > 5) {
+          this.setState({ passwordFlag: 1 });
+          return true;
+        } else {  
+          this.setState({ passwordError: 'Password must be at least 6 character !' });
+          this.setState({ passwordFlag: 0 });
+          return false
+        }
+        
       } else {
         this.setState({ passwordError: 'Please enter a valid password'});
         this.setState({ passwordFlag: 0 });
@@ -53,24 +61,23 @@ class NewPwdTextInput extends Component {
 
     if (inputName == 'newPassword') {
       if (this.state.passwordError !='') {
-        return (<RkText rkType='danger'>{this.state.passwordError}</RkText>);
+        return (<Text style={{fontSize: 16, color: 'red', marginHorizontal: 15}}>{this.state.passwordError}</Text>);
       }
     }
   }
 
   render() {
     return (
+      <View>
       <View style = {styles.emailPwdContainer}>
-
-
-              <Label style = {styles.PwdContainer}>New Password</Label>
-              <Input style = {styles.inputStyle} 
-                 autoCorrect={false}
-                 autoCapitalize="none"
-                 secureTextEntry={true}
-                 value={this.props.newPassword}
-                onChangeText={newPassword => this.onPasswordChange(newPassword)}
-                 onBlur={() => { this.validateInput('newPassword', this.props.newPassword); }} />
+        <Label style = {styles.PwdContainer}>New Password</Label>
+        <Input style = {styles.inputStyle} 
+            autoCorrect={false}
+            autoCapitalize="none"
+            secureTextEntry={true}
+            value={this.props.newPassword}
+          onChangeText={newPassword => this.onPasswordChange(newPassword)}
+            onBlur={() => { this.validateInput('newPassword', this.props.newPassword); }} />
 
 
 
@@ -82,9 +89,10 @@ class NewPwdTextInput extends Component {
           onChangeText={newPassword => this.onPasswordChange(newPassword)}
           onBlur={() => { this.validateInput('newPassword', this.props.newPassword); }}
         /> */}
-        <View>
+        
+        
+      </View>
         { this.renderFormError('newPassword') }
-        </View>
       </View>
     );
   }
@@ -97,7 +105,7 @@ let styles = RkStyleSheet.create(theme => ({
     height:70
   },
   inputStyle: {
-    flex:1, 
+   // flex:1, 
     alignSelf: "stretch",
     borderColor:'gray',
     borderBottomWidth:1,

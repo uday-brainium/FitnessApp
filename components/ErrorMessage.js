@@ -14,14 +14,13 @@ import {GradientButton} from './../components/';
 class ErrorMessage extends Component {
 
   onButtonClick = () => {
-    if(this.props.error == "New password is sent toyour mail.") {
-      alert(1)
-      NavigatorService.reset('terms_screen')
+    if(this.props.error == "New password is sent to your mail.") {
+     // NavigatorService.reset('terms_screen')
       this.props.errorSet('')
     } else {
      // alert(1)
       this.props.errorSet('')
-      NavigatorService.reset('login_screen')
+    //  NavigatorService.reset('login_screen')
     }
     
   }

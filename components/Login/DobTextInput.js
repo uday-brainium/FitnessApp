@@ -42,6 +42,8 @@ class DobTextInput extends Component {
   }
 
   render() {
+    console.log('props', this.props);
+    
     let tomorrow = new Date();
     // format the current date    
     var now= moment(tomorrow).subtract(5, 'year').format('YYYY-MM-DD')
@@ -49,7 +51,7 @@ class DobTextInput extends Component {
 
     return (
       <View style = {styles.emailPwdContainer}>
-
+            <Text style={{color: 'gray'}}>Date of birth</Text>
             <DatePicker
               defaultDate={new Date()}
               minimumDate={new Date(previous)}
@@ -59,7 +61,7 @@ class DobTextInput extends Component {
               modalTransparent={false}
               animationType={"fade"}
               androidMode={"default"}
-              placeHolderText="Date of birth"
+              placeHolderText="Select date of birth"
               textStyle={{ color: "black", fontSize: 17, marginLeft: -10 }}
               placeHolderTextStyle={{ color: "gray", fontSize: 17, marginLeft: -10 }}
               onDateChange={this.onDobChanged}

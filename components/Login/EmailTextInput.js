@@ -66,7 +66,7 @@ class EmailTextInput extends Component {
   renderFormError(inputName) {
     if (inputName == 'email') {
       if (this.state.emailError !='') {
-        return (<RkText style={{marginBottom: -10}} rkType='danger'>{this.state.emailError}</RkText>);
+        return (<RkText style={{fontSize: 16, marginHorizontal: -5}} rkType='danger'>{this.state.emailError}</RkText>);
       }
     }
   }
@@ -98,14 +98,13 @@ let styles = StyleSheet.create({
   emailPwdContainer: {   
     marginHorizontal: 20,
     marginTop: 10,     
-    height:70
+    height:65
   },
   error: {
-    marginHorizontal: 20,
+    marginHorizontal: 24,
   },
   inputStyle: {
     flex:1, 
-    alignSelf: "stretch",
     borderColor:'gray',
     borderBottomWidth:1,
     borderBottomWidth:1 ,

@@ -11,7 +11,7 @@
 
     <application
       android:name=".MainApplication"
-      android:label="FItnessApp"
+      android:label="TRAN"
       android:icon="@mipmap/app_icon"
       android:allowBackup="false"
         xmlns:tools="http://schemas.android.com/tools"
@@ -20,7 +20,7 @@
         <activity tools:replace="android:theme"
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="FitnessApp"
+            android:label="TRAN"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <activity
             android:name="com.facebook.CustomTabActivity"
@@ -37,7 +37,7 @@
             android:value="@string/fb_app_id"/>
       <activity
         android:name=".MainActivity"
-        android:label="FitnessApp"
+        android:label="TRAN"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
         android:windowSoftInputMode="adjustResize">
         <intent-filter>

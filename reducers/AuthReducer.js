@@ -8,6 +8,8 @@ import {
   FIRSTNAME_CHANGED,
   LASTNAME_CHANGED,
   GENDER_CHANGED,
+  CITY_CHANGED,
+  COUNTRY_CHANGED,
   DOB_CHANGED,
   HEIGHT_CHANGED,
   WEIGHT_CHANGED,
@@ -36,8 +38,10 @@ const INITIAL_STATE = {
   phone: '',
   firstname: '',
   lastname: '',
-  gender: '',
+  gender: 'male',
   dob: '',
+  city: '',
+  country: '',
   height: '',
   weight: '',
   user: null,
@@ -89,6 +93,10 @@ export default (state = INITIAL_STATE, action) => {
     return { ...state, gender: action.payload };
     case DOB_CHANGED:
     return { ...state, dob: action.payload };
+    case CITY_CHANGED:
+    return { ...state, city: action.payload };
+    case COUNTRY_CHANGED:
+    return { ...state, country: action.payload };
     case HEIGHT_CHANGED:
     return { ...state, height: action.payload };
     case WEIGHT_CHANGED:

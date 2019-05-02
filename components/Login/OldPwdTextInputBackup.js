@@ -80,8 +80,13 @@ class OldPwdTextInput extends Component {
       break;
       case 'newPassword':
       if (validator.isAscii(inputVal)){
-        this.setState({ passwordError: '' });
-        this.setState({ passwordFlag: 1 });
+        if(inputVal.length > 5) {
+          this.setState({ passwordError: '' });
+          this.setState({ passwordFlag: 1 });
+        } else {
+          this.setState({ passwordError: 'Password must be 5 character long!' });
+          this.setState({ passwordFlag: 0 });
+        }
       } else {
         this.setState({ passwordError: 'Please enter a valid New Password'});
         this.setState({ passwordFlag: 0 });       

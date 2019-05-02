@@ -74,7 +74,7 @@ Container:{
     flex:1, 
 },
 signTextContainer:{
-    flex:1,
+    flex:0.6,
     marginLeft: 18,
     marginBottom: -10,
     justifyContent:'flex-end',

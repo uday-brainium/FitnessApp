@@ -46,7 +46,7 @@ PushNotification.configure({
     let currentPath = NavigatorService.getCurrentRoute()
   },
   // ANDROID ONLY: GCM or FCM Sender ID (product_number) (optional - not required for local notifications, but is need to receive remote push notifications)
-  senderID: "FitnessAPP",
+  senderID: "TRAN",
   permissions: {
       alert: true,
       badge: false,
@@ -120,15 +120,19 @@ class Dashboard_screen extends Component {
 
 
 
-  componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackPress); 
+  componentDidMount() { 
+   ls.get('auth-token').then(data => {
+     console.log('auth', data);
+     
+   })
+   BackHandler.addEventListener('hardwareBackPress', this.handleBackPress); 
     this.track()
     this.props.navigation.setParams({
           openDrawer: this.openDrawerNow
       });
     ls.get('userdata').then((data) => {
       this.props.chart_data(JSON.parse(data)._id)
-      //console.log('FBLOGIN USERDATA', JSON.parse(data));
+      // console.log('FBLOGIN USERDATA', JSON.parse(data).authtoken);
       this.setState({userdata: JSON.parse(data)}, () => {
         if(this.state.userdata.heightWeight == 'false') {
           ls.get('modalflag').then((data) => {
@@ -448,9 +452,23 @@ class Dashboard_screen extends Component {
     }
   }
 
-  //if cheating stop the activity
+  //if cheating stop the activity and clear the data
   caughtCheat = () => {
-    this.stopInterval()
+    const {trackingType} = this.state
+ 
+    this.setState({
+      vehicleDistance: trackingType == 'walkrun' ? this.state.walkingDistance : this.state.cycleDistance,
+      vehicleTokens: trackingType == 'walkrun' ? (this.state.walkingTokens / 100) : (this.state.cycleTokens / 10) ,
+    }, () => {
+      this.setState({
+        walkingDistance: 0,
+        walkingTokens: 0,
+        cycleDistance: 0,
+        cycleTokens: 0
+      }, () => {
+        this.stopInterval()
+      })
+    })
   }
 
 

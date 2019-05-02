@@ -112,7 +112,7 @@ let styles = RkStyleSheet.create(theme => ({
     flex: 1,
     alignSelf: "stretch",
   },containerSignInHeader: {
-    flex: 76,
+    flex: 150,
     justifyContent:'center',
     alignItems :'center',
   },

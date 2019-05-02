@@ -40,6 +40,7 @@ export const fb_login_action = (values) => {
       fetch(NetworkConstants.RequestUrl('fbsignup'), insertData).then ((res) => {
         res.json().then(function(data) {
           ls.save('userdata', JSON.stringify(data)).then(() => {
+            ls.save('auth-token', data.authtoken)
             dispatch({
               type: FACEBOOK_LOGIN_SUCCESS,
               payload: data

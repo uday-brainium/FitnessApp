@@ -26,7 +26,6 @@ class EmailPwdButton extends Component {
   }
 
   onButtonPress() {
-
     if (this.props.emailPwdBtnStr == 'Sign in') {
 
         const { email, password } = this.props;
@@ -54,20 +53,24 @@ class EmailPwdButton extends Component {
         }
     } else if (this.props.emailPwdBtnStr == 'Sign up') {
          console.log('inside Sign up button press: '+this.props.emailPwdBtnStr);
-         const {  email, password, gender, height, weight, dob, phone, firstname, lastname } = this.props;
+         const {  email, password, gender, height, weight, dob, phone, firstname, lastname, city, country } = this.props;
 
-        if ( this.validateInput('email', email) && this.validateInput('password', password)) {
-          this.props.signupUser({  email, password, gender, height, weight, dob, phone, firstname, lastname });
-          // NetInfo.isConnected.fetch().then(isConnected => {
-          //   //console.log('First, is ' + (isConnected ? 'online' : 'offline'));
-          //   if(isConnected)
-          //   {
-
-          //   }else
-          //   {
-          //     this.props.errorSet('Please check your internet connection.');
-          //   }
-          // });
+        if ( this.validateInput('email', email) && 
+             this.validateInput('password', password) && 
+             this.validateInput('firstname', firstname) &&
+             this.validateInput('lastname', lastname) && 
+             this.validateInput('height', height) &&
+             this.validateInput('weight', weight) &&
+             this.validateInput('city', city) &&
+             this.validateInput('country', country)
+           ) {
+          
+  
+          if(!this.passwordValidate(password)) {
+            this.props.errorSet('Password must be at least 6 character long')
+          } else {
+            this.props.signupUser( email, password, gender, height, weight, dob, phone, firstname, lastname, city, country );
+          }
 
         } else {
           this.props.errorSet('Please provide valid inputs');
@@ -99,31 +102,38 @@ class EmailPwdButton extends Component {
          const { oldPassword,newPassword, confirmPassword} = this.props;
         if ( this.validateInput('password', oldPassword) && this.validateInput('password', newPassword)
         && this.validateInput('password', confirmPassword))
+        
          {
-          if ( newPassword === confirmPassword)
-          {
-
-            if(this.state.user == null || this.state.user == "")
+          if(newPassword.length > 5) {
+            if ( newPassword === confirmPassword)
             {
-             this.props.errorSet('Something went wrong in change password .');
-            }else {
 
-              const user_id = (typeof this.state.user._id !== "undefined") ? this.state.user._id : 0;
-              console.log('Hello-world', user_id);
-              
-              this.props.changeUserPassword({ user_id, oldPassword, newPassword});
+              if(this.state.user == null || this.state.user == "")
+              {
+              this.props.errorSet('Something went wrong in change password .');
+              }else {
 
+                const user_id = (typeof this.state.user._id !== "undefined") ? this.state.user._id : 0;
+              // console.log('Hello-world', user_id);
+                
+                this.props.changeUserPassword({ user_id, oldPassword, newPassword});
+
+              }
+
+            } else {
+            this.props.errorSet('New and Confirm password should be same.');
+          // this.props.onButtonPress();
             }
-
-          }else
-          this.props.errorSet('New and Confirm password should be same.');
-         // this.props.onButtonPress();
-        } else {
-          this.props.errorSet('Please provide valid inputs password');
+              } else {
+              this.props.errorSet('New password must be at least 6 character long');
+            }
+          } else {
+            this.props.errorSet('Please provide valid inputs password');
         }
     } else {
       
     }
+  
   }
 
   // Validate the form inputs
@@ -133,8 +143,28 @@ class EmailPwdButton extends Component {
         return validator.isAscii(inputVal);
         case 'email':
         return validator.isEmail(inputVal);
-      // default:
-      //   return 'foo';
+        case 'firstname' :
+        return !validator.isEmpty(inputVal);
+        case 'lastname' :
+        return !validator.isEmpty(inputVal);
+        case 'city' :
+        return !validator.isEmpty(inputVal);
+        case 'country' :
+        return !validator.isEmpty(inputVal);
+        case 'height' :
+        return !validator.isEmpty(inputVal);
+        case 'weight' :
+        return !validator.isEmpty(inputVal);
+       default:
+        return false;
+    }
+  }
+
+  passwordValidate = password => {
+    if(password.length > 5){
+      return true
+    } else {
+      return false
     }
   }
 
@@ -160,14 +190,13 @@ let styles = RkStyleSheet.create(theme => ({
     backgroundColor: theme.colors.green,
   },
   text: {
-    color: theme.colors.screen.base,
   }
 }));
 
 const mapStateToProps = ({ auth }) => {
-  const {emailReset, email, password,oldPassword,newPassword,confirmPassword, gender, height, weight, dob,phone, firstname, lastname,user } = auth;
+  const {emailReset, email, password,oldPassword,newPassword,confirmPassword, gender, height, weight, dob,phone, firstname, lastname,user, city, country } = auth;
 
-  return { emailReset,email, password,oldPassword,newPassword,confirmPassword, gender, height, weight, dob, phone, firstname, lastname,user };
+  return { emailReset,email, password,oldPassword,newPassword,confirmPassword, gender, height, weight, dob, phone, firstname, lastname,user, city, country };
 };
 
 export default connect(mapStateToProps, {

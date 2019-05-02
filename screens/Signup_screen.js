@@ -20,7 +20,8 @@ import HeightTextInput from './../components/Login/HeightTextInput';
 import WeightTextInput from './../components/Login/WeightTextInput';
 
 import DobTextInput from './../components/Login/DobTextInput';
-
+import CityInput from './../components/Login/cityInput'
+import CountryInput from './../components/Login/countryInput'
 
 import EmailPwdButton from './../components/Login/EmailPwdButton';
 import FooterNavButtons from './../components/Login/FooterNavButtons';
@@ -113,8 +114,8 @@ class ProfileScreen extends Component {
                       <LoadingSpinner parentFlag={this.state.loadingState} />
                       <LoginHeaderImage
                         keyboardflag = {this.state.keyboardflag}
-                        emailPwdBtnStr = {'SignUp'}
-                        headerString = {'Sign up'}
+                        emailPwdBtnStr = 'SignUp'
+                        headerString = 'Sign up'
                       />
                     </View>
                     <View style={styles.containerBody}>
@@ -127,8 +128,10 @@ class ProfileScreen extends Component {
                             <HeightTextInput />
                             <WeightTextInput  />
                           </View>
-                          <PhoneTextInput />
+                          {/* <PhoneTextInput /> */}
                           <DobTextInput />
+                          <CityInput/>
+                          <CountryInput />
                           <EmailTextInput />
                           <PwdTextInput />
                       </View>
@@ -171,8 +174,9 @@ let styles = RkStyleSheet.create(theme => ({
     alignSelf: 'stretch',
   }, containerHeader: {
     flex: 18,
-  }, containerBody: {
-    flex: 65,
+  },
+   containerBody: {
+    flex: 75,
   }
   , containerButtonBody: {
     flex: 17,

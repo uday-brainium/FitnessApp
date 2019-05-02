@@ -12,7 +12,7 @@ export default class Loader extends Component {
     return (
       <View>
         <Modal
-          animationType="slide"
+          animationType="fade"
           transparent={true}
           visible={this.props.loading}
           onRequestClose={() => console.log('close')

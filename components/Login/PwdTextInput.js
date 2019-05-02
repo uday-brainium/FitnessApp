@@ -38,9 +38,15 @@ class PwdTextInput extends Component {
 
     if (inputName == 'password') {
       if (validator.isAscii(inputVal)){
-        this.setState({ passwordError: '' });
-        this.setState({ passwordFlag: 1 });
-        return true;
+        if(inputVal.length > 5) {
+          this.setState({ passwordError: '' });
+          this.setState({ passwordFlag: 1 });
+          return true;
+        } else {
+          this.setState({ passwordError: 'Password must be at least 6 character long' });
+          this.setState({ passwordFlag: 0 });
+          return false;
+        }
       } else {
         this.setState({ passwordError: 'Please enter a valid password'});
         this.setState({ passwordFlag: 0 });
@@ -53,8 +59,8 @@ class PwdTextInput extends Component {
   renderFormError(inputName) {
 
     if (inputName == 'password') {
-      if (this.state.passwordError !='') {
-        return (<RkText style={{marginBottom: 10}} rkType='danger'>{this.state.passwordError}</RkText>);
+      if (this.state.passwordError != '') {
+        return (<RkText style={{fontSize: 16, marginHorizontal: -5}} rkType='danger'>{this.state.passwordError}</RkText>);
       }
     }
   }
@@ -75,7 +81,7 @@ class PwdTextInput extends Component {
            
       </View>
 
-        <View style={{marginHorizontal: 20}}>
+        <View style={{marginHorizontal: 24, marginVertical: 0}}>
         { this.renderFormError('password') }
         </View>
        </View>
@@ -87,7 +93,7 @@ let styles = RkStyleSheet.create(theme => ({
   emailPwdContainer: {
     marginHorizontal: 20,
     marginTop: 20,     
-    height:70
+    height: 65
   },
   inputStyle: {
     flex:1, 
@@ -95,7 +101,7 @@ let styles = RkStyleSheet.create(theme => ({
     borderColor:'gray',
     borderBottomWidth:1,
     borderBottomWidth:1 ,
-    height:40 ,
+    height: 40 ,
   }
 })); 
 

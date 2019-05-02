@@ -178,7 +178,7 @@ class Login extends Component {
               <View style={styles.containerSignInBody}>
                 {this._renderEmailPwdOption()}
               </View>
-              <View style={{marginBottom: -20}}>
+              <View style={{marginTop: 25, marginBottom: -20}}>
               <CheckBox
                 title='Remember me'
                 checked={this.state.rememberCheck}

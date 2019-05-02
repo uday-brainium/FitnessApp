@@ -53,24 +53,23 @@ class ConfirmPwdTextInput extends Component {
 
     if (inputName == 'confirmPassword') {
       if (this.state.passwordError !='') {
-        return (<RkText rkType='danger'>{this.state.passwordError}</RkText>);
+        return (<RkText rkType='danger' style={{fontSize: 16, marginHorizontal: 15}}>{this.state.passwordError}</RkText>);
       }
     }
   }
 
   render() {
     return (
+    <View>
       <View style = {styles.emailPwdContainer}>
-
-
-              <Label style = {styles.PwdContainer}>Confirm Password</Label>
-              <Input style = {styles.inputStyle} 
-                 autoCorrect={false}
-                 autoCapitalize="none"
-                 secureTextEntry={true}
-                 value={this.props.confirmPassword}
-                 onChangeText={confirmPassword => this.onPasswordChange(confirmPassword)}
-                 onBlur={() => { this.validateInput('confirmPassword', this.props.confirmPassword); }} />
+        <Label style = {styles.PwdContainer}>Confirm Password</Label>
+        <Input style = {styles.inputStyle} 
+            autoCorrect={false}
+            autoCapitalize="none"
+            secureTextEntry={true}
+            value={this.props.confirmPassword}
+            onChangeText={confirmPassword => this.onPasswordChange(confirmPassword)}
+            onBlur={() => { this.validateInput('confirmPassword', this.props.confirmPassword); }} />
 
 
 
@@ -82,10 +81,11 @@ class ConfirmPwdTextInput extends Component {
           onChangeText={confirmPassword => this.onPasswordChange(confirmPassword)}
           onBlur={() => { this.validateInput('confirmPassword', this.props.confirmPassword); }}
         /> */}
-        <View>
-        { this.renderFormError('confirmPassword') }
-        </View>
       </View>
+
+        { this.renderFormError('confirmPassword') }
+
+    </View>
     );
   }
 }

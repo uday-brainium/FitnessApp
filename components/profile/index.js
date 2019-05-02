@@ -99,12 +99,11 @@ class Profile extends Component {
             </View>
 
              <View style={styles.name}>
-             {this.state.profileInfo.user_type == 'facebook' &&
-              <Text style={styles.username}>{this.state.profileInfo.name}</Text>
-             }
-             {this.state.profileInfo.user_type == 'Normal' &&
+             {this.state.profileInfo.user_type == 'facebook' ?
+              <Text style={styles.username}>{this.state.profileInfo.name}</Text> :
               <Text style={styles.username}>{this.state.profileInfo.name_first} {this.state.profileInfo.name_last}</Text>
              }
+  
               
               <Image style={styles.line} source={require('./../../assets/images/Line17.png')}/>
               <Text style={styles.email}>{this.state.profileInfo.email}</Text>
